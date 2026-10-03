@@ -91,6 +91,51 @@ SetCard {
         wrapMode: Text.WordWrap
     }
 
+    // Фирменный заголовок с логотипом Zephyrine Shell
+    Row {
+        width: parent.width - Config.popoutPadding * 2
+        spacing: 16
+
+        Image {
+            source: Qt.resolvedUrl("../../assets/zephyrine-logo.png")
+            width: 54
+            height: 54
+            fillMode: Image.PreserveAspectFit
+            smooth: true
+            mipmap: true
+        }
+
+        Column {
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 3
+
+            Row {
+                spacing: 8
+                Txt {
+                    text: "Zephyrine Shell"
+                    font.bold: true
+                    font.pixelSize: Config.fontSize + 4
+                }
+                StatusChip {
+                    kind: "live"
+                    text: "v1.0"
+                }
+            }
+
+            Txt {
+                text: "Элегантная графическая оболочка Wayland"
+                color: Colors.fgVariant
+                font.pixelSize: Config.fontSize - 1
+            }
+        }
+    }
+
+    Rectangle {
+        width: parent.width - Config.popoutPadding * 2
+        height: 1
+        color: Qt.alpha(Colors.outline, 0.25)
+    }
+
     Repeater {
         model: root.rows
         delegate: Row {

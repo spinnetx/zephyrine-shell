@@ -5,10 +5,7 @@
     "icons": {
       "theme": "Qogir-Dark"
     },
-    "kittyOpacity": 0.85,
-    "wallpaper": {
-      "desktop": "wallpapers/lake-on-windy-day.1920x1080.mp4"
-    }
+    "kittyOpacity": 0.85
   },
   "hypr": {
     "borders": {

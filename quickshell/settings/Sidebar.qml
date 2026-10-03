@@ -14,6 +14,7 @@ Rectangle {
     property string current: ""
     signal selected(string id)
 
+    readonly property int headerH: 50
     readonly property int itemH: 44
     readonly property int itemGap: 4
     readonly property int pad: 8
@@ -31,10 +32,44 @@ Rectangle {
     border.width: 1
     border.color: Qt.alpha(Colors.outline, 0.28)
 
+    // Шапка сайдбара с логотипом (ненавязчиво)
+    Row {
+        x: root.pad + 6
+        y: root.pad + 2
+        width: parent.width - (root.pad + 6) * 2
+        height: root.headerH - root.pad - 4
+        spacing: 10
+
+        Image {
+            anchors.verticalCenter: parent.verticalCenter
+            source: Qt.resolvedUrl("../assets/zephyrine-logo.png")
+            width: 28
+            height: 28
+            fillMode: Image.PreserveAspectFit
+            smooth: true
+            mipmap: true
+        }
+
+        Column {
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 1
+            Txt {
+                text: "Zephyrine"
+                font.bold: true
+                font.pixelSize: Config.fontSize + 1
+            }
+            Txt {
+                text: "Настройки"
+                color: Colors.fgVariant
+                font.pixelSize: Config.fontSize - 2
+            }
+        }
+    }
+
     // Выбранный пункт.
     Rectangle {
         x: root.pad
-        y: root.pad + root.currentIndex * (root.itemH + root.itemGap)
+        y: root.headerH + root.currentIndex * (root.itemH + root.itemGap)
         width: parent.width - root.pad * 2
         height: root.itemH
         radius: Config.pillRadius
@@ -48,7 +83,7 @@ Rectangle {
 
     Column {
         x: root.pad
-        y: root.pad
+        y: root.headerH
         width: parent.width - root.pad * 2
         spacing: root.itemGap
 
