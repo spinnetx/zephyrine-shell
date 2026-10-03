@@ -78,7 +78,7 @@ Singleton {
     readonly property int popoutPadding: 12
     readonly property int popoutGap: 4         // зазор между баром и карточкой
     readonly property int popoutMaxHeight: 640 // высота окна-носителя (карточка внутри не выше)
-    readonly property int popoutMaxWidth: 460  // ширина окна-носителя у вертикальной панели
+    readonly property int popoutMaxWidth: 680  // ширина окна-носителя у вертикальной панели
 
     // --- Интервалы опроса (мс) ---
     readonly property int aiPollMs: 120000

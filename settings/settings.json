@@ -18,7 +18,13 @@
       "media",
       "power"
     ],
+    "left": [
+      "apps",
+      "workspaces",
+      "activeWindow"
+    ],
     "right": [
+      "weather",
       "limits",
       "disk",
       "gpu",
@@ -43,5 +49,8 @@
       },
       "style": "custom"
     }
+  },
+  "weather": {
+    "city": "Gdańsk"
   }
 }

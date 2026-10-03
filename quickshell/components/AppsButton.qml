@@ -13,6 +13,9 @@ Pill {
     tooltip: "Приложения"
     onClicked: PopoutState.togglePinnedAt("apps", root)
 
+    Component.onCompleted: PopoutState.registerApps(root)
+    Component.onDestruction: PopoutState.unregisterApps(root)
+
     Image {
         id: logoImg
         anchors.centerIn: parent

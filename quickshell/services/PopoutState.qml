@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Io
 import "../"
 
 // Общее состояние hover-попапов: ОДИН попап на всё приложение (на любом мониторе).
@@ -31,6 +32,8 @@ Singleton {
     property bool pinned: false
     // Пилюли часов со всех мониторов (регистрируются самими часами) — чтобы закрепить на нужном.
     property var clocks: []
+    // Кнопки приложений со всех мониторов
+    property var appsButtons: []
 
     function registerClock(it) {
         clocks = clocks.concat([it]);
@@ -39,6 +42,30 @@ Singleton {
         clocks = clocks.filter(c => c !== it);
         if (item === it)
             close();
+    }
+
+    function registerApps(it) {
+        appsButtons = appsButtons.concat([it]);
+    }
+    function unregisterApps(it) {
+        appsButtons = appsButtons.filter(c => c !== it);
+        if (item === it)
+            close();
+    }
+
+    function toggleApps() {
+        if (pinned && kind === "apps") {
+            close();
+            return;
+        }
+        const name = Hyprland.focusedMonitor?.name ?? "";
+        const it = appsButtons.find(c => c.QsWindow.window?.screen?.name === name) ?? appsButtons[0];
+        if (!it)
+            return;
+        openTimer.stop();
+        closeTimer.stop();
+        apply("apps", it, null);
+        pinned = true;
     }
 
     // Открыть kind закреплённым у пилюли часов на мониторе с фокусом / закрыть, если уже закреплён.
@@ -156,4 +183,12 @@ Singleton {
 
     // Если item-триггер исчез (например, иконка трея пропала) — закрываем.
     onItemChanged: if (item === null) close()
+
+    IpcHandler {
+        target: "apps"
+
+        function toggle(): void { root.toggleApps(); }
+        function open(): void { if (!root.pinned || root.kind !== "apps") root.toggleApps(); }
+        function close(): void { if (root.pinned && root.kind === "apps") root.close(); }
+    }
 }

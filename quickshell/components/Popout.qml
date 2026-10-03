@@ -41,7 +41,7 @@ PopupWindow {
         net: "../popouts/NetPopout.qml",
         timer: "../popouts/TimerPopout.qml",
         weather: "../popouts/WeatherPopout.qml",
-        apps: "../popouts/AppsPopout.qml"
+        apps: "../popouts/AppsPopout.qml" // KDE Plasma style two-panel app menu
     })
 
     // Центр триггера в координатах окна бара → целевой x карточки (с прижатием к краям).
