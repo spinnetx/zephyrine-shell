@@ -30,7 +30,7 @@ hl.on("hyprland.start", function()
     -- собран под Hyprland 0.56.2 вручную — после обновления hyprland пересобрать:
     -- git checkout <пин из hyprpm.toml> && make). Настройки — блок ниже; ключи плагина
     -- появляются только после загрузки, поэтому через пару секунд перечитываем конфиг.
-    hl.exec_cmd("sh -c 'test -f $HOME/.local/share/hyprland/plugins/libhyprglass.so && hyprctl plugin load $HOME/.local/share/hyprland/plugins/libhyprglass.so && sleep 2 && hyprctl reload'")
+    hl.exec_cmd("sh -c 'test -f $HOME/.local/share/hyprland/plugins/libhyprglass.so && hyprctl plugin load $HOME/.local/share/hyprland/plugins/libhyprglass.so; test -f $HOME/.local/share/hyprland/plugins/libhyprbars.so && hyprctl plugin load $HOME/.local/share/hyprland/plugins/libhyprbars.so; sleep 2 && hyprctl reload'")
 
     hl.exec_cmd("systemctl --user start hyprpolkitagent.service 2>/dev/null || true")
     hl.exec_cmd("gnome-keyring-daemon --start --components=secrets,pkcs11,ssh 2>/dev/null || true")
@@ -233,6 +233,48 @@ if hl.plugin and hl.plugin.hyprglass then
     hl.plugin.hyprglass.config({
         glass_opacity = 0.7,
         dark = { brightness = 1.0, adaptive_dim = 0.1, saturation = 1.0 },
+    })
+end
+
+-- hyprbars: заголовок окна (только для плавающих окон)
+if hl.plugin and hl.plugin.hyprbars then
+    hl.config({
+        plugin = {
+            hyprbars = {
+                bar_height = 24,
+                bar_color = "rgba(1c1d2bee)",
+                ["col.text"] = "rgba(e8e8f0ee)",
+                bar_text_font = "JetBrainsMono Nerd Font",
+                bar_text_size = 10,
+                bar_part_of_window = true,
+                bar_precedence_over_border = true,
+                bar_padding = 10,
+                bar_button_padding = 6,
+                on_double_click = "hyprctl dispatch fullscreen 1",
+            },
+        },
+    })
+
+    hl.plugin.hyprbars.add_button({
+        bg_color = "rgba(f7768eff)",
+        fg_color = "rgba(141414ff)",
+        size = 10,
+        icon = "󰅖",
+        action = "hyprctl dispatch killactive",
+    })
+
+    hl.plugin.hyprbars.add_button({
+        bg_color = "rgba(9ece6aff)",
+        fg_color = "rgba(141414ff)",
+        size = 10,
+        icon = "󰘔",
+        action = "hyprctl dispatch togglefloating",
+    })
+
+    hl.window_rule({
+        name = "hyprbars-floating-only",
+        match = { float = false },
+        ["hyprbars:no_bar"] = true,
     })
 end
 

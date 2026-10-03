@@ -48,7 +48,8 @@
         "inactive": "rgba(595959aa)"
       },
       "style": "custom"
-    }
+    },
+    "windowMode": "float"
   },
   "weather": {
     "city": "Gdańsk"
