@@ -6,39 +6,8 @@
 ---- MONITORS ----
 ------------------
 
--- monitor=name,resolution,position,scale
--- Автоопределение любого подключенного монитора (универсальный fallback)
+-- Универсальное автоопределение любого подключенного монитора с родным разрешением и автопозиционированием
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
-
--- Частные настройки для известных мониторов (если подключены)
-hl.monitor({ output = "eDP-1", mode = "1920x1080", position = "0x0", scale = 1 })
--- hl.monitor({ output = "DP-6", mode = "1920x1200", position = "0x-2400", scale = 0.5 })
-hl.monitor({ output = "DP-6", mode = "1920x1200", position = "0x-1200", scale = 1 })
-
--- Дополнительный внешний монитор при подключении получает рабочий стол 10
-local EXTERNAL_WS = 10
-local INTERNAL    = "eDP-1"   -- встроенная панель ноутбука
-
-hl.on("monitor.added", function(m)
-    if not m or m.name == INTERNAL then return end
-    -- Если в системе только один монитор (например внешний экран ПК/ВМ), не выкидываем его на 10 стол
-    local monitors = hl.get_monitors and hl.get_monitors() or {}
-    if #monitors <= 1 then return end
-
-    local name = m.name
-    -- Небольшая задержка: к моменту события монитор ещё может быть не полностью готов.
-    hl.timer(function()
-        if not hl.get_monitor(name) then return end
-        local prev = hl.get_active_monitor()
-        hl.dispatch(hl.dsp.workspace.move({ workspace = EXTERNAL_WS, monitor = name }))
-        hl.dispatch(hl.dsp.focus({ monitor = name }))
-        hl.dispatch(hl.dsp.focus({ workspace = EXTERNAL_WS }))
-        -- Фокус возвращаем на прежний монитор.
-        if prev and prev.name ~= name then
-            hl.dispatch(hl.dsp.focus({ monitor = prev.name }))
-        end
-    end, { timeout = 300, type = "oneshot" })
-end)
 
 
 ---------------------
@@ -66,26 +35,13 @@ hl.on("hyprland.start", function()
     -- появляются только после загрузки, поэтому через пару секунд перечитываем конфиг.
     hl.exec_cmd("sh -c 'test -f $HOME/.local/share/hyprland/plugins/libhyprglass.so && hyprctl plugin load $HOME/.local/share/hyprland/plugins/libhyprglass.so && sleep 2 && hyprctl reload'")
 
-    -- hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
-    hl.exec_cmd("systemctl --user enable --now hyprpolkitagent.service")
-    -- hl.exec_cmd("xhost +local:root")
-
-    -- Прогреваем gnome-keyring заранее (замена kwalletd6 из KDE-конфига):
-    -- без этого первый холодный D-Bus-запрос от Chromium/Electron-приложений
-    -- к Secret Service (isEnabled) не укладывается в таймаут, и они откатываются
-    -- на небезопасное хранилище паролей насовсем на сессию. Стартуем через
-    -- exec-once здесь, а не через pam_gnome_keyring в PAM, потому что сессия
-    -- поднимается не через gdm/greeter с поддержкой автологина в keyring.
-    hl.exec_cmd("gnome-keyring-daemon --start --components=secrets,pkcs11,ssh")
-
+    hl.exec_cmd("systemctl --user start hyprpolkitagent.service 2>/dev/null || true")
+    hl.exec_cmd("gnome-keyring-daemon --start --components=secrets,pkcs11,ssh 2>/dev/null || true")
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
-    hl.exec_cmd("/usr/lib/xdg-desktop-portal-hyprland")
-    hl.exec_cmd("/usr/lib/xdg-desktop-portal")
+    hl.exec_cmd("systemctl --user start xdg-desktop-portal-hyprland.service xdg-desktop-portal.service 2>/dev/null || true")
 
-    -- hypridle.conf существовал в дереве, но нигде не запускался — таймауты
-    -- (затемнение/блокировка/dpms) до сих пор ни разу реально не срабатывали,
-    -- работал только ручной бинд SUPER+L. Замечено и исправлено 2026-09-08.
-    hl.exec_cmd("hypridle")
+    -- hypridle с автоматическим поиском конфигурации
+    hl.exec_cmd("sh -c 'if [ -f $HOME/.config/hypr/hypridle.conf ]; then hypridle; elif [ -f /usr/share/zephyrine/hypr/hypridle.conf ]; then hypridle -c /usr/share/zephyrine/hypr/hypridle.conf; fi'")
 
     -- Панель — собственный бар на Quickshell (my_zephyrine_conf/quickshell, симлинк
     -- ~/.config/quickshell/zephyrine). Лаунчер/меню питания — свои (IPC, см. binds).
@@ -137,25 +93,25 @@ hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 -- Confirmed against https://wiki.hypr.land/Configuring/Advanced-and-Cool/Environment-variables/ :
 -- hl.env does NOT expand $VARNAME like the old env= directive did; os.getenv() is required instead.
--- SSH-агент один на всю систему — gpg-agent (его ssh-сокет; тот же выбор в fish/config.fish).
-hl.env("SSH_AUTH_SOCK", os.getenv("XDG_RUNTIME_DIR") .. "/gnupg/S.gpg-agent.ssh")
--- Настройки аппаратного ускорения для карт NVIDIA
+-- SSH-агент: берем существующий SSH_AUTH_SOCK, либо проверяем сокет gpg-agent
+if not os.getenv("SSH_AUTH_SOCK") then
+    local gpg_sock = (os.getenv("XDG_RUNTIME_DIR") or "") .. "/gnupg/S.gpg-agent.ssh"
+    local f = io.open(gpg_sock, "r")
+    if f then
+        f:close()
+        hl.env("SSH_AUTH_SOCK", gpg_sock)
+    end
+end
+
+-- Аппаратное ускорение видеокарт NVIDIA (наследуется из окружения, если активно)
 if os.getenv("LIBVA_DRIVER_NAME") then
     hl.env("LIBVA_DRIVER_NAME", os.getenv("LIBVA_DRIVER_NAME"))
-elseif os.execute("test -e /dev/nvidiactl") == 0 then
-    hl.env("LIBVA_DRIVER_NAME", "nvidia")
 end
-
 if os.getenv("__GLX_VENDOR_LIBRARY_NAME") then
     hl.env("__GLX_VENDOR_LIBRARY_NAME", os.getenv("__GLX_VENDOR_LIBRARY_NAME"))
-elseif os.execute("test -e /dev/nvidiactl") == 0 then
-    hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 end
-
 if os.getenv("NVD_BACKEND") then
     hl.env("NVD_BACKEND", os.getenv("NVD_BACKEND"))
-elseif os.execute("test -e /dev/nvidiactl") == 0 then
-    hl.env("NVD_BACKEND", "direct")
 end
 
 -- Multi-GPU (Aquamarine): если задана переменная AQ_DRM_DEVICES, передаем в композитор

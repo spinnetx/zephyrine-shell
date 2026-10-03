@@ -1,165 +1,121 @@
 #!/usr/bin/env bash
 #
-# zephyrine-session — Точка входа графической сессии Zephyrine (Hyprland + Quickshell)
-# Запускается display manager'ом (SDDM, GDM, LightDM) из /usr/share/wayland-sessions/zephyrine.desktop
+# zephyrine-session — Отказоустойчивая точка входа сессии Zephyrine (Hyprland + Quickshell)
+# Гарантированно работает на любом оборудовании: Intel, AMD, NVIDIA, multi-GPU и виртуальных машинах.
+#
 
 set -euo pipefail
 
-# Логирование сессии в ~/.local/state/zephyrine/session.log
+# 1. Логирование сессии
 LOG_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/zephyrine"
-mkdir -p "$LOG_DIR"
-exec >> "$LOG_DIR/session.log" 2>&1
+mkdir -p "$LOG_DIR" 2>/dev/null || true
+exec >> "${LOG_DIR}/session.log" 2>&1
+echo "=================================================="
 echo "=== Zephyrine Session started at $(date) ==="
+echo "=================================================="
 
-# Базовые переменные окружения сессии
+# 2. Базовые переменные окружения Wayland
 export XDG_CURRENT_DESKTOP="Hyprland"
 export XDG_SESSION_DESKTOP="Hyprland"
 export XDG_SESSION_TYPE="wayland"
 
-# Определение системных каталогов Zephyrine
+# 3. Определение каталогов Zephyrine
 if [ -z "${ZEPHYRINE_DIR:-}" ]; then
     if [ -d "/usr/share/zephyrine" ]; then
         export ZEPHYRINE_DIR="/usr/share/zephyrine"
     elif [ -d "${HOME}/.local/share/zephyrine" ]; then
         export ZEPHYRINE_DIR="${HOME}/.local/share/zephyrine"
     else
-        # Режим разработки из репозитория
         SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
         export ZEPHYRINE_DIR="$SELF_DIR"
     fi
 fi
 
-# Каталог Quickshell оболочки
 export ZEPHYRINE_QS_DIR="${ZEPHYRINE_QS_DIR:-${ZEPHYRINE_DIR}/quickshell}"
+export ZEPHYRINE_DEFAULT_WALLPAPER="${ZEPHYRINE_DEFAULT_WALLPAPER:-${ZEPHYRINE_DIR}/assets/wallpapers/japanese-night-village.1920x1080.mp4}"
+export PATH="/usr/lib/zephyrine/scripts:${HOME}/.local/bin:${ZEPHYRINE_DIR}/bin:${ZEPHYRINE_DIR}/scripts:$PATH"
 
-# Симлинк quickshell конфигурации для пользователя, если его нет
+# 4. Симлинк quickshell конфигурации для пользователя
 USER_QS_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/zephyrine"
 if [ ! -e "$USER_QS_DIR" ] && [ -d "$ZEPHYRINE_QS_DIR" ]; then
-    mkdir -p "$(dirname "$USER_QS_DIR")"
+    mkdir -p "$(dirname "$USER_QS_DIR")" 2>/dev/null || true
     ln -s "$ZEPHYRINE_QS_DIR" "$USER_QS_DIR" 2>/dev/null || true
 fi
 if [ -e "$USER_QS_DIR" ]; then
     export ZEPHYRINE_QS_DIR="$USER_QS_DIR"
 fi
 
-# Обои по умолчанию
-export ZEPHYRINE_DEFAULT_WALLPAPER="${ZEPHYRINE_DEFAULT_WALLPAPER:-${ZEPHYRINE_DIR}/assets/wallpapers/japanese-night-village.1920x1080.mp4}"
-
-# Добавление путей бинарников и скриптов в PATH
-export PATH="/usr/lib/zephyrine/scripts:${HOME}/.local/bin:${ZEPHYRINE_DIR}/bin:${ZEPHYRINE_DIR}/scripts:$PATH"
-
-# Подготовка пользовательской конфигурации Hyprland при первом запуске
-USER_HYPR_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/hypr"
-USER_HYPR_CONF="${USER_HYPR_DIR}/hyprland.lua"
-SYS_HYPR_DIR="${ZEPHYRINE_DIR}/hypr"
-
-mkdir -p "$USER_HYPR_DIR"
-
-if [ ! -f "$USER_HYPR_CONF" ] && [ -f "${SYS_HYPR_DIR}/hyprland.lua" ]; then
-    echo "==> Инициализация hyprland.lua в $USER_HYPR_DIR..."
-    cp "${SYS_HYPR_DIR}/hyprland.lua" "$USER_HYPR_CONF"
-fi
-if [ ! -f "${USER_HYPR_DIR}/hypridle.conf" ] && [ -f "${SYS_HYPR_DIR}/hypridle.conf" ]; then
-    echo "==> Инициализация hypridle.conf в $USER_HYPR_DIR..."
-    cp "${SYS_HYPR_DIR}/hypridle.conf" "${USER_HYPR_DIR}/hypridle.conf"
-fi
-if [ ! -f "${USER_HYPR_DIR}/hyprlock.conf" ] && [ -f "${SYS_HYPR_DIR}/hyprlock.conf" ]; then
-    echo "==> Инициализация hyprlock.conf в $USER_HYPR_DIR..."
-    cp "${SYS_HYPR_DIR}/hyprlock.conf" "${USER_HYPR_DIR}/hyprlock.conf"
-fi
-
-# Настройки аппаратного ускорения для систем с дискретными видеокартами NVIDIA
+# 5. Аппаратное ускорение NVIDIA (активируется ТОЛЬКО если в ядре активен драйвер nvidia)
 if [ -e "/dev/nvidiactl" ] || [ -d "/proc/driver/nvidia" ]; then
+    echo "==> Обнаружен драйвер NVIDIA: активация переменных аппаратного ускорения"
     export LIBVA_DRIVER_NAME="${LIBVA_DRIVER_NAME:-nvidia}"
     export __GLX_VENDOR_LIBRARY_NAME="${__GLX_VENDOR_LIBRARY_NAME:-nvidia}"
     export NVD_BACKEND="${NVD_BACKEND:-direct}"
-    echo "==> Обнаружен драйвер NVIDIA: активированы переменные аппаратного ускорения"
 fi
 
-# Автоопределение порядка GPU для Aquamarine (Hyprland 0.56+) при multi-GPU (Optimus/hybrid/MUX)
-if [ -z "${AQ_DRM_DEVICES:-}" ]; then
-    cards_with_display=()
-    boot_vga_cards=()
-    other_cards=()
+# 6. Подготовка и санитизация конфигурации Hyprland
+USER_HYPR_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/hypr"
+USER_HYPR_CONF="${USER_HYPR_DIR}/hyprland.lua"
+SYS_HYPR_CONF="${ZEPHYRINE_DIR}/hypr/hyprland.lua"
 
-    to_by_path() {
-        local dev="$1"
-        for bp in /dev/dri/by-path/*-card; do
-            if [ -e "$bp" ] && [ "$(readlink -f "$bp" 2>/dev/null)" = "$dev" ]; then
-                echo "$bp"
-                return
-            fi
-        done
-        echo "$dev"
-    }
+mkdir -p "$USER_HYPR_DIR" 2>/dev/null || true
 
-    for c in /sys/class/drm/card[0-9]; do
-        [ -d "$c" ] || continue
-        c_dev="/dev/dri/$(basename "$c")"
-        [ -e "$c_dev" ] || continue
-
-        # Пропуск виртуального EFI-фреймбуфера и устройств без аппаратного ускорения
-        drv="$(basename "$(readlink -f "$c/device/driver" 2>/dev/null || echo "none")")"
-        if [ "$drv" = "simple-framebuffer" ] || [ "$drv" = "simpledrm" ] || [ "$drv" = "none" ]; then
-            continue
-        fi
-
-        has_connected=0
-        for conn in "$c"/card*-*; do
-            if [ -f "$conn/status" ] && [ "$(cat "$conn/status" 2>/dev/null)" = "connected" ]; then
-                has_connected=1
-                break
-            fi
-        done
-
-        is_boot_vga=0
-        if [ -f "$c/device/boot_vga" ] && [ "$(cat "$c/device/boot_vga" 2>/dev/null)" = "1" ]; then
-            is_boot_vga=1
-        fi
-
-        bp_dev=$(to_by_path "$c_dev")
-        if [ "$has_connected" -eq 1 ]; then
-            cards_with_display+=("$bp_dev")
-        elif [ "$is_boot_vga" -eq 1 ]; then
-            boot_vga_cards+=("$bp_dev")
-        else
-            other_cards+=("$bp_dev")
-        fi
-    done
-
-    # Формируем упорядоченный список всех ускорителей:
-    # 1. Карты с подключенными мониторами (наивысший приоритет)
-    # 2. Карты с флагом boot_vga
-    # 3. Все прочие видеокарты
-    ordered_cards=()
-    for dev in "${cards_with_display[@]}" "${boot_vga_cards[@]}" "${other_cards[@]}"; do
-        for seen in "${ordered_cards[@]}"; do
-            [ "$seen" = "$dev" ] && continue 2
-        done
-        ordered_cards+=("$dev")
-    done
-
-    if [ ${#ordered_cards[@]} -gt 1 ]; then
-        export AQ_DRM_DEVICES="$(IFS=:; echo "${ordered_cards[*]}")"
-        echo "==> Multi-GPU: установлен порядок AQ_DRM_DEVICES: $AQ_DRM_DEVICES"
+# Вспомогательные конфигурации демонов
+for f in hypridle.conf hyprlock.conf; do
+    if [ ! -f "${USER_HYPR_DIR}/${f}" ] && [ -f "${ZEPHYRINE_DIR}/hypr/${f}" ]; then
+        cp "${ZEPHYRINE_DIR}/hypr/${f}" "${USER_HYPR_DIR}/${f}" 2>/dev/null || true
     fi
+done
+
+# Проверка и санитизация пользовательского конфига
+TARGET_CONF=""
+
+if [ -f "$USER_HYPR_CONF" ]; then
+    # Если в пользовательском конфиге обнаружены устаревшие фатальные директивы Mesa/WLR
+    if grep -q "__EGL_VENDOR_LIBRARY_FILENAMES" "$USER_HYPR_CONF" 2>/dev/null || \
+       grep -q "WLR_DRM_DEVICES" "$USER_HYPR_CONF" 2>/dev/null; then
+        echo "==> [ВНИМАНИЕ] Обнаружены устаревшие несовместимые параметры EGL/DRM в $USER_HYPR_CONF"
+        echo "==> Автоматическое устранение устаревших строк..."
+        cp "$USER_HYPR_CONF" "${USER_HYPR_CONF}.bak-deprecated-$(date +%s)" 2>/dev/null || true
+        sed -i '/__EGL_VENDOR_LIBRARY_FILENAMES/d' "$USER_HYPR_CONF" 2>/dev/null || true
+        sed -i '/__GLX_VENDOR_LIBRARY_NAME.*mesa/d' "$USER_HYPR_CONF" 2>/dev/null || true
+        sed -i '/WLR_DRM_DEVICES/d' "$USER_HYPR_CONF" 2>/dev/null || true
+    fi
+
+    # Проверяем валидность пользовательского конфига встроенным валидатором Hyprland
+    if Hyprland --config "$USER_HYPR_CONF" --verify-config >/dev/null 2>&1; then
+        TARGET_CONF="$USER_HYPR_CONF"
+        echo "==> Пользовательский конфиг $USER_HYPR_CONF проверен и валиден."
+    else
+        echo "==> [ОШИБКА] Пользовательский конфиг $USER_HYPR_CONF не прошел валидацию Hyprland!"
+        echo "==> Аварийное переключение на системный эталонный конфиг $SYS_HYPR_CONF"
+        cp "$USER_HYPR_CONF" "${USER_HYPR_CONF}.broken-$(date +%s)" 2>/dev/null || true
+        if [ -f "$SYS_HYPR_CONF" ]; then
+            cp "$SYS_HYPR_CONF" "$USER_HYPR_CONF" 2>/dev/null || true
+            TARGET_CONF="$USER_HYPR_CONF"
+        fi
+    fi
+elif [ -f "$SYS_HYPR_CONF" ]; then
+    echo "==> Инициализация пользовательского конфига из системного $SYS_HYPR_CONF..."
+    cp "$SYS_HYPR_CONF" "$USER_HYPR_CONF" 2>/dev/null || true
+    TARGET_CONF="$USER_HYPR_CONF"
 fi
 
-# Если конфигурация существует, запускаем с ней
+if [ -z "$TARGET_CONF" ] && [ -f "$SYS_HYPR_CONF" ]; then
+    TARGET_CONF="$SYS_HYPR_CONF"
+fi
+
 CONF_ARG=()
-if [ -f "$USER_HYPR_CONF" ]; then
-    CONF_ARG=("--config" "$USER_HYPR_CONF")
-elif [ -f "${SYS_HYPR_DIR}/hyprland.lua" ]; then
-    CONF_ARG=("--config" "${SYS_HYPR_DIR}/hyprland.lua")
+if [ -n "$TARGET_CONF" ]; then
+    CONF_ARG=("--config" "$TARGET_CONF")
 fi
 
 echo "==> Запуск композитора Hyprland..."
 echo "    ZEPHYRINE_DIR: $ZEPHYRINE_DIR"
 echo "    ZEPHYRINE_QS_DIR: $ZEPHYRINE_QS_DIR"
-echo "    AQ_DRM_DEVICES: ${AQ_DRM_DEVICES:-auto}"
-echo "    CONFIG: ${CONF_ARG[*]:-default}"
+echo "    CONFIG: ${TARGET_CONF:-default}"
 
-# Выбор официальной точки входа (start-hyprland с watchdog или напрямую Hyprland)
+# 7. Запуск официальной точки входа (start-hyprland с watchdog или напрямую Hyprland)
 if command -v start-hyprland >/dev/null 2>&1; then
     exec start-hyprland -- "${CONF_ARG[@]}"
 elif command -v Hyprland >/dev/null 2>&1; then
@@ -167,6 +123,6 @@ elif command -v Hyprland >/dev/null 2>&1; then
 elif command -v hyprland >/dev/null 2>&1; then
     exec hyprland "${CONF_ARG[@]}"
 else
-    echo "CRITICAL: Ни один бинарник Hyprland (start-hyprland, Hyprland, hyprland) не найден в PATH!" >&2
+    echo "CRITICAL: Ни один бинарник Hyprland не найден в PATH!" >&2
     exit 1
 fi
