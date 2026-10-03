@@ -28,8 +28,9 @@ Singleton {
     // --- Размеры ---
     // Бар «плавающий»: отступ от верхнего/боковых краёв, скруглённый со всех
     // сторон (у Caelestia бар тоже отделён от края и имеет скруглённый фон).
-    readonly property int barHeight: 40
-    readonly property int barMargin: 6
+    readonly property int barHeight: Prefs.barHeight
+    readonly property int barMargin: Prefs.barMargin
+    readonly property int barPadding: Prefs.barPadding
     readonly property int barRadius: Prefs.radius + 2
     // Положение панели (Prefs: bar.position) и толщина вертикальной панели (слева/справа).
     readonly property string barPosition: Prefs.barPosition
@@ -37,10 +38,11 @@ Singleton {
     readonly property int barThickness: 48
     // Размер панели поперёк экрана вместе с отступом от края: столько резервируется у окон и отступают попапы/тосты.
     readonly property int barExtent: (barVertical ? barThickness : barHeight) + barMargin
-    readonly property int pillHeight: 28
+    readonly property int pillHeight: Prefs.pillHeight
     readonly property int pillRadius: Prefs.radius
-    readonly property int pillPadding: 10
-    readonly property int spacing: 6
+    readonly property int pillPadding: Prefs.pillPadding
+    readonly property int pillSpacing: Prefs.pillSpacing
+    readonly property int spacing: Prefs.barSpacing
     readonly property int workspaceCount: 10
     readonly property int titleMaxWidth: 260
     readonly property int mediaMaxWidth: 280

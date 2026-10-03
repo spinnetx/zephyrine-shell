@@ -56,5 +56,29 @@ class LayoutTests(unittest.TestCase):
             self.assertIn(i + ":", qml, i)
 
 
+    def test_bar_spacing_and_padding_schema_validation(self):
+        """Проверка схемы настроек отступов и размеров панели и виджетов."""
+        cases = [
+            ("bar.margin", 6, 0, 24),
+            ("bar.padding", 6, 2, 24),
+            ("bar.spacing", 6, 2, 20),
+            ("bar.height", 40, 32, 56),
+            ("bar.pillHeight", 28, 22, 40),
+            ("bar.pillPadding", 10, 4, 24),
+            ("bar.pillSpacing", 6, 2, 16),
+        ]
+        for key, default, min_val, max_val in cases:
+            with self.subTest(key=key):
+                self.assertEqual(self.s.default(key), default)
+                self.assertEqual(self.s.validate(key, min_val), min_val)
+                self.assertEqual(self.s.validate(key, max_val), max_val)
+                with self.assertRaises(model.ValidationError):
+                    self.s.validate(key, min_val - 1)
+                with self.assertRaises(model.ValidationError):
+                    self.s.validate(key, max_val + 1)
+                with self.assertRaises(model.ValidationError):
+                    self.s.validate(key, "not-a-number")
+
+
 if __name__ == "__main__":
     unittest.main()

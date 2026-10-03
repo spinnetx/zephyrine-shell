@@ -304,10 +304,10 @@ PanelWindow {
             sourceComponent: win.vertical ? vZone : hZone
             onLoaded: item.ids = Qt.binding(() => Prefs.barLeft)
             anchors.left: win.vertical ? undefined : parent.left
-            anchors.leftMargin: Config.spacing
+            anchors.leftMargin: Config.barPadding
             anchors.verticalCenter: win.vertical ? undefined : parent.verticalCenter
             anchors.top: win.vertical ? parent.top : undefined
-            anchors.topMargin: Config.spacing
+            anchors.topMargin: Config.barPadding
             anchors.horizontalCenter: win.vertical ? parent.horizontalCenter : undefined
         }
 
@@ -325,10 +325,10 @@ PanelWindow {
             sourceComponent: win.vertical ? vZone : hZone
             onLoaded: item.ids = Qt.binding(() => Prefs.barRight)
             anchors.right: win.vertical ? undefined : parent.right
-            anchors.rightMargin: Config.spacing
+            anchors.rightMargin: Config.barPadding
             anchors.verticalCenter: win.vertical ? undefined : parent.verticalCenter
             anchors.bottom: win.vertical ? parent.bottom : undefined
-            anchors.bottomMargin: Config.spacing
+            anchors.bottomMargin: Config.barPadding
             anchors.horizontalCenter: win.vertical ? parent.horizontalCenter : undefined
         }
     }

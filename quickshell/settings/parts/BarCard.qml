@@ -44,9 +44,26 @@ SetCard {
     readonly property var zoneShort: ["Начало", "Центр", "Конец"]
     readonly property var hidden: catalog.filter(c => zones.every(z => z.indexOf(c.id) < 0))
 
+    property var page: null
     property int addZone: 2
     property string error: ""
     property bool sent: false
+
+    function val(key) {
+        const l = page ? page.local[key] : undefined;
+        if (l !== undefined)
+            return l;
+        if (Prefs.spec[key] !== undefined)
+            return Prefs.get(key);
+        const v = Prefs.lookup(Prefs.file, key);
+        return v === undefined ? Prefs.def(key) : v;
+    }
+    function def(key) {
+        return Prefs.def(key);
+    }
+    function err(key) {
+        return page ? (page.errors[key] ?? "") : "";
+    }
 
     function info(id) {
         return catalog.find(c => c.id === id) ?? { id: id, label: id, v: false };
@@ -294,13 +311,143 @@ SetCard {
         }
     }
 
+    Rectangle {
+        width: parent.width
+        height: 1
+        color: Qt.alpha(Colors.outline, 0.25)
+    }
+
+    Txt {
+        text: "Размеры и отступы"
+        font.bold: true
+    }
+
+    PrefSliderRow {
+        width: parent.width
+        prefKey: "bar.height"
+        label: "Высота панели"
+        hint: "Толщина панели на экране"
+        error: root.err(prefKey)
+        from: 32
+        to: 56
+        step: 1
+        decimals: 0
+        suffix: " px"
+        defaultValue: root.def(prefKey)
+        value: root.val(prefKey)
+        onPreviewed: (k, v) => page ? page.sliderPreview(k, v) : Prefs.preview(k, v)
+        onCommitted: (k, v) => page ? page.sliderCommit(k, v, 0) : SettingsCli.set({ [k]: v })
+    }
+
+    PrefSliderRow {
+        width: parent.width
+        prefKey: "bar.margin"
+        label: "Внешний отступ панели"
+        hint: "Отступ от краёв экрана"
+        error: root.err(prefKey)
+        from: 0
+        to: 24
+        step: 1
+        decimals: 0
+        suffix: " px"
+        defaultValue: root.def(prefKey)
+        value: root.val(prefKey)
+        onPreviewed: (k, v) => page ? page.sliderPreview(k, v) : Prefs.preview(k, v)
+        onCommitted: (k, v) => page ? page.sliderCommit(k, v, 0) : SettingsCli.set({ [k]: v })
+    }
+
+    PrefSliderRow {
+        width: parent.width
+        prefKey: "bar.padding"
+        label: "Внутренний отступ панели"
+        hint: "Отступ от краёв панели до виджетов"
+        error: root.err(prefKey)
+        from: 2
+        to: 24
+        step: 1
+        decimals: 0
+        suffix: " px"
+        defaultValue: root.def(prefKey)
+        value: root.val(prefKey)
+        onPreviewed: (k, v) => page ? page.sliderPreview(k, v) : Prefs.preview(k, v)
+        onCommitted: (k, v) => page ? page.sliderCommit(k, v, 0) : SettingsCli.set({ [k]: v })
+    }
+
+    PrefSliderRow {
+        width: parent.width
+        prefKey: "bar.spacing"
+        label: "Расстояние между виджетами"
+        hint: "Зазор между блоками виджетов в зонах панели"
+        error: root.err(prefKey)
+        from: 2
+        to: 20
+        step: 1
+        decimals: 0
+        suffix: " px"
+        defaultValue: root.def(prefKey)
+        value: root.val(prefKey)
+        onPreviewed: (k, v) => page ? page.sliderPreview(k, v) : Prefs.preview(k, v)
+        onCommitted: (k, v) => page ? page.sliderCommit(k, v, 0) : SettingsCli.set({ [k]: v })
+    }
+
+    PrefSliderRow {
+        width: parent.width
+        prefKey: "bar.pillHeight"
+        label: "Высота пилюль"
+        hint: "Высота элементов виджетов"
+        error: root.err(prefKey)
+        from: 22
+        to: 40
+        step: 1
+        decimals: 0
+        suffix: " px"
+        defaultValue: root.def(prefKey)
+        value: root.val(prefKey)
+        onPreviewed: (k, v) => page ? page.sliderPreview(k, v) : Prefs.preview(k, v)
+        onCommitted: (k, v) => page ? page.sliderCommit(k, v, 0) : SettingsCli.set({ [k]: v })
+    }
+
+    PrefSliderRow {
+        width: parent.width
+        prefKey: "bar.pillPadding"
+        label: "Внутренний отступ пилюль"
+        hint: "Горизонтальный отступ внутри виджета"
+        error: root.err(prefKey)
+        from: 4
+        to: 24
+        step: 1
+        decimals: 0
+        suffix: " px"
+        defaultValue: root.def(prefKey)
+        value: root.val(prefKey)
+        onPreviewed: (k, v) => page ? page.sliderPreview(k, v) : Prefs.preview(k, v)
+        onCommitted: (k, v) => page ? page.sliderCommit(k, v, 0) : SettingsCli.set({ [k]: v })
+    }
+
+    PrefSliderRow {
+        width: parent.width
+        prefKey: "bar.pillSpacing"
+        label: "Расстояние внутри пилюль"
+        hint: "Зазор между иконкой и текстом внутри виджета"
+        error: root.err(prefKey)
+        from: 2
+        to: 16
+        step: 1
+        decimals: 0
+        suffix: " px"
+        defaultValue: root.def(prefKey)
+        value: root.val(prefKey)
+        onPreviewed: (k, v) => page ? page.sliderPreview(k, v) : Prefs.preview(k, v)
+        onCommitted: (k, v) => page ? page.sliderCommit(k, v, 0) : SettingsCli.set({ [k]: v })
+    }
+
     SetButton {
         text: "Сбросить панель"
-        tooltip: "Положение и состав зон — по умолчанию"
+        tooltip: "Положение, состав зон и размеры — по умолчанию"
         onClicked: {
             root.error = "";
             root.sent = true;
-            SettingsCli.run(["reset", "bar.position", "bar.left", "bar.center", "bar.right"]);
+            SettingsCli.run(["reset", "bar.position", "bar.left", "bar.center", "bar.right", "bar.margin", "bar.padding", "bar.spacing", "bar.height", "bar.pillHeight", "bar.pillPadding", "bar.pillSpacing"]);
         }
     }
 }

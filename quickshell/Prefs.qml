@@ -40,7 +40,14 @@ Singleton {
         "power.batteryCritical": ["real", 0.15, 0.05, 0.3],
         "notifications.toastMs": ["int", 5000, 1000, 30000],
         "notifications.historyMax": ["int", 50, 10, 500],
-        "notifications.dndAllowCritical": ["bool", true]
+        "notifications.dndAllowCritical": ["bool", true],
+        "bar.margin": ["int", 6, 0, 24],
+        "bar.padding": ["int", 6, 2, 24],
+        "bar.spacing": ["int", 6, 2, 20],
+        "bar.height": ["int", 40, 32, 56],
+        "bar.pillHeight": ["int", 28, 22, 40],
+        "bar.pillPadding": ["int", 10, 4, 24],
+        "bar.pillSpacing": ["int", 6, 2, 16]
     })
 
     // Вложенный поиск по ключу с точками; undefined, если нет.
@@ -128,6 +135,13 @@ Singleton {
     readonly property int toastMs: get("notifications.toastMs")
     readonly property int historyMax: get("notifications.historyMax")
     readonly property bool dndAllowCritical: get("notifications.dndAllowCritical")
+    readonly property int barMargin: get("bar.margin")
+    readonly property int barPadding: get("bar.padding")
+    readonly property int barSpacing: get("bar.spacing")
+    readonly property int barHeight: get("bar.height")
+    readonly property int pillHeight: get("bar.pillHeight")
+    readonly property int pillPadding: get("bar.pillPadding")
+    readonly property int pillSpacing: get("bar.pillSpacing")
 
     // --- Панель: положение и состав зон (центр настроек → Внешний вид → Панель; ключи bar.*) ---
     // Список id элементов и дефолты дублируют settings/zsettings/barlayout.py и schema.json - править во всех местах.

@@ -18,7 +18,9 @@ CAPTURE_TIMEOUT = 20
 
 # id, подпись, комбинации по умолчанию, release-комбинации, действие ("exec"|"raw", строка), ключ приложения или None
 ACTIONS = (
-    ("launcher", "Лаунчер", ["SUPER + Super_L", "SUPER + space", "SUPER + R"], {"SUPER + Super_L"},
+    ("apps", "Меню приложений", ["SUPER + Super_L"], {"SUPER + Super_L"},
+     ("exec", QS + "apps toggle"), None),
+    ("launcher", "Лаунчер", ["SUPER + space", "SUPER + R"], set(),
      ("exec", QS + "launcher toggle"), None),
     ("powermenu", "Меню питания", ["SUPER + Escape"], set(), ("exec", QS + "powermenu toggle"), None),
     ("notifs", "Уведомления и календарь", ["SUPER + N"], set(), ("exec", QS + "notifs toggle"), None),

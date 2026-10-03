@@ -379,10 +379,9 @@ hl.bind(mainMod .. " + C", hl.dsp.window.close(), { description = "zp:close · �
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"), { description = "Выйти из Hyprland" })
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager), { description = "zp:files · Файловый менеджер" })
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }), { description = "zp:float · Плавающее окно" })
--- Лаунчер: одиночное нажатие SUPER (по отпусканию), SUPER+Space и SUPER+R.
--- РИСК (не проверено с живой клавиатурой): если после SUPER+<клавиша> отпускание Super тоже
--- открывает лаунчер, закомментируй бинд Super_L — остаются SUPER+Space / SUPER+R.
-hl.bind(mainMod .. " + Super_L", hl.dsp.exec_cmd(qsIpc .. "launcher toggle"), { release = true, description = "zp:launcher · Лаунчер" })
+-- Меню приложений: одиночное нажатие SUPER (по отпусканию).
+hl.bind(mainMod .. " + Super_L", hl.dsp.exec_cmd(qsIpc .. "apps toggle"), { release = true, description = "zp:apps · Меню приложений" })
+-- Лаунчер: SUPER+Space и SUPER+R.
 hl.bind(mainMod .. " + space", hl.dsp.exec_cmd(qsIpc .. "launcher toggle"), { description = "zp:launcher · Лаунчер" })
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(qsIpc .. "launcher toggle"), { description = "zp:launcher · Лаунчер" })
 -- Меню питания.

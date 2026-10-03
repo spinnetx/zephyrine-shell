@@ -54,7 +54,7 @@ Rectangle {
     Row {
         id: row
         anchors.centerIn: parent
-        spacing: Config.spacing
+        spacing: Config.pillSpacing
         height: parent.height
     }
 

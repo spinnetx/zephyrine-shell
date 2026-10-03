@@ -56,12 +56,24 @@ class EmitTests(unittest.TestCase):
         self.assertIn('hl.bind("SUPER + K", hl.dsp.exec_cmd("qs -p $HOME/.config/quickshell/zephyrine ipc call notifs '
                       'toggle"), { description = "zp:notifs · Уведомления и календарь" })', t)
 
-    def test_launcher_release_kept_and_raw_action(self):
-        t = gen({"binds.launcher": ["SUPER + Super_L", "SUPER + F1"], "binds.close": ["ALT + F4"]})
+    def test_apps_release_kept_and_raw_action(self):
+        t = gen({"binds.apps": ["SUPER + Super_L", "SUPER + F1"], "binds.close": ["ALT + F4"]})
         self.assertIn('"SUPER + Super_L", hl.dsp.exec_cmd', t)
         self.assertIn("release = true", t)
         self.assertEqual(t.count("release = true"), 1)
         self.assertIn('hl.bind("ALT + F4", hl.dsp.window.close(), { description = "zp:close · Закрыть окно" })', t)
+
+    def test_super_key_opens_apps_menu_regression(self):
+        """Регрессионный тест: по нажатию Super открывается Меню приложений (apps toggle), а не лаунчер."""
+        apps_act = binds.BY_ID.get("apps")
+        self.assertIsNotNone(apps_act, "Действие 'apps' должно присутствовать в binds.ACTIONS")
+        self.assertEqual(apps_act[2], ["SUPER + Super_L"])
+        self.assertIn("SUPER + Super_L", apps_act[3])  # release set
+        self.assertEqual(apps_act[4], ("exec", binds.QS + "apps toggle"))
+
+        launcher_act = binds.BY_ID.get("launcher")
+        self.assertNotIn("SUPER + Super_L", launcher_act[2])
+        self.assertNotIn("SUPER + Super_L", launcher_act[3])
 
     def test_app_terminal(self):
         t = gen({"apps.terminal": "foot"})

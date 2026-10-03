@@ -35,7 +35,11 @@ Item {
         "hypr.borders.custom": { active: ["rgba(33ccffee)", "rgba(00ff99ee)"], angle: 45, inactive: "rgba(595959aa)" }
     })
     // Ключи, которые бар умеет показывать вживую через Prefs.preview.
-    readonly property var liveKeys: ["appearance.glassAlpha", "appearance.surfaceAlpha", "appearance.radius"]
+    readonly property var liveKeys: [
+        "appearance.glassAlpha", "appearance.surfaceAlpha", "appearance.radius",
+        "bar.margin", "bar.padding", "bar.spacing", "bar.height",
+        "bar.pillHeight", "bar.pillPadding", "bar.pillSpacing"
+    ]
     readonly property var targetNames: ({
         "quickshell": "Панель", "hypr": "Hyprland", "gtk3": "GTK 3", "gtk4": "GTK 4", "qt6ct": "Qt", "zed": "Zed",
         "kitty": "Kitty", "kitty-conf": "Kitty", "zathura": "Zathura", "obsidian": "Obsidian", "tb-css": "Thunderbird", "tb-theme": "Thunderbird",
@@ -759,6 +763,7 @@ Item {
 
             BarCard {
                 width: parent.width
+                page: root
                 visible: root.tab === "bar"
             }
 
