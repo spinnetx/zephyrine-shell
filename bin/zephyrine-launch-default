@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#
+# zephyrine-launch-default — Запуск приложения по умолчанию (terminal, files, browser)
+
+if [ -f "/usr/lib/zephyrine/scripts/zephyrine-launch-default.sh" ]; then
+    exec "/usr/lib/zephyrine/scripts/zephyrine-launch-default.sh" "$@"
+elif [ -f "${HOME}/.local/lib/zephyrine/scripts/zephyrine-launch-default.sh" ]; then
+    exec "${HOME}/.local/lib/zephyrine/scripts/zephyrine-launch-default.sh" "$@"
+else
+    SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+    exec "${SELF_DIR}/scripts/zephyrine-launch-default.sh" "$@"
+fi

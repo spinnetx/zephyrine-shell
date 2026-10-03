@@ -13,6 +13,7 @@ DESKTOP_RE = re.compile(r"^[A-Za-z0-9._\-]+\.desktop$")
 
 # id -> (подпись, [mime-типы]); первый тип - основной
 CATEGORIES = {
+    "terminal": ("Терминал", ["x-scheme-handler/terminal"]),
     "browser": ("Браузер", ["x-scheme-handler/http", "x-scheme-handler/https", "text/html"]),
     "mail": ("Почта", ["x-scheme-handler/mailto"]),
     "files": ("Файлы", ["inode/directory"]),
@@ -97,6 +98,7 @@ def app_name(desktop_id, data_dirs=None):
 def scan_desktop(types, data_dirs=None):
     """Запасной список: .desktop-файлы, чей MimeType= содержит один из типов (если gio ничего не выдал)."""
     found = []
+    is_terminal = "x-scheme-handler/terminal" in types
     for d in (data_dirs if data_dirs is not None else _data_dirs()):
         adir = os.path.join(d, "applications")
         try:
@@ -110,6 +112,9 @@ def scan_desktop(types, data_dirs=None):
                 with open(os.path.join(adir, n), encoding="utf-8", errors="replace") as f:
                     for ln in f:
                         if ln.startswith("MimeType=") and any(t in ln[9:].split(";") for t in types):
+                            found.append(n)
+                            break
+                        elif is_terminal and ln.startswith("Categories=") and "TerminalEmulator" in ln[11:].split(";"):
                             found.append(n)
                             break
             except OSError:

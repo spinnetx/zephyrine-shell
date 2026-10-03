@@ -14,11 +14,8 @@ hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
 ---- MY PROGRAMS ----
 ---------------------
 
-local terminal    = "kitty"
--- Thunar вместо Nemo: он чище берёт GTK-тему без Cinnamon-специфичных
--- надстроек, поэтому лучше сливается с Material You палитрой,
--- чем Nemo. См. .config/Thunar/ и theme/gtk-adw-papirus.
-local fileManager = "thunar"
+local terminal    = "zephyrine-launch-default terminal"
+local fileManager = "zephyrine-launch-default files"
 -- Лаунчер и меню питания — свои, на Quickshell (my_zephyrine_conf/quickshell/{launcher,powermenu}),
 -- вызываются через IPC: qs ... ipc call <launcher|powermenu|notifs> <toggle|open|close>.
 local qsIpc       = "qs -p ${ZEPHYRINE_QS_DIR:-/usr/share/zephyrine/quickshell} ipc call "

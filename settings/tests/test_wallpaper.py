@@ -282,6 +282,14 @@ class CliTests(WallpaperCase):
             self.assertEqual(r["sddm"]["inSync"], False)
         self.assertIn("install-theme.sh", r["sddm"]["hint"])
 
+    def test_catalog_scans_user_pictures_wallpapers(self):
+        user_wp = os.path.join(str(self.home.home), "Pictures", "Wallpapers")
+        os.makedirs(user_wp, exist_ok=True)
+        self.write_file(os.path.join(user_wp, "custom.png"), b"x" * 10)
+        items = wallpaper.catalog(self.paths)
+        paths = [i["path"] for i in items]
+        self.assertIn(os.path.join(user_wp, "custom.png"), paths)
+
 
 if __name__ == "__main__":
     unittest.main()

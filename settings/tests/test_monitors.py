@@ -134,6 +134,27 @@ class MonitorTests(unittest.TestCase):
         self.assertTrue(rev["ok"])
         self.assertFalse(os.path.exists(pending_file))
 
+    def test_cmd_monitors_cli_envelope_regression(self):
+        """Регрессионный тест: cmd_monitors не должен падать с TypeError при вызове envelope."""
+        from zsettings import cli
+        class Args:
+            action = "try"
+            payload = json.dumps([{"match": "eDP-1", "scale": 1.25}])
+            timeout = 15
+            no_exec = True
+        code, env = cli.cmd_monitors(Args(), self.paths)
+        self.assertEqual(code, 0, "CLI try command must exit with 0")
+        self.assertTrue(env["ok"])
+        self.assertIn("token", env)
+
+        class ConfirmArgs:
+            action = "confirm"
+            payload = env["token"]
+            no_exec = True
+        code2, env2 = cli.cmd_monitors(ConfirmArgs(), self.paths)
+        self.assertEqual(code2, 0, "CLI confirm command must exit with 0")
+        self.assertTrue(env2["ok"])
+
 
 if __name__ == "__main__":
     unittest.main()

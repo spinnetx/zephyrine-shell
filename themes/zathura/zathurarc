@@ -16,7 +16,7 @@ set completion-bg             "#242538"
 set completion-fg             "#e8e8f0"
 set completion-group-bg       "#141414"
 set completion-group-fg       "#7aa2f7"
-set completion-highlight-bg   "#9ece6a"
+set completion-highlight-bg   "#7aa2f7"
 set completion-highlight-fg   "#141414"
 
 set notification-bg           "#242538"
@@ -26,7 +26,7 @@ set notification-error-fg     "#2a0a10"
 set notification-warning-bg   "#e0af68"
 set notification-warning-fg   "#141414"
 
-set highlight-color           "#9ece6a"
+set highlight-color           "#7aa2f7"
 set highlight-active-color    "#7aa2f7"
 set highlight-transparency    0.6
 

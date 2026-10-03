@@ -714,7 +714,7 @@
         },
         "apps.terminal": {
             "type": "string",
-            "default": "kitty",
+            "default": "zephyrine-launch-default terminal",
             "targets": [
                 "hypr"
             ],
@@ -724,7 +724,7 @@
         },
         "apps.fileManager": {
             "type": "string",
-            "default": "thunar",
+            "default": "zephyrine-launch-default files",
             "targets": [
                 "hypr"
             ],

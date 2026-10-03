@@ -89,6 +89,14 @@ class ListSetTests(unittest.TestCase):
                 raise mime.MimeError("no xdg-settings")
         self.assertEqual(len(mime.set_default("browser", "zen.desktop", runner=runner)), 4)
 
+    def test_terminal_category_and_scanner(self):
+        self.assertIn("terminal", mime.CATEGORIES)
+        d = tempfile.mkdtemp()
+        os.makedirs(os.path.join(d, "applications"))
+        with open(os.path.join(d, "applications", "myterm.desktop"), "w", encoding="utf-8") as f:
+            f.write("[Desktop Entry]\nName=MyTerm\nCategories=System;TerminalEmulator;\n")
+        self.assertIn("myterm.desktop", mime.scan_desktop(["x-scheme-handler/terminal"], [d]))
+
 
 if __name__ == "__main__":
     unittest.main()

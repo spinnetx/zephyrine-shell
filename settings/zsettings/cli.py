@@ -368,15 +368,15 @@ def cmd_monitors(args, paths):
         elif args.action == "try":
             spec = json.loads(args.payload) if args.payload else []
             res = monitors.try_config(paths, spec, timeout_sec=args.timeout, no_exec=args.no_exec)
-            return 0, envelope(True, **res)
+            return 0, envelope(**res)
         elif args.action == "confirm":
             token = args.payload
             res = monitors.confirm(paths, token, no_exec=args.no_exec)
-            return 0, envelope(True, **res)
+            return 0, envelope(**res)
         elif args.action == "revert":
             token = args.payload or None
             res = monitors.revert(paths, token, no_exec=args.no_exec)
-            return 0, envelope(True, **res)
+            return 0, envelope(**res)
     except Exception as e:
         return 1, envelope(False, errors=[{"error": str(e)}])
     return 1, envelope(False, errors=[{"error": "unknown monitors action"}])

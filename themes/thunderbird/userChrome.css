@@ -20,8 +20,8 @@
     --zp-fg: #e8e8f0;
     --zp-fg-variant: #c0c0cc;
     --zp-outline: #41466a;
-    --zp-primary: #9ece6a;
-    --zp-on-primary: #1c331b;
+    --zp-primary: #7aa2f7;
+    --zp-on-primary: #151731;
 
     /* Переменные Thunderbird (Supernova) */
     --layout-background-0: var(--zp-glass) !important;
@@ -34,9 +34,9 @@
     --toolbar-bgcolor: transparent !important;
     --toolbar-color: var(--zp-fg) !important;
     --toolbarbutton-hover-background: rgba(48, 50, 73, 0.6) !important;
-    --toolbarbutton-active-background: rgba(158, 206, 106, 0.22) !important;
+    --toolbarbutton-active-background: rgba(122, 162, 247, 0.22) !important;
     --toolbarbutton-icon-fill-attention: var(--zp-primary) !important;
-    --selected-item-color: rgba(158, 206, 106, 0.24) !important;
+    --selected-item-color: rgba(122, 162, 247, 0.24) !important;
     --selected-item-text-color: var(--zp-fg) !important;
     --color-accent-primary: var(--zp-primary) !important;
     --button-primary-bgcolor: var(--zp-primary) !important;
@@ -46,7 +46,7 @@
     --arrowpanel-border-color: var(--zp-outline) !important;
     --autocomplete-popup-background: var(--zp-high) !important;
     --autocomplete-popup-color: var(--zp-fg) !important;
-    --autocomplete-popup-highlight-background: rgba(158, 206, 106, 0.24) !important;
+    --autocomplete-popup-highlight-background: rgba(122, 162, 247, 0.24) !important;
     --autocomplete-popup-highlight-color: var(--zp-fg) !important;
     --tab-selected-bgcolor: var(--zp-high) !important;
     --tab-selected-textcolor: var(--zp-primary) !important;

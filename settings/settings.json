@@ -1,13 +1,23 @@
 {
   "version": 1,
   "appearance": {
-    "accent": "#9ece6a",
+    "accent": "#7aa2f7",
+    "cursor": {
+      "theme": "Qogir-Dark"
+    },
     "icons": {
       "theme": "Qogir-Dark"
     },
-    "kittyOpacity": 0.85
+    "kittyOpacity": 0.85,
+    "wallpaper": {
+      "desktop": "wallpapers/lake-reflecting-sky-poster.png"
+    }
   },
   "bar": {
+    "center": [
+      "media",
+      "power"
+    ],
     "right": [
       "limits",
       "disk",
@@ -17,9 +27,7 @@
       "net",
       "tray",
       "status",
-      "clock",
-      "power",
-      "weather"
+      "clock"
     ]
   },
   "hypr": {

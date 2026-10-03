@@ -318,22 +318,42 @@ def make_thumb(paths, src):
 # --------------------------------------------------------------------------- каталог и SDDM
 
 def catalog(paths):
-    """Файлы обоев каталога `<root>/wallpapers/` (рекурсивно, по имени): [{"path","rel","value","name","kind","size"}]."""
-    base = os.path.join(paths.root, "wallpapers")
+    """Файлы обоев из стандартных каталогов (рекурсивно, по имени): [{"path","rel","value","name","kind","size"}]."""
+    bases = [
+        os.path.join(paths.root, "wallpapers"),
+        os.path.join(paths.home, ".local", "share", "zephyrine", "wallpapers"),
+        os.path.join(paths.home, "Pictures", "Wallpapers"),
+        os.path.join(paths.home, "Pictures", "wallpapers"),
+        os.path.join(paths.home, "wallpapers"),
+    ]
     items = []
-    for dirpath, dirs, files in os.walk(base):
-        dirs.sort()
-        for fn in sorted(files):
-            p = os.path.join(dirpath, fn)
-            kind = media_kind(p)
-            if kind is None or not os.path.isfile(p):
-                continue
-            try:
-                size = os.path.getsize(p)
-            except OSError:
-                continue
-            items.append({"path": p, "rel": os.path.relpath(p, paths.root), "value": to_value(paths, p),
-                          "name": os.path.splitext(fn)[0], "kind": kind, "size": size})
+    seen = set()
+    for base in bases:
+        if not os.path.isdir(base):
+            continue
+        for dirpath, dirs, files in os.walk(base):
+            dirs.sort()
+            for fn in sorted(files):
+                p = os.path.join(dirpath, fn)
+                rp = os.path.realpath(p)
+                if rp in seen:
+                    continue
+                seen.add(rp)
+                kind = media_kind(p)
+                if kind is None or not os.path.isfile(p):
+                    continue
+                try:
+                    size = os.path.getsize(p)
+                except OSError:
+                    continue
+                if p.startswith(paths.root.rstrip("/") + "/"):
+                    rel = os.path.relpath(p, paths.root)
+                elif p.startswith(paths.home.rstrip("/") + "/"):
+                    rel = "~/" + os.path.relpath(p, paths.home)
+                else:
+                    rel = p
+                items.append({"path": p, "rel": rel, "value": to_value(paths, p),
+                              "name": os.path.splitext(fn)[0], "kind": kind, "size": size})
     items.sort(key=lambda i: i["rel"].lower())
     return items
 

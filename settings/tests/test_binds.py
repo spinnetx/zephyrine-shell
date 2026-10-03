@@ -68,6 +68,10 @@ class EmitTests(unittest.TestCase):
         self.assertIn('pcall(hl.unbind, "SUPER + Q")', t)
         self.assertIn('hl.bind("SUPER + Q", hl.dsp.exec_cmd("foot")', t)
 
+    def test_default_app_commands_use_zephyrine_launch_default(self):
+        self.assertEqual(binds.APP_DEFAULTS["apps.terminal"], "zephyrine-launch-default terminal")
+        self.assertEqual(binds.APP_DEFAULTS["apps.fileManager"], "zephyrine-launch-default files")
+
     @unittest.skipUnless(shutil.which("luac"), "luac недоступен")
     def test_luac_syntax(self):
         d = tempfile.mkdtemp()

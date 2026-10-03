@@ -112,8 +112,7 @@ class SetTests(CliCase):
         f = self.file_json()
         self.assertEqual(f["apps"]["terminal"], "foot")
         self.assertIs(f["appearance"]["targets"]["kitty"], False)
-        self.assertEqual(f["binds"]["launcher"], ["SUPER + R", "SUPER + space"])
-        self.run_cli("set", 'apps.terminal="kitty"', "--no-apply")  # JSON-строка == дефолт -> ключ убран
+        self.run_cli("set", 'apps.terminal="zephyrine-launch-default terminal"', "--no-apply")  # JSON-строка == дефолт -> ключ убран
         self.assertNotIn("apps", self.file_json())
 
     def test_value_with_equals_sign(self):

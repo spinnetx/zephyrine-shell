@@ -36,7 +36,7 @@ ACTIONS = (
     ("float", "Плавающее окно", ["SUPER + V"], set(), ("raw", 'hl.dsp.window.float({ action = "toggle" })'), None),
 )
 BY_ID = {a[0]: a for a in ACTIONS}
-APP_DEFAULTS = {"apps.terminal": "kitty", "apps.fileManager": "thunar"}
+APP_DEFAULTS = {"apps.terminal": "zephyrine-launch-default terminal", "apps.fileManager": "zephyrine-launch-default files"}
 
 
 def norm(combo):

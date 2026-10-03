@@ -36,6 +36,7 @@ install:
 	install -m 755 bin/zephyrine-settings $(DESTDIR)$(BINDIR)/zephyrine-settings
 	install -m 755 bin/zephyrine-wallpaper-desktop $(DESTDIR)$(BINDIR)/zephyrine-wallpaper-desktop
 	install -m 755 bin/zephyrine-lock $(DESTDIR)$(BINDIR)/zephyrine-lock
+	install -m 755 bin/zephyrine-launch-default $(DESTDIR)$(BINDIR)/zephyrine-launch-default
 	install -m 755 settings/bin/zs-btagent $(DESTDIR)$(BINDIR)/zs-btagent
 	install -m 755 scripts/lock-info.sh $(DESTDIR)$(BINDIR)/lock-info.sh
 	install -m 755 scripts/ai-usage-widget.sh $(DESTDIR)$(BINDIR)/ai-usage-widget.sh
@@ -76,6 +77,7 @@ uninstall:
 	rm -f $(DESTDIR)$(BINDIR)/zephyrine-settings
 	rm -f $(DESTDIR)$(BINDIR)/zephyrine-wallpaper-desktop
 	rm -f $(DESTDIR)$(BINDIR)/zephyrine-lock
+	rm -f $(DESTDIR)$(BINDIR)/zephyrine-launch-default
 	rm -f $(DESTDIR)$(BINDIR)/zs-btagent
 	rm -f $(DESTDIR)$(BINDIR)/lock-info.sh
 	rm -f $(DESTDIR)$(BINDIR)/ai-usage-widget.sh

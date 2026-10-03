@@ -16,6 +16,7 @@ elif [ -f "/usr/share/zephyrine/assets/wallpapers/japanese-night-village.1920x10
     FALLBACK="/usr/share/zephyrine/assets/wallpapers/japanese-night-village.1920x1080.mp4"
 fi
 
+LINK="${ZEPHYRINE_STATE:-$HOME/.local/state/zephyrine}/wallpaper-desktop"
 VIDEO="$(readlink -f -- "$LINK" 2>/dev/null)"
 [ -f "$VIDEO" ] || VIDEO="$FALLBACK"
 

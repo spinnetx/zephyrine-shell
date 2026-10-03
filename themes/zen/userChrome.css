@@ -19,8 +19,8 @@
     --zp-fg: #e8e8f0;
     --zp-fg-variant: #c0c0cc;
     --zp-outline: #41466a;
-    --zp-primary: #9ece6a;
-    --zp-on-primary: #1c331b;
+    --zp-primary: #7aa2f7;
+    --zp-on-primary: #151731;
 
     --zen-colors-primary: #141414 !important;
     --zen-colors-secondary: var(--zp-container) !important;
@@ -32,7 +32,7 @@
     --toolbar-bgcolor: transparent !important;
     --toolbar-color: var(--zp-fg) !important;
     --toolbarbutton-hover-background: rgba(48, 50, 73, 0.6) !important;
-    --toolbarbutton-active-background: rgba(158, 206, 106, 0.22) !important;
+    --toolbarbutton-active-background: rgba(122, 162, 247, 0.22) !important;
     --toolbarbutton-icon-fill: var(--zp-fg-variant) !important;
     --toolbarbutton-icon-fill-attention: var(--zp-primary) !important;
     --tab-selected-bgcolor: var(--zp-high) !important;
@@ -47,14 +47,14 @@
     --color-accent-primary: var(--zp-primary) !important;
     --button-primary-bgcolor: var(--zp-primary) !important;
     --button-primary-color: var(--zp-on-primary) !important;
-    --button-primary-hover-bgcolor: #b5df96 !important;
+    --button-primary-hover-bgcolor: #99b6f8 !important;
     --arrowpanel-background: var(--zp-high) !important;
     --arrowpanel-color: var(--zp-fg) !important;
     --arrowpanel-border-color: var(--zp-outline) !important;
     --arrowpanel-border-radius: 12px !important;
     --autocomplete-popup-background: var(--zp-high) !important;
     --autocomplete-popup-color: var(--zp-fg) !important;
-    --autocomplete-popup-highlight-background: rgba(158, 206, 106, 0.24) !important;
+    --autocomplete-popup-highlight-background: rgba(122, 162, 247, 0.24) !important;
     --autocomplete-popup-highlight-color: var(--zp-fg) !important;
 }
 
@@ -86,7 +86,7 @@ toolbarbutton,
 
 .tabbrowser-tab[selected] .tab-background {
     background-color: var(--zp-high) !important;
-    box-shadow: inset 0 0 0 1px rgba(158, 206, 106, 0.35) !important;
+    box-shadow: inset 0 0 0 1px rgba(122, 162, 247, 0.35) !important;
 }
 
 #urlbar[focused] .urlbar-background,

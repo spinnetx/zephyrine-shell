@@ -204,7 +204,7 @@ def confirm(paths, token, runner=None, no_exec=False):
         raise MonitorError("Неверный токен подтверждения экрана")
 
     if not no_exec:
-        runner(["hyprctl", "eval", "_G.zp_mon.confirmed = true"])
+        runner(["hyprctl", "eval", "if _G.zp_mon then _G.zp_mon.confirmed = true; if _G.zp_mon.timer then _G.zp_mon.timer:set_enabled(false) end end"])
 
     # Сохраняем в settings.json
     schema = model.Schema.load(paths.schema_file, paths.targets_file)
@@ -243,6 +243,7 @@ def revert(paths, token=None, runner=None, no_exec=False):
     lua_code = (
         'if _G.zp_mon and _G.zp_mon.prev then '
         'for _, p in ipairs(_G.zp_mon.prev) do hl.monitor(p) end; '
+        'if _G.zp_mon.timer then _G.zp_mon.timer:set_enabled(false) end; '
         '_G.zp_mon.confirmed = true '
         'end'
     )

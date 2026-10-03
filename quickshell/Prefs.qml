@@ -16,9 +16,11 @@ import Quickshell.Io
 Singleton {
     id: root
 
+    readonly property string explicitPath: Quickshell.env("ZEPHYRINE_SETTINGS_FILE") || Quickshell.env("ZEPHYRINE_DEV_SETTINGS")
     readonly property string userPath: (Quickshell.env("XDG_CONFIG_HOME") || (Quickshell.env("HOME") + "/.config")) + "/zephyrine/settings.json"
-    readonly property string devPath: Quickshell.env("ZEPHYRINE_DEV_SETTINGS") || userPath
-    readonly property string path: userPath
+    readonly property string repoPath: Qt.resolvedUrl("../settings/settings.json").toString().replace(/^file:\/\//, "")
+    readonly property string devPath: explicitPath || repoPath
+    readonly property string path: userView.loaded ? userPath : (devView.loaded ? devPath : userPath)
 
     // Разобранный settings.json (вложенные объекты). Заменяется целиком — так срабатывают привязки.
     property var file: ({})
@@ -174,7 +176,10 @@ Singleton {
         path: root.devPath
         printErrors: false
         watchChanges: true
-        onFileChanged: reload()
+        onFileChanged: {
+            if (!userView.loaded)
+                reload();
+        }
         onLoaded: {
             if (!userView.loaded)
                 root.apply(text());

@@ -1,17 +1,17 @@
 {
     "colours": {
-        "primary_paletteKeyColor": "9ece6a",
-        "surfaceTint": "9ece6a",
-        "primary": "9ece6a",
-        "onPrimary": "1c331b",
-        "primaryContainer": "305524",
-        "onPrimaryContainer": "e0f8d7",
-        "inversePrimary": "4a8723",
-        "primaryFixed": "e0f8d7",
-        "primaryFixedDim": "9ece6a",
-        "onPrimaryFixed": "1c331b",
-        "onPrimaryFixedVariant": "305524",
-        "primaryLight": "b5df96",
-        "primaryLighter": "bee3a3"
+        "primary_paletteKeyColor": "7aa2f7",
+        "surfaceTint": "7aa2f7",
+        "primary": "7aa2f7",
+        "onPrimary": "151731",
+        "primaryContainer": "283261",
+        "onPrimaryContainer": "cad5f7",
+        "inversePrimary": "4257ad",
+        "primaryFixed": "cad5f7",
+        "primaryFixedDim": "7aa2f7",
+        "onPrimaryFixed": "151731",
+        "onPrimaryFixedVariant": "283261",
+        "primaryLight": "99b6f8",
+        "primaryLighter": "a3bcf7"
     }
 }
