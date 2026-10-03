@@ -68,6 +68,56 @@ if [ ! -f "${USER_HYPR_DIR}/hyprlock.conf" ] && [ -f "${SYS_HYPR_DIR}/hyprlock.c
     cp "${SYS_HYPR_DIR}/hyprlock.conf" "${USER_HYPR_DIR}/hyprlock.conf"
 fi
 
+# Автоопределение порядка GPU для Aquamarine (Hyprland 0.56+) при multi-GPU (Optimus/hybrid)
+if [ -z "${AQ_DRM_DEVICES:-}" ]; then
+    primary_card=""
+    other_cards=()
+
+    to_by_path() {
+        local dev="$1"
+        for bp in /dev/dri/by-path/*-card; do
+            if [ -e "$bp" ] && [ "$(readlink -f "$bp" 2>/dev/null)" = "$dev" ]; then
+                echo "$bp"
+                return
+            fi
+        done
+        echo "$dev"
+    }
+
+    for c in /sys/class/drm/card[0-9]; do
+        [ -d "$c" ] || continue
+        c_dev="/dev/dri/$(basename "$c")"
+        [ -e "$c_dev" ] || continue
+
+        has_connected=0
+        for conn in "$c"/card*-*; do
+            if [ -f "$conn/status" ] && [ "$(cat "$conn/status" 2>/dev/null)" = "connected" ]; then
+                has_connected=1
+                break
+            fi
+        done
+
+        is_boot_vga=0
+        if [ -f "$c/device/boot_vga" ] && [ "$(cat "$c/device/boot_vga" 2>/dev/null)" = "1" ]; then
+            is_boot_vga=1
+        fi
+
+        bp_dev=$(to_by_path "$c_dev")
+        if [ "$has_connected" -eq 1 ] || [ "$is_boot_vga" -eq 1 ]; then
+            if [ -z "$primary_card" ]; then
+                primary_card="$bp_dev"
+                continue
+            fi
+        fi
+        other_cards+=("$bp_dev")
+    done
+
+    if [ -n "$primary_card" ] && [ ${#other_cards[@]} -gt 0 ]; then
+        export AQ_DRM_DEVICES="${primary_card}:$(IFS=:; echo "${other_cards[*]}")"
+        echo "==> Multi-GPU: установлен порядок AQ_DRM_DEVICES: $AQ_DRM_DEVICES"
+    fi
+fi
+
 # Если конфигурация существует, запускаем с ней
 CONF_ARG=()
 if [ -f "$USER_HYPR_CONF" ]; then
@@ -79,6 +129,7 @@ fi
 echo "==> Запуск композитора Hyprland..."
 echo "    ZEPHYRINE_DIR: $ZEPHYRINE_DIR"
 echo "    ZEPHYRINE_QS_DIR: $ZEPHYRINE_QS_DIR"
+echo "    AQ_DRM_DEVICES: ${AQ_DRM_DEVICES:-auto}"
 echo "    CONFIG: ${CONF_ARG[*]:-default}"
 
 # Выбор официальной точки входа (start-hyprland с watchdog или напрямую Hyprland)

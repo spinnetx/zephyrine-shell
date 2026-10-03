@@ -139,9 +139,10 @@ hl.env("HYPRCURSOR_SIZE", "24")
 -- hl.env does NOT expand $VARNAME like the old env= directive did; os.getenv() is required instead.
 -- SSH-агент один на всю систему — gpg-agent (его ssh-сокет; тот же выбор в fish/config.fish).
 hl.env("SSH_AUTH_SOCK", os.getenv("XDG_RUNTIME_DIR") .. "/gnupg/S.gpg-agent.ssh")
-hl.env("__EGL_VENDOR_LIBRARY_FILENAMES", "/usr/share/glvnd/egl_vendor.d/50_mesa.json")
-hl.env("__GLX_VENDOR_LIBRARY_NAME", "mesa")
-hl.env("WLR_DRM_DEVICES", "/dev/dri/card1")
+-- Multi-GPU (Aquamarine): если задана переменная AQ_DRM_DEVICES, передаем в композитор
+if os.getenv("AQ_DRM_DEVICES") then
+    hl.env("AQ_DRM_DEVICES", os.getenv("AQ_DRM_DEVICES"))
+end
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 hl.env("LIBVIRT_DEFAULT_URI", "qemu:///system") -- virsh/virt-install по умолчанию к системному libvirt
 

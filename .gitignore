@@ -19,6 +19,11 @@ pkg/
 # SDDM large assets
 sddm/zephyrine/assets/background.mp4
 
+# Diagnostic reports
+DIAGNOSIS*.md
+*.diagnostic
+*.report
+
 # OS
 .DS_Store
 Thumbs.db
