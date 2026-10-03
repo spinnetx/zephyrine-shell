@@ -1,0 +1,24 @@
+/* Внутренние страницы Zen (about:*, новая вкладка) — палитра ObsidianNeon.
+ * Сайты не трогаются. Полный перезапуск Zen обязателен. */
+
+@-moz-document url-prefix("about:") {
+    :root {
+        --in-content-page-background: #141414 !important;
+        --in-content-page-color: #e8e8f0 !important;
+        --in-content-text-color: #e8e8f0 !important;
+        --in-content-box-background: #1c1d2b !important;
+        --in-content-box-background-hover: #242538 !important;
+        --in-content-box-border-color: #41466a !important;
+        --in-content-border-color: #41466a !important;
+        --in-content-primary-button-background: #9ece6a !important;
+        --in-content-primary-button-background-hover: #b5df96 !important;
+        --in-content-primary-button-text-color: #1c331b !important;
+        --in-content-accent-color: #9ece6a !important;
+        --in-content-link-color: #7aa2f7 !important;
+        --in-content-link-color-hover: #a9c1fa !important;
+        --in-content-focus-outline-color: #9ece6a !important;
+        --newtab-background-color: #141414 !important;
+        --newtab-text-primary-color: #e8e8f0 !important;
+        --newtab-primary-action-background: #9ece6a !important;
+    }
+}

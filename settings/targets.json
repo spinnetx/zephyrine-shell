@@ -1,0 +1,882 @@
+{
+    "version": 1,
+    "description": "Манифест целей генератора (DESIGN §3.2). Пути output - относительно корня репо ($ZEPHYRINE_ROOT, по умолчанию ~/my_zephyrine_conf); ~ - домашний каталог. stage != v1 - заглушка будущего этапа.",
+    "fields": {
+        "kind": "template|patch|data|emit|command",
+        "deploy": "none | copy:<путь> | obsidian-vaults | zen-profile | tb-profile | tb-xpi",
+        "reload": "none | hypr-reload | kitty-usr1 | hypridle-restart | mpvpaper-restart | gsettings",
+        "detect": "{type: always|command|file}; не найдено -> skipped (не ошибка)",
+        "golden": "участвует в golden-тесте (false для emit/patch/command)",
+        "keys": "ключи settings, влияющие на цель (выбор целей при set); keysLater - ключи будущих этапов",
+        "patches": "только kind=patch: список правок отдельных ключей файла (zsettings/patch.py: type ini|line, from, value, tail, sizeFrom, forbid); deployPatches - то же только для живой копии"
+    },
+    "stateDir": "~/.local/state/zephyrine",
+    "profileDiscovery": {
+        "rule": "<root>/installs.ini -> первая строка 'Default=' -> <root>/<значение>; как в deploy.sh",
+        "examples": {
+            "zen": "~/.config/zen/smhkr7xv.Default (release)",
+            "thunderbird": "~/.config/thunderbird/<профиль>"
+        }
+    },
+    "targets": [
+        {
+            "id": "quickshell",
+            "kind": "data",
+            "stage": "v1",
+            "template": null,
+            "output": "quickshell/scheme.override.json",
+            "deploy": "none",
+            "reload": "none",
+            "restart": "вживую (FileView в Colors.qml)",
+            "detect": {
+                "type": "always"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.mode"
+            ],
+            "golden": true,
+            "deployNote": "~/.config/quickshell/zephyrine - симлинк на quickshell/ репо; пишем в realpath",
+            "defaultContent": "{\"colours\": {}}",
+            "notes": "Только переопределённые ключи палитры (эффективное != scheme.json). Альфы/радиусы бар получает от Prefs (settings.json), не через этот файл.",
+            "manageKey": "appearance.targets.quickshell"
+        },
+        {
+            "id": "hypr",
+            "kind": "emit",
+            "stage": "v1",
+            "template": null,
+            "output": ".config/hypr/settings.lua",
+            "deploy": "none",
+            "reload": "hypr-reload",
+            "restart": "вживую",
+            "detect": {
+                "type": "command",
+                "name": "hyprctl"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.windowRounding",
+                "hypr.borders.style",
+                "hypr.borders.size",
+                "hypr.borders.custom",
+                "hypr.glassOpacity",
+                "input.layouts",
+                "input.switchOption",
+                "input.extraOptions",
+                "input.repeatRate",
+                "input.repeatDelay",
+                "input.sensitivity",
+                "input.touchpad.naturalScroll",
+                "input.touchpad.tapToClick",
+                "input.touchpad.tapAndDrag",
+                "input.touchpad.disableWhileTyping",
+                "input.touchpad.clickfinger",
+                "input.touchpad.middleButtonEmulation",
+                "input.touchpad.scrollFactor",
+                "appearance.mode",
+                "appearance.cursor.theme",
+                "appearance.cursor.size"
+            ],
+            "golden": false,
+            "deployNote": "~/.config/hypr - симлинк на .config/hypr репо",
+            "reloadCmd": [
+                "hyprctl",
+                "reload",
+                "config-only"
+            ],
+            "preCheck": [
+                "luac -p <file>",
+                "hyprctl repl (loadfile)"
+            ],
+            "postCheck": [
+                "hyprctl configerrors пуст, иначе откат из бэкапа"
+            ],
+            "keysLater": [
+                "display.monitors",
+                "binds.*",
+                "apps.terminal",
+                "apps.fileManager",
+                "autostart"
+            ],
+            "notes": "Эмиттер (hypr.py), без шаблона; подключается из hyprland.lua через pcall(dofile) (DESIGN §3.9). Цветовые значения рамок - не палитра (palette-roles.json: nonPalette).",
+            "manageKey": "appearance.targets.hypr"
+        },
+        {
+            "id": "gtk3",
+            "kind": "template",
+            "stage": "v1",
+            "template": "templates/gtk/gtk3.css.tmpl",
+            "output": ".config/gtk-3.0/gtk.css",
+            "deploy": "copy:~/.config/gtk-3.0/gtk.css",
+            "reload": "none",
+            "restart": "новые окна; открытые GTK-приложения - перезапуск",
+            "detect": {
+                "type": "always"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.glassAlpha",
+                "appearance.surfaceAlpha",
+                "appearance.radius",
+                "appearance.mode"
+            ],
+            "golden": "tests/golden/gtk3/gtk.css",
+            "notes": "Файл НЕ идентичен gtk-4.0/gtk.css: в gtk-3.0 есть дополнительный комментарий в конце (строки про window/.background) - отдельный шаблон на каждую цель.",
+            "manageKey": "appearance.targets.gtk3"
+        },
+        {
+            "id": "gtk4",
+            "kind": "template",
+            "stage": "v1",
+            "template": "templates/gtk/gtk4.css.tmpl",
+            "output": ".config/gtk-4.0/gtk.css",
+            "deploy": "copy:~/.config/gtk-4.0/gtk.css",
+            "reload": "none",
+            "restart": "новые окна; открытые GTK-приложения - перезапуск",
+            "detect": {
+                "type": "always"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.glassAlpha",
+                "appearance.surfaceAlpha",
+                "appearance.radius",
+                "appearance.mode"
+            ],
+            "golden": "tests/golden/gtk4/gtk.css",
+            "manageKey": "appearance.targets.gtk4"
+        },
+        {
+            "id": "qt6ct",
+            "kind": "template",
+            "stage": "v1",
+            "template": "templates/qt6ct/zephyrine.conf.tmpl",
+            "output": ".config/qt6ct/colors/zephyrine.conf",
+            "deploy": "copy:~/.config/qt6ct/colors/zephyrine.conf",
+            "reload": "none",
+            "restart": "перезапуск Qt-приложений (проверить, следит ли qt6ct за файлом)",
+            "detect": {
+                "type": "command",
+                "name": "qt6ct"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.mode"
+            ],
+            "golden": "tests/golden/qt6ct/zephyrine.conf",
+            "notes": "Формат #AARRGGBB (фильтр argb). Файл палитры не содержит абсолютных путей; путь color_scheme_path живёт в qt6ct.conf (цель qt6ct-conf).",
+            "manageKey": "appearance.targets.qt6ct"
+        },
+        {
+            "id": "zed",
+            "kind": "template",
+            "stage": "v1",
+            "template": "templates/zed/zephyrine.json.tmpl",
+            "output": ".config/zed/themes/zephyrine.json",
+            "deploy": "none",
+            "reload": "none",
+            "restart": "Zed следит за themes/ (проверить)",
+            "detect": {
+                "type": "command",
+                "name": "zeditor"
+            },
+            "keys": [
+                "appearance.glassAlpha",
+                "appearance.mode"
+            ],
+            "golden": "tests/golden/zed/zephyrine.json",
+            "deployNote": "~/.config/zed - симлинк на .config/zed репо",
+            "notes": "Эталон без финального \\n (json.dumps indent=2). Шаблон строго воспроизводит байты.",
+            "manageKey": "appearance.targets.zed"
+        },
+        {
+            "id": "kitty",
+            "kind": "template",
+            "stage": "v1",
+            "template": "templates/kitty/zephyrine.conf.tmpl",
+            "output": ".config/kitty/zephyrine.conf",
+            "deploy": "none",
+            "reload": "kitty-usr1",
+            "restart": "вживую",
+            "detect": {
+                "type": "command",
+                "name": "kitty"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.mode"
+            ],
+            "golden": "tests/golden/kitty/zephyrine.conf",
+            "deployNote": "~/.config/kitty - симлинк на .config/kitty репо",
+            "reloadCmd": [
+                "pkill",
+                "-USR1",
+                "-x",
+                "kitty"
+            ],
+            "notes": "kitty.conf подключает zephyrine.conf через include (строка 98).",
+            "manageKey": "appearance.targets.kitty"
+        },
+        {
+            "id": "zathura",
+            "kind": "template",
+            "stage": "v1",
+            "template": "templates/zathura/zathurarc.tmpl",
+            "output": ".config/zathura/zathurarc",
+            "deploy": "none",
+            "reload": "none",
+            "restart": "перезапуск zathura или :source",
+            "detect": {
+                "type": "command",
+                "name": "zathura"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.fonts.mono.family",
+                "appearance.fonts.mono.size",
+                "appearance.mode"
+            ],
+            "golden": "tests/golden/zathura/zathurarc",
+            "deployNote": "~/.config/zathura/zathurarc - симлинк на файл репо (сам каталог zathura - обычный)",
+            "manageKey": "appearance.targets.zathura"
+        },
+        {
+            "id": "obsidian",
+            "kind": "template",
+            "stage": "v1",
+            "template": "templates/obsidian/theme.css.tmpl",
+            "output": "obsidian/Zephyrine/theme.css",
+            "deploy": "obsidian-vaults",
+            "deployPath": "<vault>/.obsidian/themes/Zephyrine/theme.css",
+            "reload": "none",
+            "restart": "проверить live-перезагрузку темы; иначе Ctrl+R в Obsidian",
+            "detect": {
+                "type": "file",
+                "path": "~/.config/obsidian/obsidian.json"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.glassAlpha",
+                "appearance.surfaceAlpha",
+                "appearance.radius",
+                "appearance.fonts.mono.family",
+                "appearance.fonts.shell.size",
+                "appearance.mode"
+            ],
+            "golden": "tests/golden/obsidian/theme.css",
+            "deployExtra": [
+                "obsidian/Zephyrine/manifest.json (статический, копируется рядом с theme.css; не шаблон)"
+            ],
+            "registry": "~/.config/obsidian/obsidian.json",
+            "registryPath": "vaults.*.path",
+            "notes": "Vault'ы сейчас на /mnt/data (NTFS/fuseblk) - может быть не смонтирован -> skipped. Нет <vault>/.obsidian -> skipped. appearance.json (включение темы) НЕ трогаем - это делает deploy.sh --obsidian-only. Нужны primaryHsl (palette-roles.json: strings).",
+            "manageKey": "appearance.targets.obsidian"
+        },
+        {
+            "id": "tb-css",
+            "kind": "template",
+            "stage": "v1",
+            "template": "templates/thunderbird/userChrome.css.tmpl",
+            "output": "thunderbird/userChrome.css",
+            "deploy": "tb-profile",
+            "deployPath": "<профиль TB>/chrome/userChrome.css",
+            "reload": "none",
+            "restart": "полный перезапуск Thunderbird",
+            "detect": {
+                "type": "file",
+                "path": "~/.config/thunderbird/installs.ini"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.glassAlpha",
+                "appearance.surfaceAlpha",
+                "appearance.radius",
+                "appearance.mode"
+            ],
+            "golden": "tests/golden/tb-css/userChrome.css",
+            "profile": {
+                "root": "~/.config/thunderbird",
+                "registry": "installs.ini",
+                "key": "Default"
+            },
+            "manageKey": "appearance.targets.tb-css"
+        },
+        {
+            "id": "tb-theme",
+            "kind": "template",
+            "stage": "v1",
+            "template": "templates/thunderbird/manifest.json.tmpl",
+            "output": "thunderbird/zephyrine-theme/manifest.json",
+            "deploy": "tb-xpi",
+            "deployPath": "<профиль TB>/extensions/zephyrine-theme@zephyrine.xpi",
+            "reload": "none",
+            "restart": "полный перезапуск Thunderbird",
+            "detect": {
+                "type": "file",
+                "path": "~/.config/thunderbird/installs.ini"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.mode"
+            ],
+            "golden": "tests/golden/tb-theme/manifest.json",
+            "xpi": {
+                "format": "zip",
+                "deflate": true,
+                "members": [
+                    {
+                        "src": "output",
+                        "name": "manifest.json"
+                    }
+                ]
+            },
+            "profile": {
+                "root": "~/.config/thunderbird",
+                "registry": "installs.ini",
+                "key": "Default"
+            },
+            "versioning": {
+                "field": "version",
+                "base": "1.0",
+                "counter": "generated.json:meta.tbVersion",
+                "note": "golden идёт с N=0 -> \"1.0\"; при необходимости роста версии - 1.0.N (проверить, нужен ли рост)"
+            },
+            "notes": "Эталон manifest.json НЕ воспроизводится json.dumps (инлайн-объект gecko) - шаблон текстовый. Живая копия - manifest внутри xpi.",
+            "manageKey": "appearance.targets.tb-theme"
+        },
+        {
+            "id": "zen-chrome",
+            "kind": "template",
+            "stage": "v1",
+            "template": "templates/zen/userChrome.css.tmpl",
+            "output": "zen/userChrome.css",
+            "deploy": "zen-profile",
+            "deployPath": "<профиль Zen>/chrome/userChrome.css",
+            "reload": "none",
+            "restart": "полный перезапуск Zen",
+            "detect": {
+                "type": "file",
+                "path": "~/.config/zen/installs.ini"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.glassAlpha",
+                "appearance.radius",
+                "appearance.mode"
+            ],
+            "golden": "tests/golden/zen-chrome/userChrome.css",
+            "profile": {
+                "root": "~/.config/zen",
+                "registry": "installs.ini",
+                "key": "Default"
+            },
+            "notes": "Путь профиля содержит пробелы и скобки ('smhkr7xv.Default (release)') - только списки аргументов, без sh -c.",
+            "manageKey": "appearance.targets.zen-chrome"
+        },
+        {
+            "id": "zen-content",
+            "kind": "template",
+            "stage": "v1",
+            "template": "templates/zen/userContent.css.tmpl",
+            "output": "zen/userContent.css",
+            "deploy": "zen-profile",
+            "deployPath": "<профиль Zen>/chrome/userContent.css",
+            "reload": "none",
+            "restart": "полный перезапуск Zen",
+            "detect": {
+                "type": "file",
+                "path": "~/.config/zen/installs.ini"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.mode"
+            ],
+            "golden": "tests/golden/zen-content/userContent.css",
+            "profile": {
+                "root": "~/.config/zen",
+                "registry": "installs.ini",
+                "key": "Default"
+            },
+            "manageKey": "appearance.targets.zen-content"
+        },
+        {
+            "id": "gtk3-settings",
+            "kind": "patch",
+            "stage": "v1.1",
+            "template": null,
+            "output": ".config/gtk-3.0/settings.ini",
+            "deploy": "copy:~/.config/gtk-3.0/settings.ini",
+            "reload": "none",
+            "restart": "GTK 3 - перезапуск приложений",
+            "detect": {
+                "type": "always"
+            },
+            "keys": [
+                "appearance.fonts.ui.family",
+                "appearance.fonts.ui.size",
+                "appearance.mode",
+                "appearance.icons.theme",
+                "appearance.cursor.theme",
+                "appearance.cursor.size"
+            ],
+            "golden": false,
+            "patches": [
+                {
+                    "type": "ini",
+                    "section": "Settings",
+                    "key": "gtk-font-name",
+                    "from": "appearance.fonts.ui",
+                    "value": "{family},  {size}"
+                },
+                {
+                    "type": "ini",
+                    "section": "Settings",
+                    "key": "gtk-application-prefer-dark-theme",
+                    "from": "appearance.mode",
+                    "map": {
+                        "dark": "true",
+                        "light": "false"
+                    }
+                },
+                {
+                    "type": "ini",
+                    "section": "Settings",
+                    "key": "gtk-theme-name",
+                    "from": "appearance.mode",
+                    "map": {
+                        "dark": "adw-gtk3-dark",
+                        "light": "adw-gtk3"
+                    }
+                },
+                {
+                    "type": "ini",
+                    "section": "Settings",
+                    "key": "gtk-icon-theme-name",
+                    "from": "appearance.icons.theme",
+                    "fallback": {
+                        "from": "appearance.mode",
+                        "map": {
+                            "dark": "Papirus-Dark",
+                            "light": "Papirus"
+                        }
+                    }
+                },
+                {
+                    "type": "ini",
+                    "section": "Settings",
+                    "key": "gtk-cursor-theme-name",
+                    "from": "appearance.cursor.theme"
+                },
+                {
+                    "type": "ini",
+                    "section": "Settings",
+                    "key": "gtk-cursor-theme-size",
+                    "from": "appearance.cursor.size"
+                }
+            ],
+            "manageKey": "appearance.targets.gtk3-settings",
+            "notes": "Правятся gtk-font-name и (по режиму темы) gtk-application-prefer-dark-theme, gtk-theme-name, gtk-icon-theme-name (appearance.icons.theme, null = по режиму), gtk-cursor-theme-name, gtk-cursor-theme-size; остальные ключи settings.ini не трогаются. Формат значения как в файле: 'Inter,  10'."
+        },
+        {
+            "id": "gtk4-settings",
+            "kind": "patch",
+            "stage": "v1.1",
+            "template": null,
+            "output": ".config/gtk-4.0/settings.ini",
+            "deploy": "copy:~/.config/gtk-4.0/settings.ini",
+            "reload": "none",
+            "restart": "GTK 4 - вживую через gsettings",
+            "detect": {
+                "type": "always"
+            },
+            "keys": [
+                "appearance.fonts.ui.family",
+                "appearance.fonts.ui.size",
+                "appearance.mode",
+                "appearance.icons.theme",
+                "appearance.cursor.theme",
+                "appearance.cursor.size"
+            ],
+            "golden": false,
+            "patches": [
+                {
+                    "type": "ini",
+                    "section": "Settings",
+                    "key": "gtk-font-name",
+                    "from": "appearance.fonts.ui",
+                    "value": "{family},  {size}"
+                },
+                {
+                    "type": "ini",
+                    "section": "Settings",
+                    "key": "gtk-application-prefer-dark-theme",
+                    "from": "appearance.mode",
+                    "map": {
+                        "dark": "true",
+                        "light": "false"
+                    }
+                },
+                {
+                    "type": "ini",
+                    "section": "Settings",
+                    "key": "gtk-theme-name",
+                    "from": "appearance.mode",
+                    "map": {
+                        "dark": "adw-gtk3-dark",
+                        "light": "adw-gtk3"
+                    }
+                },
+                {
+                    "type": "ini",
+                    "section": "Settings",
+                    "key": "gtk-icon-theme-name",
+                    "from": "appearance.icons.theme",
+                    "fallback": {
+                        "from": "appearance.mode",
+                        "map": {
+                            "dark": "Papirus-Dark",
+                            "light": "Papirus"
+                        }
+                    }
+                },
+                {
+                    "type": "ini",
+                    "section": "Settings",
+                    "key": "gtk-cursor-theme-name",
+                    "from": "appearance.cursor.theme"
+                },
+                {
+                    "type": "ini",
+                    "section": "Settings",
+                    "key": "gtk-cursor-theme-size",
+                    "from": "appearance.cursor.size"
+                }
+            ],
+            "manageKey": "appearance.targets.gtk4-settings",
+            "live": true,
+            "notes": "Правятся gtk-font-name и (по режиму темы) gtk-application-prefer-dark-theme, gtk-theme-name, gtk-icon-theme-name (appearance.icons.theme, null = по режиму), gtk-cursor-theme-name, gtk-cursor-theme-size; остальные ключи settings.ini не трогаются. Живой GTK 4 получает шрифт через gsettings (цель gsettings)."
+        },
+        {
+            "id": "qt6ct-conf",
+            "kind": "patch",
+            "stage": "v1.1",
+            "template": null,
+            "output": ".config/qt6ct/qt6ct.conf",
+            "deploy": "copy:~/.config/qt6ct/qt6ct.conf",
+            "reload": "none",
+            "restart": "перезапуск Qt-приложений",
+            "detect": {
+                "type": "command",
+                "name": "qt6ct"
+            },
+            "keys": [
+                "appearance.fonts.ui.family",
+                "appearance.fonts.ui.size",
+                "appearance.fonts.mono.family",
+                "appearance.fonts.mono.size",
+                "appearance.mode",
+                "appearance.icons.theme"
+            ],
+            "golden": false,
+            "patches": [
+                {
+                    "type": "ini",
+                    "section": "Fonts",
+                    "key": "general",
+                    "from": "appearance.fonts.ui",
+                    "value": "\"{family},{size}{tail}\"",
+                    "tail": "^\"[^,\"]*,[^,\"]*(?P<tail>,[^\"]*)\"\\s*$",
+                    "tailDefault": ",-1,5,400,0,0,0,0,0,0,0,0,0,0,1",
+                    "forbid": ","
+                },
+                {
+                    "type": "ini",
+                    "section": "Fonts",
+                    "key": "fixed",
+                    "from": "appearance.fonts.mono",
+                    "value": "\"{family},{size}{tail}\"",
+                    "tail": "^\"[^,\"]*,[^,\"]*(?P<tail>,[^\"]*)\"\\s*$",
+                    "tailDefault": ",-1,5,400,0,0,0,0,0,0,0,0,0,0,1",
+                    "forbid": ",",
+                    "sizeFrom": "appearance.fonts.mono.size"
+                },
+                {
+                    "type": "ini",
+                    "section": "Appearance",
+                    "key": "icon_theme",
+                    "from": "appearance.icons.theme",
+                    "fallback": {
+                        "from": "appearance.mode",
+                        "map": {
+                            "dark": "Papirus-Dark",
+                            "light": "Papirus"
+                        }
+                    }
+                }
+            ],
+            "manageKey": "appearance.targets.qt6ct-conf",
+            "deployPatches": [
+                {
+                    "type": "ini",
+                    "section": "Appearance",
+                    "key": "color_scheme_path",
+                    "value": "{HOME}/.config/qt6ct/colors/zephyrine.conf"
+                }
+            ],
+            "notes": "Правятся только Fonts/general и Fonts/fixed (хвост шрифта '-1,5,400,...' сохраняется). Размер fixed берётся из mono.size (дефолт 11). Живая копия: color_scheme_path подставляется под HOME (как deploy.sh); в репо путь под ~ не трогаем."
+        },
+        {
+            "id": "kitty-conf",
+            "kind": "patch",
+            "stage": "v1.1",
+            "template": null,
+            "output": ".config/kitty/kitty.conf",
+            "deploy": "none",
+            "reload": "kitty-usr1",
+            "restart": "вживую",
+            "detect": {
+                "type": "command",
+                "name": "kitty"
+            },
+            "keys": [
+                "appearance.fonts.mono.family",
+                "appearance.fonts.mono.size",
+                "appearance.kittyOpacity"
+            ],
+            "golden": false,
+            "deployNote": "симлинк",
+            "reloadCmd": [
+                "pkill",
+                "-USR1",
+                "-x",
+                "kitty"
+            ],
+            "patches": [
+                {
+                    "type": "line",
+                    "pattern": "^font_family\\s+(?P<val>.*)$",
+                    "from": "appearance.fonts.mono.family",
+                    "line": "font_family        {v}"
+                },
+                {
+                    "type": "line",
+                    "pattern": "^font_size\\s+(?P<val>.*)$",
+                    "from": "appearance.fonts.mono.size",
+                    "value": "{v:.1f}",
+                    "line": "font_size          {v:.1f}"
+                },
+                {
+                    "type": "line",
+                    "pattern": "^background_opacity\\s+(?P<val>.*)$",
+                    "from": "appearance.kittyOpacity",
+                    "value": "{v:.2f}",
+                    "line": "background_opacity {v:.2f}"
+                }
+            ],
+            "manageKey": "appearance.targets.kitty-conf",
+            "notes": "Правятся только font_family, font_size, background_opacity (остальное - руками). kitty перечитывает конфиг по SIGUSR1."
+        },
+        {
+            "id": "gsettings",
+            "kind": "command",
+            "stage": "v1.1",
+            "template": null,
+            "output": null,
+            "deploy": "none",
+            "reload": "gsettings",
+            "restart": "GTK 4 - вживую; GTK 3/Qt - перезапуск",
+            "detect": {
+                "type": "command",
+                "name": "gsettings"
+            },
+            "keys": [
+                "appearance.fonts.ui.family",
+                "appearance.fonts.ui.size",
+                "appearance.fonts.mono.family",
+                "appearance.fonts.mono.size",
+                "appearance.mode",
+                "appearance.icons.theme",
+                "appearance.cursor.theme",
+                "appearance.cursor.size"
+            ],
+            "golden": false,
+            "commands": [
+                {
+                    "schema": "org.gnome.desktop.interface",
+                    "key": "font-name",
+                    "from": "appearance.fonts.ui",
+                    "value": "{family}  {size}"
+                },
+                {
+                    "schema": "org.gnome.desktop.interface",
+                    "key": "monospace-font-name",
+                    "from": "appearance.fonts.mono",
+                    "sizeFrom": "appearance.fonts.mono.size",
+                    "value": "{family}  {size}"
+                },
+                {
+                    "schema": "org.gnome.desktop.interface",
+                    "key": "color-scheme",
+                    "from": "appearance.mode",
+                    "map": {
+                        "dark": "prefer-dark",
+                        "light": "prefer-light"
+                    }
+                },
+                {
+                    "schema": "org.gnome.desktop.interface",
+                    "key": "gtk-theme",
+                    "from": "appearance.mode",
+                    "map": {
+                        "dark": "adw-gtk3-dark",
+                        "light": "adw-gtk3"
+                    }
+                },
+                {
+                    "schema": "org.gnome.desktop.interface",
+                    "key": "icon-theme",
+                    "from": "appearance.icons.theme",
+                    "fallback": {
+                        "from": "appearance.mode",
+                        "map": {
+                            "dark": "Papirus-Dark",
+                            "light": "Papirus"
+                        }
+                    }
+                },
+                {
+                    "schema": "org.gnome.desktop.interface",
+                    "key": "cursor-theme",
+                    "from": "appearance.cursor.theme"
+                },
+                {
+                    "schema": "org.gnome.desktop.interface",
+                    "key": "cursor-size",
+                    "from": "appearance.cursor.size"
+                }
+            ],
+            "manageKey": "appearance.targets.gsettings",
+            "live": true,
+            "notes": "Реализация - zsettings/gsettings.py: читает gsettings get, пишет set только при отличии (значение в виде 'Inter  11', где 11 дефолт mono.size)."
+        },
+        {
+            "id": "cursor",
+            "kind": "command",
+            "stage": "v1.1",
+            "template": null,
+            "output": null,
+            "deploy": "none",
+            "reload": "none",
+            "restart": "вживую в Hyprland; Qt/XWayland и открытые GTK 3 - перезапуск приложений",
+            "detect": {
+                "type": "command",
+                "name": "hyprctl"
+            },
+            "keys": [
+                "appearance.cursor.theme",
+                "appearance.cursor.size"
+            ],
+            "golden": false,
+            "manageKey": "appearance.targets.cursor",
+            "live": true,
+            "notes": "Реализация - zsettings/cursor.py: `hyprctl setcursor <тема> <размер>` (только при изменении и если Hyprland запущен). Переменные XCURSOR_*/HYPRCURSOR_* для следующего входа пишет цель hypr (settings.lua)."
+        },
+        {
+            "id": "wallpaper",
+            "kind": "command",
+            "stage": "v1.1",
+            "template": null,
+            "output": null,
+            "deploy": "none",
+            "reload": "mpvpaper-restart",
+            "restart": "вживую (только mpvpaper рабочего стола; SDDM - команда с sudo)",
+            "detect": {
+                "type": "command",
+                "name": "mpvpaper"
+            },
+            "keys": [
+                "appearance.wallpaper.desktop",
+                "appearance.wallpaper.lock"
+            ],
+            "golden": false,
+            "state": {
+                "desktop": "~/.local/state/zephyrine/wallpaper-desktop",
+                "lock": "~/.local/state/zephyrine/wallpaper-lock"
+            },
+            "manageKey": "appearance.targets.wallpaper"
+        },
+        {
+            "id": "hypridle",
+            "kind": "template",
+            "stage": "3",
+            "template": "templates/hypr/hypridle.conf.tmpl",
+            "output": ".config/hypr/hypridle.conf",
+            "deploy": "none",
+            "reload": "hypridle-restart",
+            "restart": "вживую (перезапуск hypridle)",
+            "detect": {
+                "type": "command",
+                "name": "hypridle"
+            },
+            "keys": [
+                "power.idle.dimSec",
+                "power.idle.dimLevel",
+                "power.idle.lockSec",
+                "power.idle.dpmsSec",
+                "power.idle.suspendSec"
+            ],
+            "golden": "tests/golden/hypridle/hypridle.conf",
+            "deployNote": "симлинк",
+            "notes": "Golden = текущий файл; поведение dpms/затемнения - после ответа на DESIGN §10 вопрос 1.",
+            "manageKey": "appearance.targets.hypridle"
+        },
+        {
+            "id": "hyprlock",
+            "kind": "template",
+            "stage": "v1",
+            "template": "templates/hypr/hyprlock.conf.tmpl",
+            "output": ".config/hypr/hyprlock.conf",
+            "deploy": "none",
+            "reload": "none",
+            "restart": "со следующей блокировки",
+            "detect": {
+                "type": "command",
+                "name": "hyprlock"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.fonts.lock.family",
+                "appearance.mode"
+            ],
+            "golden": "tests/golden/hyprlock/hyprlock.conf",
+            "deployNote": "симлинк",
+            "optional": true,
+            "notes": "Экран блокировки: цвета из палитры (акцент), шрифт appearance.fonts.lock.family. Golden — файл, собранный из шаблона при дефолтных настройках.",
+            "manageKey": "appearance.targets.hyprlock"
+        },
+        {
+            "id": "sddm",
+            "kind": "template",
+            "stage": "v1",
+            "template": "templates/sddm/theme.conf.user.tmpl",
+            "output": "sddm/zephyrine/theme.conf.user",
+            "deploy": "none",
+            "reload": "none",
+            "restart": "после sudo sddm/install-theme.sh",
+            "detect": {
+                "type": "always"
+            },
+            "keys": [
+                "appearance.accent",
+                "appearance.fonts.login.family",
+                "appearance.mode"
+            ],
+            "golden": "tests/golden/sddm/theme.conf.user",
+            "deployNote": "файл в репозитории; в систему его копирует sudo sddm/install-theme.sh (greeter читает /usr/share/sddm/themes/zephyrine/theme.conf.user)",
+            "optional": true,
+            "notes": "Окно входа SDDM: палитра (акцент) и шрифт поверх theme.conf.",
+            "manageKey": "appearance.targets.sddm"
+        }
+    ]
+}

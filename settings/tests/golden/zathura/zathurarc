@@ -1,0 +1,43 @@
+# Тема zathura под палитру ObsidianNeon (та же, что у theme/obsidian-neon-scheme.json)
+# — в отличие от evince/papers, zathura не наследует GTK-тему, цвета задаются вручную.
+
+set font "JetBrainsMono Nerd Font 11"
+
+set default-bg               "#141414"
+set default-fg                "#e8e8f0"
+
+set statusbar-bg              "#1c1d2b"
+set statusbar-fg              "#e8e8f0"
+
+set inputbar-bg               "#1c1d2b"
+set inputbar-fg               "#e8e8f0"
+
+set completion-bg             "#242538"
+set completion-fg             "#e8e8f0"
+set completion-group-bg       "#141414"
+set completion-group-fg       "#7aa2f7"
+set completion-highlight-bg   "#bb9af7"
+set completion-highlight-fg   "#141414"
+
+set notification-bg           "#242538"
+set notification-fg           "#e8e8f0"
+set notification-error-bg     "#f7768e"
+set notification-error-fg     "#2a0a10"
+set notification-warning-bg   "#e0af68"
+set notification-warning-fg   "#141414"
+
+set highlight-color           "#bb9af7"
+set highlight-active-color    "#7aa2f7"
+set highlight-transparency    0.6
+
+set recolor                   true
+set recolor-lightcolor        "#141414"
+set recolor-darkcolor         "#e8e8f0"
+set recolor-keephue           false
+
+set window-title-basename     true
+set selection-clipboard       clipboard
+set adjust-open               "best-fit"
+set pages-per-row             1
+set scroll-step               60
+set guioptions                ""

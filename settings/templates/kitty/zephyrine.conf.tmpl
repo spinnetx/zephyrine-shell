@@ -1,0 +1,32 @@
+# Палитра ObsidianNeon (quickshell/scheme.json). Прозрачность — background_opacity в kitty.conf.
+foreground            {{ c.onSurface | hex }}
+background            {{ c.surface | hex }}
+selection_foreground  {{ c.onPrimary | hex }}
+selection_background  {{ c.primary | hex }}
+cursor                {{ c.primary | hex }}
+cursor_text_color     {{ c.onPrimary | hex }}
+url_color             {{ c.secondary | hex }}
+
+active_border_color   {{ c.primary | hex }}
+inactive_border_color {{ c.outlineVariant | hex }}
+active_tab_foreground    {{ c.onPrimary | hex }}
+active_tab_background    {{ c.primary | hex }}
+inactive_tab_foreground  {{ c.onSurfaceVariant | hex }}
+inactive_tab_background  {{ c.surfaceContainer | hex }}
+
+color0  {{ c.surfaceContainer | hex }}
+color8  {{ c.outlineVariant | hex }}
+color1  {{ c.error | hex }}
+color9  {{ c.errorLight | hex }}
+color2  {{ c.success | hex }}
+color10 {{ c.successLight | hex }}
+color3  {{ c.warning | hex }}
+color11 {{ c.warningLight | hex }}
+color4  {{ c.secondary | hex }}
+color12 {{ c.secondaryLight | hex }}
+color5  {{ c.purple | hex }}
+color13 {{ c.purpleBright | hex }}
+color6  {{ c.tertiary | hex }}
+color14 {{ c.cyanBright | hex }}
+color7  {{ c.onSurfaceVariant | hex }}
+color15 {{ c.onSurface | hex }}

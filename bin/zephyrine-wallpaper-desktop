@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#
+# zephyrine-wallpaper-desktop — Запуск видеообоев или статичных обоев рабочего стола
+
+if [ -f "/usr/lib/zephyrine/scripts/wallpaper-desktop.sh" ]; then
+    exec "/usr/lib/zephyrine/scripts/wallpaper-desktop.sh" "$@"
+else
+    SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+    exec "${SELF_DIR}/scripts/wallpaper-desktop.sh" "$@"
+fi

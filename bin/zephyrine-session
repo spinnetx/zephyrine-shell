@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+#
+# zephyrine-session — Точка входа графической сессии Zephyrine (Hyprland + Quickshell)
+# Запускается display manager'ом (SDDM, GDM, LightDM) из /usr/share/wayland-sessions/zephyrine.desktop
+
+set -euo pipefail
+
+# Базовые переменные окружения сессии
+export XDG_CURRENT_DESKTOP="Hyprland:Zephyrine"
+export XDG_SESSION_DESKTOP="Zephyrine"
+export XDG_SESSION_TYPE="wayland"
+
+# Определение системных каталогов Zephyrine
+if [ -z "${ZEPHYRINE_DIR:-}" ]; then
+    if [ -d "/usr/share/zephyrine" ]; then
+        export ZEPHYRINE_DIR="/usr/share/zephyrine"
+    elif [ -d "${HOME}/.local/share/zephyrine" ]; then
+        export ZEPHYRINE_DIR="${HOME}/.local/share/zephyrine"
+    else
+        # Режим разработки из репозитория
+        SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+        export ZEPHYRINE_DIR="$SELF_DIR"
+    fi
+fi
+
+# Каталог Quickshell оболочки
+export ZEPHYRINE_QS_DIR="${ZEPHYRINE_QS_DIR:-${ZEPHYRINE_DIR}/quickshell}"
+
+# Обои по умолчанию
+export ZEPHYRINE_DEFAULT_WALLPAPER="${ZEPHYRINE_DEFAULT_WALLPAPER:-${ZEPHYRINE_DIR}/assets/wallpapers/japanese-night-village.1920x1080.mp4}"
+
+# Добавление путей бинарников и скриптов в PATH
+if [ -d "/usr/lib/zephyrine/bin" ]; then
+    export PATH="/usr/lib/zephyrine/bin:/usr/lib/zephyrine/scripts:$PATH"
+elif [ -d "${ZEPHYRINE_DIR}/scripts" ]; then
+    export PATH="${ZEPHYRINE_DIR}/bin:${ZEPHYRINE_DIR}/scripts:$PATH"
+fi
+
+# Проверка и подготовка пользовательской конфигурации
+USER_HYPR_CONF="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/hyprland.lua"
+SYS_HYPR_CONF="${ZEPHYRINE_DIR}/hypr/hyprland.lua"
+
+# Если у пользователя нет своего hyprland.lua, предлагаем системный
+CONF_ARG=()
+if [ ! -f "$USER_HYPR_CONF" ] && [ -f "$SYS_HYPR_CONF" ]; then
+    CONF_ARG=("--config" "$SYS_HYPR_CONF")
+fi
+
+echo "==> Запуск сессии Zephyrine..."
+echo "    ZEPHYRINE_DIR: $ZEPHYRINE_DIR"
+echo "    ZEPHYRINE_QS_DIR: $ZEPHYRINE_QS_DIR"
+
+exec Hyprland "${CONF_ARG[@]}"

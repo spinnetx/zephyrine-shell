@@ -1,0 +1,102 @@
+/* Thunderbird в стиле оболочки Zephyrine: палитра ObsidianNeon (quickshell/scheme.json),
+ * «стекло» с альфой бара (0.88), акцент — сиреневый primary, скругления 12 px.
+ * Затрагивается только chrome (папки, список писем, тулбары, статус-бар);
+ * тело письма в окне чтения не трогается.
+ *
+ * Базовые селекторы прозрачности — из github.com/eromatiya/thunderblurred.
+ * Нужны prefs из user.js и встроенная тема Dark (user.js ставит её сам).
+ * Полный перезапуск Thunderbird обязателен — userChrome.css на лету не подхватывается.
+ * Не проверялось вживую: при смене разметки в новой версии Thunderbird часть
+ * правил может не сработать, переменные :root — самая стабильная часть.
+ */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+:root {
+    --zp-glass: {{ c.background | rgba:a.glass }};
+    --zp-glass-hi: {{ c.surfaceContainer | rgba:a.surface }};
+    --zp-high: {{ c.surfaceContainerHigh | hex }};
+    --zp-highest: {{ c.surfaceContainerHighest | hex }};
+    --zp-fg: {{ c.onSurface | hex }};
+    --zp-fg-variant: {{ c.onSurfaceVariant | hex }};
+    --zp-outline: {{ c.outlineVariant | hex }};
+    --zp-primary: {{ c.primary | hex }};
+    --zp-on-primary: {{ c.onPrimary | hex }};
+
+    /* Переменные Thunderbird (Supernova) */
+    --layout-background-0: var(--zp-glass) !important;
+    --layout-background-1: var(--zp-glass) !important;
+    --layout-background-2: var(--zp-glass-hi) !important;
+    --layout-border-0: var(--zp-outline) !important;
+    --layout-color-0: var(--zp-fg) !important;
+    --layout-color-1: var(--zp-fg) !important;
+    --layout-color-2: var(--zp-fg-variant) !important;
+    --toolbar-bgcolor: transparent !important;
+    --toolbar-color: var(--zp-fg) !important;
+    --toolbarbutton-hover-background: {{ c.surfaceContainerHighest | rgba:0.6 }} !important;
+    --toolbarbutton-active-background: {{ c.primary | rgba:0.22 }} !important;
+    --toolbarbutton-icon-fill-attention: var(--zp-primary) !important;
+    --selected-item-color: {{ c.primary | rgba:0.24 }} !important;
+    --selected-item-text-color: var(--zp-fg) !important;
+    --color-accent-primary: var(--zp-primary) !important;
+    --button-primary-bgcolor: var(--zp-primary) !important;
+    --button-primary-color: var(--zp-on-primary) !important;
+    --arrowpanel-background: var(--zp-high) !important;
+    --arrowpanel-color: var(--zp-fg) !important;
+    --arrowpanel-border-color: var(--zp-outline) !important;
+    --autocomplete-popup-background: var(--zp-high) !important;
+    --autocomplete-popup-color: var(--zp-fg) !important;
+    --autocomplete-popup-highlight-background: {{ c.primary | rgba:0.24 }} !important;
+    --autocomplete-popup-highlight-color: var(--zp-fg) !important;
+    --tab-selected-bgcolor: var(--zp-high) !important;
+    --tab-selected-textcolor: var(--zp-primary) !important;
+    --lwt-accent-color: {{ c.background | hex }} !important;
+    --lwt-text-color: var(--zp-fg) !important;
+}
+
+/* Один внешний слой стекла; вложенные панели прозрачны, иначе альфы складываются */
+#messengerWindow,
+#messengerBox,
+#mail-toolbox {
+    background: var(--zp-glass) !important;
+    border: none !important;
+}
+
+#messengerBox #folderTree,
+#threadTree,
+#messengerBox #messagesBox #quick-filter-bar,
+splitter,
+.tab-background[selected="true"] {
+    background: transparent !important;
+    border: none !important;
+}
+
+#status-bar {
+    background: var(--zp-glass) !important;
+    border-top: 1px solid {{ c.outlineVariant | rgba:0.5 }} !important;
+}
+
+/* Вкладки и кнопки — пилюли */
+.tabmail-tab,
+.tab-background {
+    border-radius: {{ r.md | px }} !important;
+}
+
+.tabmail-tab[selected="true"] .tab-label {
+    color: var(--zp-primary) !important;
+}
+
+toolbarbutton,
+.toolbarbutton-1,
+button {
+    border-radius: {{ r.sm | px }} !important;
+}
+
+/* Всплывающие меню и панели плотные — читаемость над любым фоном */
+menupopup,
+panel,
+.menupopup-arrowscrollbox {
+    --panel-background: var(--zp-high);
+    --panel-border-color: var(--zp-outline);
+    --panel-border-radius: {{ r.md | px }};
+}

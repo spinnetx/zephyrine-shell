@@ -1,0 +1,21 @@
+; СГЕНЕРИРОВАНО zephyrine-settings из templates/sddm/theme.conf.user.tmpl — руками не править.
+; Перекрывает theme.conf темы zephyrine: палитра (акцент — appearance.accent) и шрифт окна входа (appearance.fonts.login.family).
+; В систему копируется командой sudo sddm/install-theme.sh (greeter читает /usr/share/sddm/themes/zephyrine/theme.conf.user).
+[General]
+fontFamily=JetBrainsMono Nerd Font
+background=141414
+surfaceContainer=1c1d2b
+surfaceContainerHigh=242538
+surfaceContainerHighest=303249
+fg=e8e8f0
+fgVariant=c0c0cc
+outline=7f88b5
+outlineVariant=41466a
+primary=bb9af7
+primaryText=2a1a33
+primaryContainer=4b3161
+secondary=7aa2f7
+tertiary=2ac3de
+error=f7768e
+errorText=4a0d17
+success=9ece6a

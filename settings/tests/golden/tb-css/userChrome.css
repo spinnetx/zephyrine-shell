@@ -1,0 +1,102 @@
+/* Thunderbird в стиле оболочки Zephyrine: палитра ObsidianNeon (quickshell/scheme.json),
+ * «стекло» с альфой бара (0.88), акцент — сиреневый primary, скругления 12 px.
+ * Затрагивается только chrome (папки, список писем, тулбары, статус-бар);
+ * тело письма в окне чтения не трогается.
+ *
+ * Базовые селекторы прозрачности — из github.com/eromatiya/thunderblurred.
+ * Нужны prefs из user.js и встроенная тема Dark (user.js ставит её сам).
+ * Полный перезапуск Thunderbird обязателен — userChrome.css на лету не подхватывается.
+ * Не проверялось вживую: при смене разметки в новой версии Thunderbird часть
+ * правил может не сработать, переменные :root — самая стабильная часть.
+ */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+:root {
+    --zp-glass: rgba(20, 20, 20, 0.88);
+    --zp-glass-hi: rgba(28, 29, 43, 0.94);
+    --zp-high: #242538;
+    --zp-highest: #303249;
+    --zp-fg: #e8e8f0;
+    --zp-fg-variant: #c0c0cc;
+    --zp-outline: #41466a;
+    --zp-primary: #bb9af7;
+    --zp-on-primary: #2a1a33;
+
+    /* Переменные Thunderbird (Supernova) */
+    --layout-background-0: var(--zp-glass) !important;
+    --layout-background-1: var(--zp-glass) !important;
+    --layout-background-2: var(--zp-glass-hi) !important;
+    --layout-border-0: var(--zp-outline) !important;
+    --layout-color-0: var(--zp-fg) !important;
+    --layout-color-1: var(--zp-fg) !important;
+    --layout-color-2: var(--zp-fg-variant) !important;
+    --toolbar-bgcolor: transparent !important;
+    --toolbar-color: var(--zp-fg) !important;
+    --toolbarbutton-hover-background: rgba(48, 50, 73, 0.6) !important;
+    --toolbarbutton-active-background: rgba(187, 154, 247, 0.22) !important;
+    --toolbarbutton-icon-fill-attention: var(--zp-primary) !important;
+    --selected-item-color: rgba(187, 154, 247, 0.24) !important;
+    --selected-item-text-color: var(--zp-fg) !important;
+    --color-accent-primary: var(--zp-primary) !important;
+    --button-primary-bgcolor: var(--zp-primary) !important;
+    --button-primary-color: var(--zp-on-primary) !important;
+    --arrowpanel-background: var(--zp-high) !important;
+    --arrowpanel-color: var(--zp-fg) !important;
+    --arrowpanel-border-color: var(--zp-outline) !important;
+    --autocomplete-popup-background: var(--zp-high) !important;
+    --autocomplete-popup-color: var(--zp-fg) !important;
+    --autocomplete-popup-highlight-background: rgba(187, 154, 247, 0.24) !important;
+    --autocomplete-popup-highlight-color: var(--zp-fg) !important;
+    --tab-selected-bgcolor: var(--zp-high) !important;
+    --tab-selected-textcolor: var(--zp-primary) !important;
+    --lwt-accent-color: #141414 !important;
+    --lwt-text-color: var(--zp-fg) !important;
+}
+
+/* Один внешний слой стекла; вложенные панели прозрачны, иначе альфы складываются */
+#messengerWindow,
+#messengerBox,
+#mail-toolbox {
+    background: var(--zp-glass) !important;
+    border: none !important;
+}
+
+#messengerBox #folderTree,
+#threadTree,
+#messengerBox #messagesBox #quick-filter-bar,
+splitter,
+.tab-background[selected="true"] {
+    background: transparent !important;
+    border: none !important;
+}
+
+#status-bar {
+    background: var(--zp-glass) !important;
+    border-top: 1px solid rgba(65, 70, 106, 0.5) !important;
+}
+
+/* Вкладки и кнопки — пилюли */
+.tabmail-tab,
+.tab-background {
+    border-radius: 12px !important;
+}
+
+.tabmail-tab[selected="true"] .tab-label {
+    color: var(--zp-primary) !important;
+}
+
+toolbarbutton,
+.toolbarbutton-1,
+button {
+    border-radius: 10px !important;
+}
+
+/* Всплывающие меню и панели плотные — читаемость над любым фоном */
+menupopup,
+panel,
+.menupopup-arrowscrollbox {
+    --panel-background: var(--zp-high);
+    --panel-border-color: var(--zp-outline);
+    --panel-border-radius: 12px;
+}

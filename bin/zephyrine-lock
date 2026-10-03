@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#
+# zephyrine-lock — Экран блокировки Zephyrine с видео и hyprlock
+
+if [ -f "/usr/lib/zephyrine/scripts/lock-with-video.sh" ]; then
+    exec "/usr/lib/zephyrine/scripts/lock-with-video.sh" "$@"
+else
+    SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+    exec "${SELF_DIR}/scripts/lock-with-video.sh" "$@"
+fi

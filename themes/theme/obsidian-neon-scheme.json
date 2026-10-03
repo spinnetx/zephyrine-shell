@@ -1,0 +1,74 @@
+{
+    "name": "ObsidianNeon",
+    "flavour": "glass",
+    "mode": "dark",
+    "colours": {
+        "primary_paletteKeyColor": "bb9af7",
+        "secondary_paletteKeyColor": "7aa2f7",
+        "tertiary_paletteKeyColor": "2ac3de",
+        "neutral_paletteKeyColor": "8a8a94",
+        "neutral_variant_paletteKeyColor": "7a7a88",
+
+        "background": "141414",
+        "onBackground": "e0e0e0",
+        "surface": "141414",
+        "surfaceDim": "0d0d10",
+        "surfaceBright": "262735",
+        "surfaceContainerLowest": "0d0d10",
+        "surfaceContainerLow": "121212",
+        "surfaceContainer": "16161e",
+        "surfaceContainerHigh": "1a1b26",
+        "surfaceContainerHighest": "1f2030",
+        "onSurface": "e0e0e0",
+        "surfaceVariant": "33344a",
+        "onSurfaceVariant": "a9a9b3",
+        "inverseSurface": "e6e1e6",
+        "inverseOnSurface": "2f2b30",
+        "outline": "565f89",
+        "outlineVariant": "363b54",
+        "shadow": "000000",
+        "scrim": "000000",
+        "surfaceTint": "bb9af7",
+
+        "primary": "bb9af7",
+        "onPrimary": "2a1a33",
+        "primaryContainer": "4b3161",
+        "onPrimaryContainer": "e9d9fb",
+        "inversePrimary": "7c4fa8",
+
+        "secondary": "7aa2f7",
+        "onSecondary": "12233f",
+        "secondaryContainer": "1f3a63",
+        "onSecondaryContainer": "d3e2ff",
+
+        "tertiary": "2ac3de",
+        "onTertiary": "00363d",
+        "tertiaryContainer": "004f59",
+        "onTertiaryContainer": "9eeff9",
+
+        "error": "f7768e",
+        "onError": "4a0d17",
+        "errorContainer": "6c1b28",
+        "onErrorContainer": "ffd9dd",
+
+        "success": "9ece6a",
+        "onSuccess": "1f3712",
+        "successContainer": "33501f",
+        "onSuccessContainer": "d7f2c0",
+
+        "primaryFixed": "e9d9fb",
+        "primaryFixedDim": "bb9af7",
+        "onPrimaryFixed": "2a1a33",
+        "onPrimaryFixedVariant": "4b3161",
+
+        "secondaryFixed": "d3e2ff",
+        "secondaryFixedDim": "7aa2f7",
+        "onSecondaryFixed": "12233f",
+        "onSecondaryFixedVariant": "1f3a63",
+
+        "tertiaryFixed": "9eeff9",
+        "tertiaryFixedDim": "2ac3de",
+        "onTertiaryFixed": "00363d",
+        "onTertiaryFixedVariant": "004f59"
+    }
+}

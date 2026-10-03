@@ -1,0 +1,632 @@
+{
+  "version": 1,
+  "description": "Метаданные палитры для генератора тем (DESIGN §3.4-3.5). Не данные пользователя. Ключи — имена из quickshell/scheme.json (colours).",
+  "mode": {
+    "oklch-delta": "L' = L_newB + (L_K - L_B); C' = C_K * (C_newB / C_B) (C_B~0 -> C_K); H' = H_newB + (H_K - H_B); затем гамут-клип (уменьшение хромы), half-up. Short-circuit: если эффективная база == базовая из scheme.json, K = литерал из scheme.json.",
+    "hsl-string": "строка 'H, S%, L%' из HSL эффективной базы; при базовой — literal."
+  },
+  "bases": {
+    "primary": {
+      "settingKey": "appearance.accent",
+      "userChangeable": true,
+      "stage": "v1"
+    },
+    "secondary": {
+      "settingKey": null,
+      "userChangeable": false,
+      "stage": "later"
+    },
+    "tertiary": {
+      "settingKey": null,
+      "userChangeable": false,
+      "stage": "later"
+    },
+    "error": {
+      "settingKey": null,
+      "userChangeable": false,
+      "stage": "later"
+    },
+    "success": {
+      "settingKey": null,
+      "userChangeable": false,
+      "stage": "later"
+    },
+    "warning": {
+      "settingKey": null,
+      "userChangeable": false,
+      "stage": "later"
+    }
+  },
+  "derived": {
+    "onPrimary": {
+      "anchor": "primary",
+      "mode": "oklch-delta"
+    },
+    "primaryContainer": {
+      "anchor": "primary",
+      "mode": "oklch-delta"
+    },
+    "onPrimaryContainer": {
+      "anchor": "primary",
+      "mode": "oklch-delta"
+    },
+    "inversePrimary": {
+      "anchor": "primary",
+      "mode": "oklch-delta"
+    },
+    "primaryFixed": {
+      "anchor": "primary",
+      "mode": "oklch-delta"
+    },
+    "primaryFixedDim": {
+      "anchor": "primary",
+      "mode": "oklch-delta"
+    },
+    "onPrimaryFixed": {
+      "anchor": "primary",
+      "mode": "oklch-delta"
+    },
+    "onPrimaryFixedVariant": {
+      "anchor": "primary",
+      "mode": "oklch-delta"
+    },
+    "surfaceTint": {
+      "anchor": "primary",
+      "mode": "oklch-delta"
+    },
+    "primary_paletteKeyColor": {
+      "anchor": "primary",
+      "mode": "oklch-delta"
+    },
+    "primaryLight": {
+      "anchor": "primary",
+      "mode": "oklch-delta"
+    },
+    "primaryLighter": {
+      "anchor": "primary",
+      "mode": "oklch-delta"
+    },
+    "onSecondary": {
+      "anchor": "secondary",
+      "mode": "oklch-delta"
+    },
+    "secondaryContainer": {
+      "anchor": "secondary",
+      "mode": "oklch-delta"
+    },
+    "onSecondaryContainer": {
+      "anchor": "secondary",
+      "mode": "oklch-delta"
+    },
+    "secondaryFixed": {
+      "anchor": "secondary",
+      "mode": "oklch-delta"
+    },
+    "secondaryFixedDim": {
+      "anchor": "secondary",
+      "mode": "oklch-delta"
+    },
+    "onSecondaryFixed": {
+      "anchor": "secondary",
+      "mode": "oklch-delta"
+    },
+    "onSecondaryFixedVariant": {
+      "anchor": "secondary",
+      "mode": "oklch-delta"
+    },
+    "secondaryLight": {
+      "anchor": "secondary",
+      "mode": "oklch-delta"
+    },
+    "focusBorder": {
+      "anchor": "secondary",
+      "mode": "oklch-delta"
+    },
+    "secondary_paletteKeyColor": {
+      "anchor": "secondary",
+      "mode": "oklch-delta"
+    },
+    "onTertiary": {
+      "anchor": "tertiary",
+      "mode": "oklch-delta"
+    },
+    "tertiaryContainer": {
+      "anchor": "tertiary",
+      "mode": "oklch-delta"
+    },
+    "onTertiaryContainer": {
+      "anchor": "tertiary",
+      "mode": "oklch-delta"
+    },
+    "tertiaryFixed": {
+      "anchor": "tertiary",
+      "mode": "oklch-delta"
+    },
+    "tertiaryFixedDim": {
+      "anchor": "tertiary",
+      "mode": "oklch-delta"
+    },
+    "onTertiaryFixed": {
+      "anchor": "tertiary",
+      "mode": "oklch-delta"
+    },
+    "onTertiaryFixedVariant": {
+      "anchor": "tertiary",
+      "mode": "oklch-delta"
+    },
+    "tertiary_paletteKeyColor": {
+      "anchor": "tertiary",
+      "mode": "oklch-delta"
+    },
+    "onError": {
+      "anchor": "error",
+      "mode": "oklch-delta"
+    },
+    "errorContainer": {
+      "anchor": "error",
+      "mode": "oklch-delta"
+    },
+    "onErrorContainer": {
+      "anchor": "error",
+      "mode": "oklch-delta"
+    },
+    "errorLight": {
+      "anchor": "error",
+      "mode": "oklch-delta"
+    },
+    "onErrorStrong": {
+      "anchor": "error",
+      "mode": "oklch-delta"
+    },
+    "onSuccess": {
+      "anchor": "success",
+      "mode": "oklch-delta"
+    },
+    "successContainer": {
+      "anchor": "success",
+      "mode": "oklch-delta"
+    },
+    "onSuccessContainer": {
+      "anchor": "success",
+      "mode": "oklch-delta"
+    },
+    "successLight": {
+      "anchor": "success",
+      "mode": "oklch-delta"
+    },
+    "successDeep": {
+      "anchor": "success",
+      "mode": "oklch-delta"
+    },
+    "warningLight": {
+      "anchor": "warning",
+      "mode": "oklch-delta"
+    },
+    "onWarning": {
+      "anchor": "warning",
+      "mode": "oklch-delta"
+    },
+    "warningContainer": {
+      "anchor": "warning",
+      "mode": "oklch-delta"
+    }
+  },
+  "strings": {
+    "primaryHsl": {
+      "anchor": "primary",
+      "mode": "hsl-string",
+      "literal": "267, 85%, 78%",
+      "note": "Obsidian --interactive-accent-hsl / --color-accent-hsl. Литерал — ручное приближение (реальный HSL bb9af7 = 261, 85%, 79%): при базовом primary выводится литерал как есть (short-circuit), при смене акцента считается честно (целые H, S%, L%)."
+    }
+  },
+  "constants": {
+    "warning": {
+      "kind": "base",
+      "family": "warning",
+      "sameHexAs": "yellow",
+      "note": "База семейства warning; в v1 не меняется (gtk warning_bg_color, zathura, obsidian --zp-warning, zed warning/modified/conflict)."
+    },
+    "purple": {
+      "kind": "hue",
+      "family": "purple",
+      "sameHexAs": "primary",
+      "note": "ANSI magenta (kitty 5), zed keyword/ANSI, obsidian --color-purple/--code-keyword/h1. НЕ следует за акцентом."
+    },
+    "purpleBright": {
+      "kind": "hue",
+      "family": "purple",
+      "sameHexAs": "primaryLighter",
+      "note": "kitty 13; zed ANSI bright magenta."
+    },
+    "purpleDim": {
+      "kind": "hue",
+      "family": "purple",
+      "sameHexAs": "inversePrimary",
+      "note": "zed preproc и т.п."
+    },
+    "blue": {
+      "kind": "hue",
+      "family": "blue",
+      "sameHexAs": "secondary",
+      "note": "kitty 4, zed функции/ANSI, obsidian --code-function/h2."
+    },
+    "blueBright": {
+      "kind": "hue",
+      "family": "blue",
+      "sameHexAs": "secondaryLight",
+      "note": "kitty 12, zed ANSI."
+    },
+    "blueDim": {
+      "kind": "hue",
+      "family": "blue",
+      "note": "zed."
+    },
+    "cyan": {
+      "kind": "hue",
+      "family": "cyan",
+      "sameHexAs": "tertiary",
+      "note": "kitty 6, zed ANSI/types, obsidian h3."
+    },
+    "cyanBright": {
+      "kind": "hue",
+      "family": "cyan",
+      "note": "kitty 14, zed."
+    },
+    "cyanDim": {
+      "kind": "hue",
+      "family": "cyan",
+      "note": "zed."
+    },
+    "green": {
+      "kind": "hue",
+      "family": "green",
+      "sameHexAs": "success",
+      "note": "kitty 2, zed ANSI/strings."
+    },
+    "greenBright": {
+      "kind": "hue",
+      "family": "green",
+      "sameHexAs": "successLight",
+      "note": "kitty 10, zed."
+    },
+    "greenDim": {
+      "kind": "hue",
+      "family": "green",
+      "note": "zed."
+    },
+    "yellow": {
+      "kind": "hue",
+      "family": "yellow",
+      "sameHexAs": "warning",
+      "note": "kitty 3, zed ANSI/constants."
+    },
+    "yellowBright": {
+      "kind": "hue",
+      "family": "yellow",
+      "sameHexAs": "warningLight",
+      "note": "kitty 11, zed."
+    },
+    "yellowDim": {
+      "kind": "hue",
+      "family": "yellow",
+      "note": "zed."
+    },
+    "red": {
+      "kind": "hue",
+      "family": "red",
+      "sameHexAs": "error",
+      "note": "kitty 1, zed ANSI."
+    },
+    "redBright": {
+      "kind": "hue",
+      "family": "red",
+      "sameHexAs": "errorLight",
+      "note": "kitty 9, zed."
+    },
+    "redDim": {
+      "kind": "hue",
+      "family": "red",
+      "note": "zed."
+    },
+    "redAlt": {
+      "kind": "hue",
+      "family": "red",
+      "note": "zed players[1] и т.п."
+    },
+    "redDeep": {
+      "kind": "hue",
+      "family": "red",
+      "note": "zed punctuation.special."
+    },
+    "orange": {
+      "kind": "hue",
+      "family": "orange",
+      "note": "zed numbers/booleans, obsidian --color-orange."
+    },
+    "pink": {
+      "kind": "hue",
+      "family": "pink",
+      "note": "obsidian --color-pink."
+    },
+    "sky": {
+      "kind": "hue",
+      "family": "sky",
+      "note": "obsidian --code-operator."
+    },
+    "neutral40": {
+      "kind": "neutral",
+      "family": "neutral",
+      "note": "obsidian --color-base-40, zed bright_black."
+    },
+    "neutral45": {
+      "kind": "neutral",
+      "family": "neutral",
+      "note": "obsidian --code-comment, zed comment."
+    },
+    "neutral60": {
+      "kind": "neutral",
+      "family": "neutral",
+      "note": "obsidian --color-base-60/--code-punctuation, zed dim_white."
+    },
+    "white": {
+      "kind": "neutral",
+      "family": "neutral",
+      "note": "qt6ct BrightText."
+    }
+  },
+  "validation": {
+    "primary": {
+      "minContrastVs": {
+        "key": "background",
+        "ratio": 3.0
+      },
+      "minOklchL": 0.55
+    },
+    "onPrimary": {
+      "minContrastVs": {
+        "key": "primary",
+        "ratio": 4.5
+      },
+      "fallback": "если после деривации не проходит - тёмный (OKLCH L~0.25) / светлый (L~0.95) вариант той же хромы и оттенка"
+    }
+  },
+  "roleRule": "В шаблон подставляется РОЛЬ, а не ключ с тем же hex. Элементы интерфейса (фокус, выделение, активная вкладка, CTA, курсор, рамки фокуса) -> семантические ключи (primary*, secondary*, error*, success*, warning*, surface*, outline*, fg). Подсветка синтаксиса, ANSI терминала, 'радуга' заголовков Obsidian, граф -> hue-ключи из constants (purple, blue, ...), они не меняются при смене акцента. Пример: kitty cursor = primary, color5 = purple.",
+  "nonPalette": [
+    {
+      "hex": "33ccff",
+      "role": "hypr active_border gradient, start",
+      "where": ".config/hypr/hyprland.lua:180 rgba(33ccffee)",
+      "setting": "hypr.borders.custom / style=legacy"
+    },
+    {
+      "hex": "00ff99",
+      "role": "hypr active_border gradient, end",
+      "where": ".config/hypr/hyprland.lua:180 rgba(00ff99ee)",
+      "setting": "hypr.borders.custom / style=legacy"
+    },
+    {
+      "hex": "595959",
+      "role": "hypr inactive_border",
+      "where": ".config/hypr/hyprland.lua:181 rgba(595959aa)",
+      "setting": "hypr.borders.custom / style=legacy"
+    },
+    {
+      "hex": "1a1a1a",
+      "role": "hypr decoration.shadow.color",
+      "where": ".config/hypr/hyprland.lua:206 rgba(1a1a1aee)",
+      "setting": null,
+      "note": "Тень остаётся литералом в hyprland.lua; settings.lua её не трогает."
+    }
+  ],
+  "lintWhitelist": {
+    "literals": [
+      "transparent",
+      "#00000000",
+      "rgba(0, 0, 0, <a>)",
+      "rgba(0,0,0,<a>)"
+    ],
+    "note": "Намеренные константы: чёрные тени и полная прозрачность (в scheme есть shadow/scrim=000000, но шаблоны используют литерал)."
+  },
+  "externalColors": {
+    "note": "Реестр 31 уникального 'внешнего' цвета (отсутствовали в базовой scheme.json до S1.1, DESIGN §1.2). hex -> ключи scheme.json (роли) либо null = не палитра (см. nonPalette).",
+    "map": {
+      "1f8fa3": [
+        "cyanDim"
+      ],
+      "2a0a10": [
+        "onErrorStrong"
+      ],
+      "2a1d08": [
+        "onWarning"
+      ],
+      "3a5a9a": [
+        "focusBorder"
+      ],
+      "4a3a1f": [
+        "warningContainer"
+      ],
+      "4a7a2a": [
+        "successDeep"
+      ],
+      "5b6190": [
+        "neutral40"
+      ],
+      "5b82c8": [
+        "blueDim"
+      ],
+      "6a9145": [
+        "greenDim"
+      ],
+      "6b7199": [
+        "neutral45"
+      ],
+      "6fe3f0": [
+        "cyanBright"
+      ],
+      "89ddff": [
+        "sky"
+      ],
+      "a0a6c8": [
+        "neutral60"
+      ],
+      "a9c1fa": [
+        "secondaryLight",
+        "blueBright"
+      ],
+      "b08a4a": [
+        "yellowDim"
+      ],
+      "b5dc8a": [
+        "successLight",
+        "greenBright"
+      ],
+      "b8566a": [
+        "redDim"
+      ],
+      "c25068": [
+        "redDeep"
+      ],
+      "cdb2f9": [
+        "primaryLight"
+      ],
+      "d2baf9": [
+        "primaryLighter",
+        "purpleBright"
+      ],
+      "d9506a": [
+        "redAlt"
+      ],
+      "e0af68": [
+        "warning",
+        "yellow"
+      ],
+      "f0c98a": [
+        "warningLight",
+        "yellowBright"
+      ],
+      "f5a3d4": [
+        "pink"
+      ],
+      "ff9aab": [
+        "errorLight",
+        "redBright"
+      ],
+      "ff9e64": [
+        "orange"
+      ],
+      "ffffff": [
+        "white"
+      ],
+      "33ccff": null,
+      "00ff99": null,
+      "595959": null,
+      "1a1a1a": null
+    }
+  },
+  "schemes": {
+    "light": {
+      "name": "ObsidianNeon Light",
+      "flavour": "glass",
+      "mode": "light",
+      "colours": {
+        "primary_paletteKeyColor": "bb9af7",
+        "secondary_paletteKeyColor": "7aa2f7",
+        "tertiary_paletteKeyColor": "2ac3de",
+        "neutral_paletteKeyColor": "8a8a94",
+        "neutral_variant_paletteKeyColor": "7a7a88",
+        "background": "f9fafd",
+        "onBackground": "191a20",
+        "surface": "f9fafd",
+        "surfaceDim": "e2e2e8",
+        "surfaceBright": "fcfcff",
+        "surfaceContainerLowest": "ffffff",
+        "surfaceContainerLow": "f5f5fa",
+        "surfaceContainer": "eff0f6",
+        "surfaceContainerHigh": "e9eaf3",
+        "surfaceContainerHighest": "e4e5ef",
+        "onSurface": "191a20",
+        "surfaceVariant": "e0e2f0",
+        "onSurfaceVariant": "50515f",
+        "inverseSurface": "25262c",
+        "inverseOnSurface": "eff0f4",
+        "outline": "6d738f",
+        "outlineVariant": "c1c6db",
+        "shadow": "000000",
+        "scrim": "000000",
+        "surfaceTint": "794bba",
+        "primary": "794bba",
+        "onPrimary": "ffffff",
+        "primaryContainer": "e6daff",
+        "onPrimaryContainer": "2c1d43",
+        "inversePrimary": "bb9af7",
+        "secondary": "3d64bc",
+        "onSecondary": "ffffff",
+        "secondaryContainer": "d3e2ff",
+        "onSecondaryContainer": "152448",
+        "tertiary": "007081",
+        "onTertiary": "ffffff",
+        "tertiaryContainer": "b8ecf7",
+        "onTertiaryContainer": "002c34",
+        "error": "be3b5a",
+        "onError": "ffffff",
+        "errorContainer": "ffd5da",
+        "onErrorContainer": "42151e",
+        "success": "487100",
+        "onSuccess": "ffffff",
+        "successContainer": "d5e9c3",
+        "onSuccessContainer": "1a2d02",
+        "primaryFixed": "e9d9fb",
+        "primaryFixedDim": "bb9af7",
+        "onPrimaryFixed": "2a1a33",
+        "onPrimaryFixedVariant": "4b3161",
+        "secondaryFixed": "d3e2ff",
+        "secondaryFixedDim": "7aa2f7",
+        "onSecondaryFixed": "12233f",
+        "onSecondaryFixedVariant": "1f3a63",
+        "tertiaryFixed": "9eeff9",
+        "tertiaryFixedDim": "2ac3de",
+        "onTertiaryFixed": "00363d",
+        "onTertiaryFixedVariant": "004f59",
+        "primaryLight": "946fd1",
+        "primaryLighter": "a584df",
+        "secondaryLight": "5d83d5",
+        "focusBorder": "7b98d0",
+        "successLight": "64902a",
+        "successDeep": "335200",
+        "errorLight": "da5c75",
+        "onErrorStrong": "ffffff",
+        "warning": "ab7c34",
+        "warningLight": "b88841",
+        "onWarning": "1b0f00",
+        "warningContainer": "ffdfb4",
+        "purple": "7554aa",
+        "purpleBright": "8a69c1",
+        "purpleDim": "59378a",
+        "blue": "4165b4",
+        "blueBright": "557acb",
+        "blueDim": "274794",
+        "cyan": "008093",
+        "cyanBright": "0097ad",
+        "cyanDim": "00606f",
+        "green": "558115",
+        "greenBright": "699631",
+        "greenDim": "3e6200",
+        "yellow": "a5762d",
+        "yellowBright": "bb8b44",
+        "yellowDim": "855900",
+        "red": "bb3f5c",
+        "redBright": "d35670",
+        "redDim": "981c40",
+        "redAlt": "af2648",
+        "redDeep": "942543",
+        "orange": "bf6426",
+        "pink": "af6392",
+        "sky": "2d85a5",
+        "neutral40": "5b6190",
+        "neutral45": "6b7199",
+        "neutral60": "a0a6c8",
+        "white": "ffffff"
+      }
+    }
+  }
+}

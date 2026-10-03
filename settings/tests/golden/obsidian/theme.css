@@ -1,0 +1,356 @@
+/* Zephyrine — тема Obsidian под оболочку Zephyrine (палитра Obsidian Neon из
+   quickshell/scheme.json). Тёмная, полупрозрачная («стекло»), скруглённые
+   «пилюли», акцент — сиреневый primary. Прозрачность окна работает только с
+   флагом Electron --enable-transparent-visuals (obsidian/obsidian.desktop);
+   без него фон просто тёмный. Снипет transparent.css с этой темой не нужен. */
+
+body {
+    /* --- палитра (scheme.json) --- */
+    --zp-bg: 20, 20, 20;              /* background */
+    --zp-container: 28, 29, 43;       /* surfaceContainer */
+    --zp-high: 36, 37, 56;            /* surfaceContainerHigh */
+    --zp-highest: 48, 50, 73;         /* surfaceContainerHighest */
+    --zp-fg: #e8e8f0;
+    --zp-fg-variant: #c0c0cc;
+    --zp-outline: #7f88b5;
+    --zp-outline-variant: #41466a;
+    --zp-primary: #bb9af7;
+    --zp-on-primary: #2a1a33;
+    --zp-primary-container: #4b3161;
+    --zp-secondary: #7aa2f7;
+    --zp-tertiary: #2ac3de;
+    --zp-error: #f7768e;
+    --zp-success: #9ece6a;
+    --zp-warning: #e0af68;
+
+    /* --- «стекло»: как barAlpha/pillAlpha в Config.qml --- */
+    --zp-bar-alpha: 0.88;
+    --zp-pill-alpha: 0.94;
+
+    --zp-radius: 14px;
+    --zp-radius-s: 12px;
+
+    --font-interface-theme: "JetBrainsMono Nerd Font", sans-serif;
+    --font-text-theme: "JetBrainsMono Nerd Font", sans-serif;
+    --font-monospace-theme: "JetBrainsMono Nerd Font Mono", monospace;
+    --font-ui-small: 12px;
+    --font-ui-medium: 13px;
+
+    --radius-s: 8px;
+    --radius-m: 12px;
+    --radius-l: 14px;
+    --clickable-icon-radius: 10px;
+    --input-radius: 12px;
+}
+
+.theme-dark, .theme-light {
+    color-scheme: dark;
+
+    --color-base-00: #0d0d10;
+    --color-base-05: #121212;
+    --color-base-10: #141414;
+    --color-base-20: #1c1d2b;
+    --color-base-25: #242538;
+    --color-base-30: #303249;
+    --color-base-35: #41466a;
+    --color-base-40: #5b6190;
+    --color-base-50: #7f88b5;
+    --color-base-60: #a0a6c8;
+    --color-base-70: #c0c0cc;
+    --color-base-100: #e8e8f0;
+
+    /* Фоны — один слой на реальную панель (обёртки ниже прозрачны) */
+    --background-primary: rgba(var(--zp-bg), var(--zp-bar-alpha));
+    --background-primary-alt: rgba(var(--zp-container), var(--zp-bar-alpha));
+    --background-secondary: rgba(var(--zp-bg), var(--zp-bar-alpha));
+    --background-secondary-alt: rgba(var(--zp-container), var(--zp-bar-alpha));
+    --background-modifier-hover: rgba(var(--zp-highest), 0.55);
+    --background-modifier-active-hover: rgba(187, 154, 247, 0.18);
+    --background-modifier-border: #41466a;
+    --background-modifier-border-hover: #7f88b5;
+    --background-modifier-border-focus: #bb9af7;
+    --background-modifier-form-field: rgba(var(--zp-container), var(--zp-pill-alpha));
+    --background-modifier-cover: rgba(13, 13, 16, 0.7);
+    --background-modifier-error: #f7768e;
+    --background-modifier-success: #9ece6a;
+    --background-modifier-message: rgba(var(--zp-high), var(--zp-pill-alpha));
+    --titlebar-background: rgba(var(--zp-bg), var(--zp-bar-alpha));
+    --titlebar-background-focused: rgba(var(--zp-bg), var(--zp-bar-alpha));
+    --titlebar-text-color: var(--zp-fg-variant);
+    --titlebar-text-color-focused: var(--zp-fg);
+
+    --text-normal: var(--zp-fg);
+    --text-muted: var(--zp-fg-variant);
+    --text-faint: #7f88b5;
+    --text-on-accent: var(--zp-on-primary);
+    --text-error: var(--zp-error);
+    --text-success: var(--zp-success);
+    --text-warning: var(--zp-warning);
+    --text-accent: var(--zp-primary);
+    --text-accent-hover: #d2baf9;
+    --text-selection: rgba(187, 154, 247, 0.28);
+    --text-highlight-bg: rgba(224, 175, 104, 0.3);
+
+    --interactive-normal: rgba(var(--zp-high), var(--zp-pill-alpha));
+    --interactive-hover: rgba(var(--zp-highest), var(--zp-pill-alpha));
+    --interactive-accent: #bb9af7;
+    --interactive-accent-hover: #cdb2f9;
+    --interactive-accent-hsl: 267, 85%, 78%;
+
+    --color-accent: #bb9af7;
+    --color-accent-1: #bb9af7;
+    --color-accent-2: #cdb2f9;
+    --color-accent-hsl: 267, 85%, 78%;
+
+    --color-red: #f7768e;
+    --color-orange: #ff9e64;
+    --color-yellow: #e0af68;
+    --color-green: #9ece6a;
+    --color-cyan: #2ac3de;
+    --color-blue: #7aa2f7;
+    --color-purple: #bb9af7;
+    --color-pink: #f5a3d4;
+
+    --code-background: rgba(var(--zp-container), 0.9);
+    --code-normal: var(--zp-fg-variant);
+    --code-comment: #6b7199;
+    --code-function: #7aa2f7;
+    --code-keyword: #bb9af7;
+    --code-string: #9ece6a;
+    --code-value: #ff9e64;
+    --code-property: #2ac3de;
+    --code-tag: #f7768e;
+    --code-operator: #89ddff;
+    --code-punctuation: #a0a6c8;
+    --code-important: #e0af68;
+
+    --scrollbar-bg: transparent;
+    --scrollbar-thumb-bg: rgba(127, 136, 181, 0.25);
+    --scrollbar-active-thumb-bg: rgba(187, 154, 247, 0.5);
+
+    --shadow-s: 0 2px 8px rgba(0, 0, 0, 0.35);
+    --shadow-l: 0 12px 40px rgba(0, 0, 0, 0.55);
+}
+
+/* Только самый внешний слой красим — вложенные контейнеры прозрачны, иначе
+   полупрозрачные фоны складываются и окно ползёт к 100% непрозрачности. */
+.app-container,
+.horizontal-main-container,
+.workspace,
+.workspace-split,
+.mod-root {
+    background-color: transparent !important;
+}
+
+/* --- плавающие карточки вместо сплошной сетки --- */
+.workspace {
+    gap: 0;
+}
+
+.workspace-split.mod-vertical > .workspace-leaf,
+.workspace-tabs {
+    border-radius: var(--zp-radius);
+}
+
+.workspace-tab-header-container {
+    background: rgba(var(--zp-bg), var(--zp-bar-alpha));
+    border-bottom: 1px solid rgba(65, 70, 106, 0.5);
+}
+
+/* --- вкладки: пилюли --- */
+.workspace-tab-header {
+    border-radius: var(--zp-radius-s);
+}
+
+.workspace-tab-header.is-active {
+    background: rgba(var(--zp-high), var(--zp-pill-alpha));
+    box-shadow: inset 0 -2px 0 var(--zp-primary);
+}
+
+.workspace-tab-header.is-active .workspace-tab-header-inner-title {
+    color: var(--zp-primary);
+}
+
+.workspace-tab-header:not(.is-active):hover {
+    background: rgba(var(--zp-highest), 0.5);
+}
+
+/* --- боковые панели --- */
+.nav-file-title,
+.nav-folder-title,
+.tree-item-self {
+    border-radius: 10px;
+}
+
+.nav-file-title.is-active,
+.tree-item-self.is-active {
+    background: rgba(187, 154, 247, 0.16);
+    color: var(--zp-primary);
+}
+
+.tree-item-self:hover,
+.nav-file-title:hover,
+.nav-folder-title:hover {
+    background: rgba(var(--zp-highest), 0.55);
+}
+
+.side-dock-ribbon {
+    background: rgba(var(--zp-bg), var(--zp-bar-alpha));
+}
+
+.status-bar {
+    background: rgba(var(--zp-bg), var(--zp-bar-alpha));
+    border-top: 1px solid rgba(65, 70, 106, 0.5);
+    border-radius: 0;
+    color: var(--zp-fg-variant);
+}
+
+/* --- поля, кнопки, переключатели --- */
+input[type="text"],
+input[type="search"],
+input[type="number"],
+textarea,
+select,
+.dropdown {
+    border-radius: var(--zp-radius-s);
+    border: 1px solid var(--zp-outline-variant);
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--zp-primary) !important;
+    box-shadow: 0 0 0 2px rgba(187, 154, 247, 0.25) !important;
+}
+
+button {
+    border-radius: var(--zp-radius-s);
+}
+
+button.mod-cta,
+.mod-cta {
+    background: var(--zp-primary);
+    color: var(--zp-on-primary);
+}
+
+.checkbox-container.is-enabled {
+    background: var(--zp-primary);
+}
+
+/* --- модальные окна, палитра команд, меню, подсказки: плотнее (контекст) --- */
+.modal,
+.prompt,
+.menu,
+.suggestion-container,
+.tooltip,
+.popover {
+    background: rgb(var(--zp-high));
+    border: 1px solid var(--zp-outline-variant);
+    border-radius: var(--zp-radius);
+    box-shadow: var(--shadow-l);
+}
+
+.menu-item,
+.suggestion-item {
+    border-radius: 10px;
+}
+
+.menu-item.selected,
+.suggestion-item.is-selected {
+    background: rgba(187, 154, 247, 0.18);
+    color: var(--zp-primary);
+}
+
+.notice {
+    background: rgb(var(--zp-high));
+    border: 1px solid var(--zp-outline-variant);
+    border-radius: var(--zp-radius);
+    color: var(--zp-fg);
+}
+
+/* --- редактор и чтение --- */
+.markdown-source-view.mod-cm6 .cm-content,
+.markdown-preview-view {
+    --h1-color: #bb9af7;
+    --h2-color: #7aa2f7;
+    --h3-color: #2ac3de;
+    --h4-color: #9ece6a;
+    --h5-color: #e0af68;
+    --h6-color: #f7768e;
+    --link-color: #7aa2f7;
+    --link-color-hover: #a9c1fa;
+    --link-external-color: #2ac3de;
+    --link-unresolved-color: #f7768e;
+    --link-unresolved-opacity: 0.8;
+    --bold-color: #e8e8f0;
+    --italic-color: #d2baf9;
+    --tag-color: #bb9af7;
+    --tag-background: rgba(187, 154, 247, 0.14);
+    --tag-border-color: rgba(187, 154, 247, 0.3);
+    --hr-color: #41466a;
+    --blockquote-border-color: #bb9af7;
+    --blockquote-color: var(--zp-fg-variant);
+    --list-marker-color: #7f88b5;
+    --checkbox-color: #bb9af7;
+    --checkbox-marker-color: #2a1a33;
+}
+
+.tag {
+    border-radius: 999px;
+    padding: 1px 9px;
+}
+
+blockquote {
+    background: rgba(var(--zp-container), 0.6);
+    border-radius: 0 var(--zp-radius-s) var(--zp-radius-s) 0;
+}
+
+code,
+pre,
+.HyperMD-codeblock {
+    border-radius: 10px;
+}
+
+pre {
+    background: rgba(var(--zp-container), 0.9);
+    border: 1px solid rgba(65, 70, 106, 0.6);
+    padding: 4px 6px;
+}
+
+table th,
+table td {
+    border-color: var(--zp-outline-variant);
+}
+
+th {
+    background: rgba(var(--zp-high), 0.8);
+    color: var(--zp-primary);
+}
+
+.callout {
+    border-radius: var(--zp-radius);
+    border: 1px solid rgba(65, 70, 106, 0.6);
+    background-color: rgba(var(--zp-container), 0.7);
+}
+
+/* --- граф --- */
+.graph-view.color-fill { color: #7f88b5; }
+.graph-view.color-circle { color: #bb9af7; }
+.graph-view.color-line { color: #41466a; }
+.graph-view.color-text { color: #e8e8f0; }
+.graph-view.color-fill-highlight { color: #bb9af7; }
+.graph-view.color-line-highlight { color: #2ac3de; }
+.graph-view.color-fill-tag { color: #2ac3de; }
+.graph-view.color-fill-attachment { color: #9ece6a; }
+.graph-view.color-fill-unresolved { color: #f7768e; }
+
+/* --- тонкие скроллбары --- */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}

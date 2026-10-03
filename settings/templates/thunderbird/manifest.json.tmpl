@@ -1,0 +1,52 @@
+{
+  "manifest_version": 2,
+  "name": "Zephyrine",
+  "version": "{{ meta.tbVersion }}",
+  "description": "Тёмная тема в палитре ObsidianNeon оболочки Zephyrine. Прозрачность задаёт userChrome.css.",
+  "browser_specific_settings": {
+    "gecko": { "id": "zephyrine-theme@zephyrine", "strict_min_version": "115.0" }
+  },
+  "theme": {
+    "colors": {
+      "frame": "{{ c.background | hex }}",
+      "frame_inactive": "{{ c.background | hex }}",
+      "tab_background_text": "{{ c.onSurfaceVariant | hex }}",
+      "tab_selected": "{{ c.surfaceContainerHigh | hex }}",
+      "tab_text": "{{ c.primary | hex }}",
+      "tab_line": "{{ c.primary | hex }}",
+      "toolbar": "{{ c.background | hex }}",
+      "toolbar_text": "{{ c.onSurface | hex }}",
+      "toolbar_field": "{{ c.surfaceContainer | hex }}",
+      "toolbar_field_text": "{{ c.onSurface | hex }}",
+      "toolbar_field_border": "{{ c.outlineVariant | hex }}",
+      "toolbar_field_focus": "{{ c.surfaceContainerHigh | hex }}",
+      "toolbar_field_border_focus": "{{ c.primary | hex }}",
+      "toolbar_field_highlight": "{{ c.primaryContainer | hex }}",
+      "toolbar_field_highlight_text": "{{ c.onPrimaryContainer | hex }}",
+      "toolbar_top_separator": "{{ c.outlineVariant | hex }}",
+      "toolbar_bottom_separator": "{{ c.outlineVariant | hex }}",
+      "toolbar_vertical_separator": "{{ c.outlineVariant | hex }}",
+      "button_background_hover": "{{ c.surfaceContainerHighest | hex }}",
+      "button_background_active": "{{ c.outlineVariant | hex }}",
+      "icons": "{{ c.onSurfaceVariant | hex }}",
+      "icons_attention": "{{ c.primary | hex }}",
+      "sidebar": "{{ c.background | hex }}",
+      "sidebar_text": "{{ c.onSurface | hex }}",
+      "sidebar_border": "{{ c.outlineVariant | hex }}",
+      "sidebar_highlight": "{{ c.primaryContainer | hex }}",
+      "sidebar_highlight_text": "{{ c.onPrimaryContainer | hex }}",
+      "popup": "{{ c.surfaceContainerHigh | hex }}",
+      "popup_text": "{{ c.onSurface | hex }}",
+      "popup_border": "{{ c.outlineVariant | hex }}",
+      "popup_highlight": "{{ c.primaryContainer | hex }}",
+      "popup_highlight_text": "{{ c.onPrimaryContainer | hex }}",
+      "input_background": "{{ c.surfaceContainer | hex }}",
+      "input_color": "{{ c.onSurface | hex }}",
+      "input_border": "{{ c.outlineVariant | hex }}",
+      "focus_outline": "{{ c.primary | hex }}"
+    },
+    "properties": {
+      "color_scheme": "{{ m.scheme }}"
+    }
+  }
+}

@@ -1,0 +1,190 @@
+perturb appearance.accent = '#ff00ff'
+
+== gtk3 (.config/gtk-3.0/gtk.css): изменено строк: 7
+  -  17 | @define-color zp_primary #bb9af7;
+  +  17 | @define-color zp_primary #ff00ff;
+  -  45 | @define-color accent_bg_color #bb9af7;
+  +  45 | @define-color accent_bg_color #ff00ff;
+  -  46 | @define-color accent_fg_color #2a1a33;
+  +  46 | @define-color accent_fg_color #2d0021;
+  -  47 | @define-color accent_color #cdb2f9;
+  +  47 | @define-color accent_color #ff6ff5;
+  -  66 | @define-color theme_selected_bg_color #bb9af7;
+  +  66 | @define-color theme_selected_bg_color #ff00ff;
+  -  67 | @define-color theme_selected_fg_color #2a1a33;
+  +  67 | @define-color theme_selected_fg_color #2d0021;
+  -  81 |     background-color: rgba(187, 154, 247, 0.28);
+  +  81 |     background-color: rgba(255, 0, 255, 0.28);
+
+== gtk4 (.config/gtk-4.0/gtk.css): изменено строк: 7
+  -  17 | @define-color zp_primary #bb9af7;
+  +  17 | @define-color zp_primary #ff00ff;
+  -  45 | @define-color accent_bg_color #bb9af7;
+  +  45 | @define-color accent_bg_color #ff00ff;
+  -  46 | @define-color accent_fg_color #2a1a33;
+  +  46 | @define-color accent_fg_color #2d0021;
+  -  47 | @define-color accent_color #cdb2f9;
+  +  47 | @define-color accent_color #ff6ff5;
+  -  66 | @define-color theme_selected_bg_color #bb9af7;
+  +  66 | @define-color theme_selected_bg_color #ff00ff;
+  -  67 | @define-color theme_selected_fg_color #2a1a33;
+  +  67 | @define-color theme_selected_fg_color #2d0021;
+  -  81 |     background-color: rgba(187, 154, 247, 0.28);
+  +  81 |     background-color: rgba(255, 0, 255, 0.28);
+
+== qt6ct (.config/qt6ct/colors/zephyrine.conf): изменено строк: 3
+  -   2 | active_colors=#ffe8e8f0, #ff1c1d2b, #ff303249, #ff242538, #ff0d0d10, #ff121212, #ffe8e8f0, #ffffffff, #ffe8e8…
+  +   2 | active_colors=#ffe8e8f0, #ff1c1d2b, #ff303249, #ff242538, #ff0d0d10, #ff121212, #ffe8e8f0, #ffffffff, #ffe8e8…
+  -   3 | inactive_colors=#ffc0c0cc, #ff1c1d2b, #ff303249, #ff242538, #ff0d0d10, #ff121212, #ffc0c0cc, #ffffffff, #ffc0…
+  +   3 | inactive_colors=#ffc0c0cc, #ff1c1d2b, #ff303249, #ff242538, #ff0d0d10, #ff121212, #ffc0c0cc, #ffffffff, #ffc0…
+  -   4 | disabled_colors=#ff7f88b5, #ff1c1d2b, #ff303249, #ff242538, #ff0d0d10, #ff121212, #ff7f88b5, #ffffffff, #ff7f…
+  +   4 | disabled_colors=#ff7f88b5, #ff1c1d2b, #ff303249, #ff242538, #ff0d0d10, #ff121212, #ff7f88b5, #ffffffff, #ff7f…
+
+== zed: без изменений
+== kitty (.config/kitty/zephyrine.conf): изменено строк: 7
+  -   4 | selection_foreground  #2a1a33
+  +   4 | selection_foreground  #2d0021
+  -   5 | selection_background  #bb9af7
+  +   5 | selection_background  #ff00ff
+  -   6 | cursor                #bb9af7
+  +   6 | cursor                #ff00ff
+  -   7 | cursor_text_color     #2a1a33
+  +   7 | cursor_text_color     #2d0021
+  -  10 | active_border_color   #bb9af7
+  +  10 | active_border_color   #ff00ff
+  -  12 | active_tab_foreground    #2a1a33
+  +  12 | active_tab_foreground    #2d0021
+  -  13 | active_tab_background    #bb9af7
+  +  13 | active_tab_background    #ff00ff
+  старое значение осталось (допустимо только для намеренных констант: ANSI/синтаксис/нейтрали):
+     27 | color5  #bb9af7   [hex bb9af7]
+
+== zathura (.config/zathura/zathurarc): изменено строк: 2
+  -  19 | set completion-highlight-bg   "#bb9af7"
+  +  19 | set completion-highlight-bg   "#ff00ff"
+  -  29 | set highlight-color           "#bb9af7"
+  +  29 | set highlight-color           "#ff00ff"
+
+== obsidian (obsidian/Zephyrine/theme.css): изменено строк: 27
+  -  17 |     --zp-primary: #bb9af7;
+  +  17 |     --zp-primary: #ff00ff;
+  -  18 |     --zp-on-primary: #2a1a33;
+  +  18 |     --zp-on-primary: #2d0021;
+  -  19 |     --zp-primary-container: #4b3161;
+  +  19 |     --zp-primary-container: #59004b;
+  -  68 |     --background-modifier-active-hover: rgba(187, 154, 247, 0.18);
+  +  68 |     --background-modifier-active-hover: rgba(255, 0, 255, 0.18);
+  -  71 |     --background-modifier-border-focus: #bb9af7;
+  +  71 |     --background-modifier-border-focus: #ff00ff;
+  -  90 |     --text-accent-hover: #d2baf9;
+  +  90 |     --text-accent-hover: #ff7ff4;
+  -  91 |     --text-selection: rgba(187, 154, 247, 0.28);
+  +  91 |     --text-selection: rgba(255, 0, 255, 0.28);
+  -  96 |     --interactive-accent: #bb9af7;
+  +  96 |     --interactive-accent: #ff00ff;
+  -  97 |     --interactive-accent-hover: #cdb2f9;
+  +  97 |     --interactive-accent-hover: #ff6ff5;
+  -  98 |     --interactive-accent-hsl: 267, 85%, 78%;
+  +  98 |     --interactive-accent-hsl: 300, 100%, 50%;
+  - 100 |     --color-accent: #bb9af7;
+  + 100 |     --color-accent: #ff00ff;
+  - 101 |     --color-accent-1: #bb9af7;
+  + 101 |     --color-accent-1: #ff00ff;
+  - 102 |     --color-accent-2: #cdb2f9;
+  + 102 |     --color-accent-2: #ff6ff5;
+  - 103 |     --color-accent-hsl: 267, 85%, 78%;
+  + 103 |     --color-accent-hsl: 300, 100%, 50%;
+  - 129 |     --scrollbar-active-thumb-bg: rgba(187, 154, 247, 0.5);
+  + 129 |     --scrollbar-active-thumb-bg: rgba(255, 0, 255, 0.5);
+  - 187 |     background: rgba(187, 154, 247, 0.16);
+  + 187 |     background: rgba(255, 0, 255, 0.16);
+  - 222 |     box-shadow: 0 0 0 2px rgba(187, 154, 247, 0.25) !important;
+  + 222 |     box-shadow: 0 0 0 2px rgba(255, 0, 255, 0.25) !important;
+  - 259 |     background: rgba(187, 154, 247, 0.18);
+  + 259 |     background: rgba(255, 0, 255, 0.18);
+  - 285 |     --italic-color: #d2baf9;
+  + 285 |     --italic-color: #ff7ff4;
+  - 286 |     --tag-color: #bb9af7;
+  + 286 |     --tag-color: #ff00ff;
+  - 287 |     --tag-background: rgba(187, 154, 247, 0.14);
+  + 287 |     --tag-background: rgba(255, 0, 255, 0.14);
+  - 288 |     --tag-border-color: rgba(187, 154, 247, 0.3);
+  + 288 |     --tag-border-color: rgba(255, 0, 255, 0.3);
+  - 290 |     --blockquote-border-color: #bb9af7;
+  + 290 |     --blockquote-border-color: #ff00ff;
+  - 293 |     --checkbox-color: #bb9af7;
+  + 293 |     --checkbox-color: #ff00ff;
+  - 294 |     --checkbox-marker-color: #2a1a33;
+  + 294 |     --checkbox-marker-color: #2d0021;
+  - 337 | .graph-view.color-circle { color: #bb9af7; }
+  + 337 | .graph-view.color-circle { color: #ff00ff; }
+  - 340 | .graph-view.color-fill-highlight { color: #bb9af7; }
+  + 340 | .graph-view.color-fill-highlight { color: #ff00ff; }
+  старое значение осталось (допустимо только для намеренных констант: ANSI/синтаксис/нейтрали):
+    111 | --color-purple: #bb9af7;   [hex bb9af7]
+    118 | --code-keyword: #bb9af7;   [hex bb9af7]
+    273 | --h1-color: #bb9af7;   [hex bb9af7]
+
+== tb-css (thunderbird/userChrome.css): изменено строк: 5
+  -  23 |     --zp-primary: #bb9af7;
+  +  23 |     --zp-primary: #ff00ff;
+  -  24 |     --zp-on-primary: #2a1a33;
+  +  24 |     --zp-on-primary: #2d0021;
+  -  37 |     --toolbarbutton-active-background: rgba(187, 154, 247, 0.22) !important;
+  +  37 |     --toolbarbutton-active-background: rgba(255, 0, 255, 0.22) !important;
+  -  39 |     --selected-item-color: rgba(187, 154, 247, 0.24) !important;
+  +  39 |     --selected-item-color: rgba(255, 0, 255, 0.24) !important;
+  -  49 |     --autocomplete-popup-highlight-background: rgba(187, 154, 247, 0.24) !important;
+  +  49 |     --autocomplete-popup-highlight-background: rgba(255, 0, 255, 0.24) !important;
+
+== tb-theme (thunderbird/zephyrine-theme/manifest.json): изменено строк: 11
+  -  15 |       "tab_text": "#bb9af7",
+  +  15 |       "tab_text": "#ff00ff",
+  -  16 |       "tab_line": "#bb9af7",
+  +  16 |       "tab_line": "#ff00ff",
+  -  23 |       "toolbar_field_border_focus": "#bb9af7",
+  +  23 |       "toolbar_field_border_focus": "#ff00ff",
+  -  24 |       "toolbar_field_highlight": "#4b3161",
+  +  24 |       "toolbar_field_highlight": "#59004b",
+  -  25 |       "toolbar_field_highlight_text": "#e9d9fb",
+  +  25 |       "toolbar_field_highlight_text": "#ffb5ed",
+  -  32 |       "icons_attention": "#bb9af7",
+  +  32 |       "icons_attention": "#ff00ff",
+  -  36 |       "sidebar_highlight": "#4b3161",
+  +  36 |       "sidebar_highlight": "#59004b",
+  -  37 |       "sidebar_highlight_text": "#e9d9fb",
+  +  37 |       "sidebar_highlight_text": "#ffb5ed",
+  -  41 |       "popup_highlight": "#4b3161",
+  +  41 |       "popup_highlight": "#59004b",
+  -  42 |       "popup_highlight_text": "#e9d9fb",
+  +  42 |       "popup_highlight_text": "#ffb5ed",
+  -  46 |       "focus_outline": "#bb9af7"
+  +  46 |       "focus_outline": "#ff00ff"
+
+== zen-chrome (zen/userChrome.css): изменено строк: 6
+  -  21 |     --zp-primary: #bb9af7;
+  +  21 |     --zp-primary: #ff00ff;
+  -  22 |     --zp-on-primary: #2a1a33;
+  +  22 |     --zp-on-primary: #2d0021;
+  -  34 |     --toolbarbutton-active-background: rgba(187, 154, 247, 0.22) !important;
+  +  34 |     --toolbarbutton-active-background: rgba(255, 0, 255, 0.22) !important;
+  -  49 |     --button-primary-hover-bgcolor: #cdb2f9 !important;
+  +  49 |     --button-primary-hover-bgcolor: #ff6ff5 !important;
+  -  56 |     --autocomplete-popup-highlight-background: rgba(187, 154, 247, 0.24) !important;
+  +  56 |     --autocomplete-popup-highlight-background: rgba(255, 0, 255, 0.24) !important;
+  -  76 |     box-shadow: inset 0 0 0 1px rgba(187, 154, 247, 0.35) !important;
+  +  76 |     box-shadow: inset 0 0 0 1px rgba(255, 0, 255, 0.35) !important;
+
+== zen-content (zen/userContent.css): изменено строк: 6
+  -  13 |         --in-content-primary-button-background: #bb9af7 !important;
+  +  13 |         --in-content-primary-button-background: #ff00ff !important;
+  -  14 |         --in-content-primary-button-background-hover: #cdb2f9 !important;
+  +  14 |         --in-content-primary-button-background-hover: #ff6ff5 !important;
+  -  15 |         --in-content-primary-button-text-color: #2a1a33 !important;
+  +  15 |         --in-content-primary-button-text-color: #2d0021 !important;
+  -  16 |         --in-content-accent-color: #bb9af7 !important;
+  +  16 |         --in-content-accent-color: #ff00ff !important;
+  -  19 |         --in-content-focus-outline-color: #bb9af7 !important;
+  +  19 |         --in-content-focus-outline-color: #ff00ff !important;
+  -  22 |         --newtab-primary-action-background: #bb9af7 !important;
+  +  22 |         --newtab-primary-action-background: #ff00ff !important;

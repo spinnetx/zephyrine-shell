@@ -1,0 +1,61 @@
+perturb appearance.radius = 20
+
+== gtk3 (.config/gtk-3.0/gtk.css): изменено строк: 1
+  -  73 |     border-radius: 12px;
+  +  73 |     border-radius: 20px;
+
+== gtk4 (.config/gtk-4.0/gtk.css): изменено строк: 1
+  -  73 |     border-radius: 12px;
+  +  73 |     border-radius: 20px;
+
+== qt6ct: без изменений
+== zed: без изменений
+== kitty: без изменений
+== zathura: без изменений
+== obsidian (obsidian/Zephyrine/theme.css): изменено строк: 10
+  -  30 |     --zp-radius: 14px;
+  +  30 |     --zp-radius: 22px;
+  -  31 |     --zp-radius-s: 12px;
+  +  31 |     --zp-radius-s: 20px;
+  -  39 |     --radius-s: 8px;
+  +  39 |     --radius-s: 16px;
+  -  40 |     --radius-m: 12px;
+  +  40 |     --radius-m: 20px;
+  -  41 |     --radius-l: 14px;
+  +  41 |     --radius-l: 22px;
+  -  42 |     --clickable-icon-radius: 10px;
+  +  42 |     --clickable-icon-radius: 18px;
+  -  43 |     --input-radius: 12px;
+  +  43 |     --input-radius: 20px;
+  - 182 |     border-radius: 10px;
+  + 182 |     border-radius: 18px;
+  - 254 |     border-radius: 10px;
+  + 254 |     border-radius: 18px;
+  - 310 |     border-radius: 10px;
+  + 310 |     border-radius: 18px;
+  старое значение осталось (допустимо только для намеренных констант: ANSI/синтаксис/нейтрали):
+     36 | --font-ui-small: 12px;   [radius 12px]
+    132 | --shadow-l: 0 12px 40px rgba(0, 0, 0, 0.55);   [radius 12px]
+
+== tb-css (thunderbird/userChrome.css): изменено строк: 3
+  -  82 |     border-radius: 12px !important;
+  +  82 |     border-radius: 20px !important;
+  -  92 |     border-radius: 10px !important;
+  +  92 |     border-radius: 18px !important;
+  - 101 |     --panel-border-radius: 12px;
+  + 101 |     --panel-border-radius: 20px;
+
+== tb-theme: без изменений
+== zen-chrome (zen/userChrome.css): изменено строк: 5
+  -   2 |  * стекло с альфой бара (0.88), акцент — сиреневый primary, скругления 12 px.
+  +   2 |  * стекло с альфой бара (0.88), акцент — сиреневый primary, скругления 20 px.
+  -  29 |     --zen-border-radius: 12px !important;
+  +  29 |     --zen-border-radius: 20px !important;
+  -  53 |     --arrowpanel-border-radius: 12px !important;
+  +  53 |     --arrowpanel-border-radius: 20px !important;
+  -  71 |     border-radius: 12px !important;
+  +  71 |     border-radius: 20px !important;
+  -  90 |     --panel-border-radius: 12px;
+  +  90 |     --panel-border-radius: 20px;
+
+== zen-content: без изменений

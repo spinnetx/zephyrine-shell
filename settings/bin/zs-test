@@ -1,0 +1,5 @@
+#!/bin/sh
+# Тестовый стенд шаблонов тем: zs-test golden|perturb|lint|home [...]
+# (то же, что `zephyrine-settings test ...`, но без зависимости от cli.py)
+D="$(cd "$(dirname "$0")/.." && pwd)"
+PYTHONPATH="$D${PYTHONPATH:+:$PYTHONPATH}" exec python3 -m zsettings.testkit "$@"

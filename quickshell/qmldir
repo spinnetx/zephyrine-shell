@@ -1,0 +1,4 @@
+singleton Config Config.qml
+singleton Colors Colors.qml
+singleton Prefs Prefs.qml
+Bar Bar.qml

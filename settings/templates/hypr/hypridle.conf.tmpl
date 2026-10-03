@@ -1,0 +1,20 @@
+# hypridle — демон управления простоем сессии для Hyprland.
+# В старом my_config его не было вообще (bare-конфиг). Здесь — консервативный
+# набор таймаутов для десктопного сценария с внешним монитором (DP-6):
+# не агрессивный auto-suspend, только затемнение → лок → dpms off.
+# См. https://wiki.hypr.land/Hypr-Ecosystem/hypridle/
+
+general {
+    # Скрипт сам проверяет pidof hyprlock и поднимает видео за прозрачным hyprlock.
+    lock_cmd = $HOME/my_zephyrine_conf/scripts/lock-with-video.sh
+    before_sleep_cmd = loginctl lock-session
+    after_sleep_cmd = hyprctl dispatch "hl.dsp.dpms({action=\"on\"})"
+}
+
+{{ idle.dimBlock }}
+
+{{ idle.lockBlock }}
+
+{{ idle.dpmsBlock }}
+
+{{ idle.suspendBlock }}

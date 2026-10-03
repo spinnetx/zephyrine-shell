@@ -1,0 +1,18 @@
+# TODO: --disable-gpu-compositing может ощутимо просадить производительность
+# рендеринга на очень больших vault'ах с графами/canvas — если так, можно
+# убрать этот флаг и оставить только --enable-transparent-visuals, ценой
+# чуть менее чистой прозрачности.
+#
+# Это оверрайд системного /usr/share/applications/obsidian.desktop: тот же
+# desktop-file id ("obsidian.desktop"), поэтому в ~/.local/share/applications
+# он перекрывает системный значок вместо того, чтобы давать второй ярлык.
+[Desktop Entry]
+Name=Obsidian
+Comment=Obsidian с включённой прозрачностью окна (Electron --enable-transparent-visuals)
+Exec=env ELECTRON_OZONE_PLATFORM_HINT=wayland obsidian --enable-transparent-visuals --disable-gpu-compositing %U
+Terminal=false
+Type=Application
+Icon=obsidian
+StartupWMClass=md.obsidian.Obsidian
+MimeType=x-scheme-handler/obsidian;
+Categories=Office;

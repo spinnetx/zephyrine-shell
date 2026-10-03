@@ -1,0 +1,36 @@
+/* CSS-сниппет для Obsidian: включить в Settings → Appearance → CSS snippets.
+   Копировать в <ваш-vault>/.obsidian/snippets/transparent.css для каждого
+   vault'а отдельно — Obsidian не поддерживает сниппеты глобально для всех
+   vault'ов сразу. */
+
+/* Стоковые темы (moonstone/obsidian) красят сайдбар/редактор/статус-бар не
+   литеральным цветом, а через background: var(--background-primary) /
+   var(--background-secondary) — эти элементы покрывают почти всю площадь
+   окна. Если оставить их непрозрачными (как раньше), сквозь прозрачный body
+   ничего не видно — снаружи кажется, будто прозрачности нет вообще.
+   Переопределяем сами переменные, а не отдельные селекторы: тогда любая
+   тема (стоковая или community, вроде Isinglass) красится нашим тоном
+   одним слоем на каждый реальный элемент, без ручного перечисления всех
+   селекторов темы. */
+body {
+    --background-primary: rgba(20, 20, 20, 0.1);
+    --background-primary-alt: rgba(20, 20, 20, 0.1);
+    --background-secondary: rgba(20, 20, 20, 0.1);
+    --background-secondary-alt: rgba(20, 20, 20, 0.1);
+    --titlebar-background: rgba(20, 20, 20, 0.1);
+    --titlebar-background-focused: rgba(20, 20, 20, 0.1);
+}
+
+/* Красим только один (самый внешний) слой — вложенные контейнеры оставляем
+   прозрачными, иначе полупрозрачные фоны складываются друг с другом при
+   наложении и суммарная непрозрачность на глаз ползёт к 100%. */
+.app-container,
+.workspace,
+.workspace-split,
+.mod-root {
+    background-color: transparent !important;
+}
+
+.titlebar {
+    background-color: rgba(20, 20, 20, 0.1) !important;
+}

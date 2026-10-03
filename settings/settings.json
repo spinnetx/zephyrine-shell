@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "appearance": {
+    "accent": "#9ece6a",
+    "icons": {
+      "theme": "Qogir-Dark"
+    },
+    "kittyOpacity": 0.85,
+    "wallpaper": {
+      "desktop": "wallpapers/lake-on-windy-day.1920x1080.mp4"
+    }
+  },
+  "hypr": {
+    "borders": {
+      "custom": {
+        "active": [
+          "rgba(33ff4fee)",
+          "rgba(009effee)",
+          "rgba(fff000ee)"
+        ],
+        "angle": 40,
+        "inactive": "rgba(595959aa)"
+      },
+      "style": "custom"
+    }
+  }
+}

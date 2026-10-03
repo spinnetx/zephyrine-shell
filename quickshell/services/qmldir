@@ -1,0 +1,15 @@
+singleton AiUsage AiUsage.qml
+singleton Disks Disks.qml
+singleton Net Net.qml
+singleton Kbd Kbd.qml
+singleton PopoutState PopoutState.qml
+singleton Wifi Wifi.qml
+singleton Notifs Notifs.qml
+singleton SysMon SysMon.qml
+singleton Persist Persist.qml
+singleton Toaster Toaster.qml
+singleton Overlays Overlays.qml
+singleton Gpu Gpu.qml
+singleton SettingsCli SettingsCli.qml
+singleton Countdown Countdown.qml
+singleton Weather Weather.qml

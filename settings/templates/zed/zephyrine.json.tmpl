@@ -1,0 +1,427 @@
+{
+  "$schema": "https://zed.dev/schema/themes/v0.2.0.json",
+  "name": "Zephyrine",
+  "author": "zephyrine",
+  "themes": [
+    {
+      "name": "Zephyrine",
+      "appearance": "{{ m.scheme }}",
+      "style": {
+        "border": "#00000000",
+        "border.variant": "#00000000",
+        "border.focused": "{{ c.focusBorder | hexa:80 }}",
+        "border.selected": "{{ c.secondaryContainer | hexa:80 }}",
+        "border.transparent": "#00000000",
+        "border.disabled": "#00000000",
+        "elevated_surface.background": "{{ c.surfaceContainerHigh | hexa:ff }}",
+        "surface.background": "{{ c.surfaceContainerHigh | hexa:ff }}",
+        "background": "{{ c.background | hex }}{{ a.glass | anchor:0.8667 | hexbyte }}",
+        "element.background": "#00000000",
+        "element.hover": "{{ c.surfaceContainerHighest | hexa:70 }}",
+        "element.active": "{{ c.outlineVariant | hexa:80 }}",
+        "element.selected": "{{ c.outlineVariant | hexa:70 }}",
+        "element.disabled": "{{ c.surfaceContainerHigh | hexa:ff }}",
+        "drop_target.background": "{{ c.outline | hexa:40 }}",
+        "ghost_element.background": "#00000000",
+        "ghost_element.hover": "{{ c.surfaceContainerHighest | hexa:60 }}",
+        "ghost_element.active": "{{ c.outlineVariant | hexa:70 }}",
+        "ghost_element.selected": "{{ c.outlineVariant | hexa:70 }}",
+        "ghost_element.disabled": "{{ c.surfaceContainerHigh | hexa:ff }}",
+        "text": "{{ c.onSurface | hexa:ff }}",
+        "text.muted": "{{ c.onSurfaceVariant | hexa:ff }}",
+        "text.placeholder": "{{ c.outline | hexa:ff }}",
+        "text.disabled": "{{ c.outline | hexa:ff }}",
+        "text.accent": "{{ c.secondary | hexa:ff }}",
+        "icon": "{{ c.onSurface | hexa:ff }}",
+        "icon.muted": "{{ c.onSurfaceVariant | hexa:ff }}",
+        "icon.disabled": "{{ c.outline | hexa:ff }}",
+        "icon.placeholder": "{{ c.onSurfaceVariant | hexa:ff }}",
+        "icon.accent": "{{ c.secondary | hexa:ff }}",
+        "status_bar.background": "{{ c.background | hex }}{{ a.glass | anchor:0.8667 | hexbyte }}",
+        "title_bar.background": "{{ c.background | hex }}{{ a.glass | anchor:0.8667 | hexbyte }}",
+        "title_bar.inactive_background": "{{ c.surfaceContainerHigh | hex }}{{ a.glass | anchor:0.8667 | hexbyte }}",
+        "toolbar.background": "#00000000",
+        "tab_bar.background": "#00000000",
+        "tab.inactive_background": "#00000000",
+        "tab.active_background": "{{ c.background | hexa:26 }}",
+        "search.match_background": "{{ c.secondary | hexa:40 }}",
+        "search.active_match_background": "{{ c.orange | hexa:60 }}",
+        "panel.background": "#00000000",
+        "panel.focused_border": "{{ c.focusBorder | hexa:80 }}",
+        "pane.focused_border": "{{ c.focusBorder | hexa:80 }}",
+        "scrollbar.thumb.background": "{{ c.onSurfaceVariant | hexa:80 }}",
+        "scrollbar.thumb.hover_background": "{{ c.surfaceContainerHighest | hexa:80 }}",
+        "scrollbar.thumb.border": "{{ c.surfaceContainerHighest | hexa:80 }}",
+        "scrollbar.track.background": "#00000000",
+        "scrollbar.track.border": "{{ c.surfaceContainerHigh | hexa:ff }}",
+        "editor.foreground": "{{ c.onSurfaceVariant | hexa:ff }}",
+        "editor.background": "#00000000",
+        "editor.gutter.background": "#00000000",
+        "editor.subheader.background": "{{ c.surfaceContainerHigh | hexa:ff }}",
+        "editor.active_line.background": "{{ c.surfaceContainerHigh | hexa:80 }}",
+        "editor.highlighted_line.background": "{{ c.surfaceContainerHigh | hexa:ff }}",
+        "editor.line_number": "{{ c.outlineVariant | hex }}",
+        "editor.active_line_number": "{{ c.onSurface | hex }}",
+        "editor.hover_line_number": "{{ c.onSurfaceVariant | hex }}",
+        "editor.invisible": "{{ c.outlineVariant | hex }}",
+        "editor.wrap_guide": "{{ c.onSurfaceVariant | hexa:80 }}",
+        "editor.active_wrap_guide": "{{ c.onSurfaceVariant | hexa:80 }}",
+        "editor.document_highlight.read_background": "{{ c.secondary | hexa:45 }}",
+        "editor.document_highlight.write_background": "{{ c.outlineVariant | hexa:45 }}",
+        "terminal.background": "#00000000",
+        "terminal.foreground": "{{ c.onSurfaceVariant | hexa:ff }}",
+        "terminal.bright_foreground": "{{ c.onSurface | hexa:ff }}",
+        "terminal.dim_foreground": "{{ c.neutral45 | hexa:ff }}",
+        "terminal.ansi.black": "{{ c.background | hexa:ff }}",
+        "terminal.ansi.bright_black": "{{ c.neutral45 | hexa:ff }}",
+        "terminal.ansi.dim_black": "{{ c.surfaceContainerHighest | hexa:ff }}",
+        "terminal.ansi.red": "{{ c.red | hexa:ff }}",
+        "terminal.ansi.bright_red": "{{ c.redBright | hexa:ff }}",
+        "terminal.ansi.dim_red": "{{ c.redDim | hexa:ff }}",
+        "terminal.ansi.green": "{{ c.green | hexa:ff }}",
+        "terminal.ansi.bright_green": "{{ c.greenBright | hexa:ff }}",
+        "terminal.ansi.dim_green": "{{ c.greenDim | hexa:ff }}",
+        "terminal.ansi.yellow": "{{ c.yellow | hexa:ff }}",
+        "terminal.ansi.bright_yellow": "{{ c.yellowBright | hexa:ff }}",
+        "terminal.ansi.dim_yellow": "{{ c.yellowDim | hexa:ff }}",
+        "terminal.ansi.blue": "{{ c.blue | hexa:ff }}",
+        "terminal.ansi.bright_blue": "{{ c.blueBright | hexa:ff }}",
+        "terminal.ansi.dim_blue": "{{ c.blueDim | hexa:ff }}",
+        "terminal.ansi.magenta": "{{ c.purple | hexa:ff }}",
+        "terminal.ansi.bright_magenta": "{{ c.purpleBright | hexa:ff }}",
+        "terminal.ansi.dim_magenta": "{{ c.purpleDim | hexa:ff }}",
+        "terminal.ansi.cyan": "{{ c.cyan | hexa:ff }}",
+        "terminal.ansi.bright_cyan": "{{ c.cyanBright | hexa:ff }}",
+        "terminal.ansi.dim_cyan": "{{ c.cyanDim | hexa:ff }}",
+        "terminal.ansi.white": "{{ c.onSurfaceVariant | hexa:ff }}",
+        "terminal.ansi.bright_white": "{{ c.onSurface | hexa:ff }}",
+        "terminal.ansi.dim_white": "{{ c.neutral60 | hexa:ff }}",
+        "link_text.hover": "{{ c.secondary | hexa:ff }}",
+        "version_control.added": "{{ c.success | hexa:ff }}",
+        "version_control.modified": "{{ c.warning | hexa:ff }}",
+        "version_control.word_added": "{{ c.successDeep | hexa:80 }}",
+        "version_control.word_deleted": "{{ c.errorContainer | hexa:80 }}",
+        "version_control.deleted": "{{ c.error | hexa:ff }}",
+        "version_control.conflict_marker.ours": "{{ c.success | hexa:40 }}",
+        "version_control.conflict_marker.theirs": "{{ c.secondary | hexa:40 }}",
+        "conflict": "{{ c.warning | hexa:ff }}",
+        "conflict.background": "{{ c.warning | hexa:1a }}",
+        "conflict.border": "{{ c.warningContainer | hexa:ff }}",
+        "created": "{{ c.success | hexa:ff }}",
+        "created.background": "{{ c.success | hexa:1a }}",
+        "created.border": "{{ c.successContainer | hexa:ff }}",
+        "deleted": "{{ c.error | hexa:ff }}",
+        "deleted.background": "{{ c.error | hexa:1a }}",
+        "deleted.border": "{{ c.errorContainer | hexa:ff }}",
+        "error": "{{ c.error | hexa:ff }}",
+        "error.background": "{{ c.error | hexa:60 }}",
+        "error.border": "{{ c.errorContainer | hexa:ff }}",
+        "hidden": "{{ c.outline | hexa:ff }}",
+        "hidden.background": "{{ c.outline | hexa:1a }}",
+        "hidden.border": "{{ c.surfaceContainerHighest | hexa:ff }}",
+        "hint": "{{ c.outline | hexa:ff }}",
+        "hint.background": "{{ c.neutral40 | hexa:60 }}",
+        "hint.border": "{{ c.secondaryContainer | hexa:ff }}",
+        "ignored": "{{ c.outline | hexa:ff }}",
+        "ignored.background": "{{ c.outline | hexa:1a }}",
+        "ignored.border": "{{ c.outlineVariant | hexa:ff }}",
+        "info": "{{ c.secondary | hexa:ff }}",
+        "info.background": "{{ c.secondary | hexa:60 }}",
+        "info.border": "{{ c.secondaryContainer | hexa:ff }}",
+        "modified": "{{ c.warning | hexa:ff }}",
+        "modified.background": "{{ c.warning | hexa:1a }}",
+        "modified.border": "{{ c.warningContainer | hexa:ff }}",
+        "predictive": "{{ c.neutral40 | hexa:ff }}",
+        "predictive.background": "{{ c.neutral40 | hexa:1a }}",
+        "predictive.border": "{{ c.successContainer | hexa:ff }}",
+        "renamed": "{{ c.secondary | hexa:ff }}",
+        "renamed.background": "{{ c.secondary | hexa:1a }}",
+        "renamed.border": "{{ c.secondaryContainer | hexa:ff }}",
+        "success": "{{ c.success | hexa:ff }}",
+        "success.background": "{{ c.success | hexa:1a }}",
+        "success.border": "{{ c.successContainer | hexa:ff }}",
+        "unreachable": "{{ c.onSurfaceVariant | hexa:ff }}",
+        "unreachable.background": "{{ c.outline | hexa:1a }}",
+        "unreachable.border": "{{ c.outlineVariant | hexa:ff }}",
+        "warning": "{{ c.warning | hexa:ff }}",
+        "warning.background": "{{ c.warning | hexa:60 }}",
+        "warning.border": "{{ c.warningContainer | hexa:ff }}",
+        "players": [
+          {
+            "cursor": "{{ c.secondary | hexa:ff }}",
+            "background": "{{ c.secondary | hexa:ff }}",
+            "selection": "{{ c.secondary | hexa:3d }}"
+          },
+          {
+            "cursor": "{{ c.redAlt | hexa:ff }}",
+            "background": "{{ c.redAlt | hexa:ff }}",
+            "selection": "{{ c.redAlt | hexa:3d }}"
+          },
+          {
+            "cursor": "{{ c.orange | hexa:ff }}",
+            "background": "{{ c.orange | hexa:ff }}",
+            "selection": "{{ c.orange | hexa:3d }}"
+          },
+          {
+            "cursor": "{{ c.purple | hexa:ff }}",
+            "background": "{{ c.purple | hexa:ff }}",
+            "selection": "{{ c.purple | hexa:3d }}"
+          },
+          {
+            "cursor": "{{ c.cyan | hexa:ff }}",
+            "background": "{{ c.cyan | hexa:ff }}",
+            "selection": "{{ c.cyan | hexa:3d }}"
+          },
+          {
+            "cursor": "{{ c.red | hexa:ff }}",
+            "background": "{{ c.red | hexa:ff }}",
+            "selection": "{{ c.red | hexa:3d }}"
+          },
+          {
+            "cursor": "{{ c.yellow | hexa:ff }}",
+            "background": "{{ c.yellow | hexa:ff }}",
+            "selection": "{{ c.yellow | hexa:3d }}"
+          },
+          {
+            "cursor": "{{ c.green | hexa:ff }}",
+            "background": "{{ c.green | hexa:ff }}",
+            "selection": "{{ c.green | hexa:3d }}"
+          }
+        ],
+        "syntax": {
+          "attribute": {
+            "color": "{{ c.blue | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "boolean": {
+            "color": "{{ c.orange | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "comment": {
+            "color": "{{ c.neutral40 | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "comment.doc": {
+            "color": "{{ c.outline | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "constant": {
+            "color": "{{ c.yellow | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "constructor": {
+            "color": "{{ c.blue | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "embedded": {
+            "color": "{{ c.onSurface | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "emphasis": {
+            "color": "{{ c.blue | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "emphasis.strong": {
+            "color": "{{ c.orange | hexa:ff }}",
+            "font_style": null,
+            "font_weight": 700
+          },
+          "enum": {
+            "color": "{{ c.cyan | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "function": {
+            "color": "{{ c.blue | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "hint": {
+            "color": "{{ c.outline | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "keyword": {
+            "color": "{{ c.purple | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "label": {
+            "color": "{{ c.blue | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "link_text": {
+            "color": "{{ c.blue | hexa:ff }}",
+            "font_style": "italic",
+            "font_weight": null
+          },
+          "link_uri": {
+            "color": "{{ c.cyan | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "namespace": {
+            "color": "{{ c.onSurface | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "number": {
+            "color": "{{ c.orange | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "operator": {
+            "color": "{{ c.cyan | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "predictive": {
+            "color": "{{ c.neutral40 | hexa:ff }}",
+            "font_style": "italic",
+            "font_weight": null
+          },
+          "preproc": {
+            "color": "{{ c.purple | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "primary": {
+            "color": "{{ c.onSurfaceVariant | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "property": {
+            "color": "{{ c.red | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "punctuation": {
+            "color": "{{ c.onSurfaceVariant | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "punctuation.bracket": {
+            "color": "{{ c.onSurfaceVariant | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "punctuation.delimiter": {
+            "color": "{{ c.onSurfaceVariant | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "punctuation.list_marker": {
+            "color": "{{ c.red | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "punctuation.markup": {
+            "color": "{{ c.red | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "punctuation.special": {
+            "color": "{{ c.redDeep | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "selector": {
+            "color": "{{ c.yellow | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "selector.pseudo": {
+            "color": "{{ c.blue | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "string": {
+            "color": "{{ c.green | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "string.escape": {
+            "color": "{{ c.outline | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "string.regex": {
+            "color": "{{ c.orange | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "string.special": {
+            "color": "{{ c.orange | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "string.special.symbol": {
+            "color": "{{ c.orange | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "tag": {
+            "color": "{{ c.blue | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "text.literal": {
+            "color": "{{ c.green | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "title": {
+            "color": "{{ c.red | hexa:ff }}",
+            "font_style": null,
+            "font_weight": 400
+          },
+          "type": {
+            "color": "{{ c.cyan | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "variable": {
+            "color": "{{ c.onSurfaceVariant | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "variable.parameter": {
+            "color": "{{ c.red | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "variable.special": {
+            "color": "{{ c.orange | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "variant": {
+            "color": "{{ c.blue | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "diff.plus": {
+            "color": "{{ c.green | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          },
+          "diff.minus": {
+            "color": "{{ c.red | hexa:ff }}",
+            "font_style": null,
+            "font_weight": null
+          }
+        },
+        "background.appearance": "blurred"
+      }
+    }
+  ]
+}

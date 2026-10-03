@@ -1,0 +1,4 @@
+#!/bin/sh
+# Агент BlueZ для сопряжения (JSON по stdio): zs-btagent [--bus ..] [--timeout N]; см. zsettings/btagent.py
+D="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
+PYTHONPATH="$D${PYTHONPATH:+:$PYTHONPATH}" exec python3 -m zsettings.btagent "$@"

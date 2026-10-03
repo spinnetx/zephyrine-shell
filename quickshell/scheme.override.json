@@ -1,0 +1,17 @@
+{
+    "colours": {
+        "primary_paletteKeyColor": "9ece6a",
+        "surfaceTint": "9ece6a",
+        "primary": "9ece6a",
+        "onPrimary": "1c331b",
+        "primaryContainer": "305524",
+        "onPrimaryContainer": "e0f8d7",
+        "inversePrimary": "4a8723",
+        "primaryFixed": "e0f8d7",
+        "primaryFixedDim": "9ece6a",
+        "onPrimaryFixed": "1c331b",
+        "onPrimaryFixedVariant": "305524",
+        "primaryLight": "b5df96",
+        "primaryLighter": "bee3a3"
+    }
+}

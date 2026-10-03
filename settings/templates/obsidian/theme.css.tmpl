@@ -1,0 +1,356 @@
+/* Zephyrine — тема Obsidian под оболочку Zephyrine (палитра Obsidian Neon из
+   quickshell/scheme.json). Тёмная, полупрозрачная («стекло»), скруглённые
+   «пилюли», акцент — сиреневый primary. Прозрачность окна работает только с
+   флагом Electron --enable-transparent-visuals (obsidian/obsidian.desktop);
+   без него фон просто тёмный. Снипет transparent.css с этой темой не нужен. */
+
+body {
+    /* --- палитра (scheme.json) --- */
+    --zp-bg: {{ c.background | rgb }};              /* background */
+    --zp-container: {{ c.surfaceContainer | rgb }};       /* surfaceContainer */
+    --zp-high: {{ c.surfaceContainerHigh | rgb }};            /* surfaceContainerHigh */
+    --zp-highest: {{ c.surfaceContainerHighest | rgb }};         /* surfaceContainerHighest */
+    --zp-fg: {{ c.onSurface | hex }};
+    --zp-fg-variant: {{ c.onSurfaceVariant | hex }};
+    --zp-outline: {{ c.outline | hex }};
+    --zp-outline-variant: {{ c.outlineVariant | hex }};
+    --zp-primary: {{ c.primary | hex }};
+    --zp-on-primary: {{ c.onPrimary | hex }};
+    --zp-primary-container: {{ c.primaryContainer | hex }};
+    --zp-secondary: {{ c.secondary | hex }};
+    --zp-tertiary: {{ c.tertiary | hex }};
+    --zp-error: {{ c.error | hex }};
+    --zp-success: {{ c.success | hex }};
+    --zp-warning: {{ c.warning | hex }};
+
+    /* --- «стекло»: как barAlpha/pillAlpha в Config.qml --- */
+    --zp-bar-alpha: {{ a.glass }};
+    --zp-pill-alpha: {{ a.surface }};
+
+    --zp-radius: {{ r.lg | px }};
+    --zp-radius-s: {{ r.md | px }};
+
+    --font-interface-theme: {{ f.mono.family | css_str }}, sans-serif;
+    --font-text-theme: {{ f.mono.family | css_str }}, sans-serif;
+    --font-monospace-theme: "{{ f.mono.family }} Mono", monospace;
+    --font-ui-small: 12px;
+    --font-ui-medium: {{ f.shell.size | px }};
+
+    --radius-s: {{ r.xs | px }};
+    --radius-m: {{ r.md | px }};
+    --radius-l: {{ r.lg | px }};
+    --clickable-icon-radius: {{ r.sm | px }};
+    --input-radius: {{ r.md | px }};
+}
+
+.theme-dark, .theme-light {
+    color-scheme: {{ m.scheme }};
+
+    --color-base-00: {{ c.surfaceDim | hex }};
+    --color-base-05: {{ c.surfaceContainerLow | hex }};
+    --color-base-10: {{ c.background | hex }};
+    --color-base-20: {{ c.surfaceContainer | hex }};
+    --color-base-25: {{ c.surfaceContainerHigh | hex }};
+    --color-base-30: {{ c.surfaceContainerHighest | hex }};
+    --color-base-35: {{ c.outlineVariant | hex }};
+    --color-base-40: {{ c.neutral40 | hex }};
+    --color-base-50: {{ c.outline | hex }};
+    --color-base-60: {{ c.neutral60 | hex }};
+    --color-base-70: {{ c.onSurfaceVariant | hex }};
+    --color-base-100: {{ c.onSurface | hex }};
+
+    /* Фоны — один слой на реальную панель (обёртки ниже прозрачны) */
+    --background-primary: rgba(var(--zp-bg), var(--zp-bar-alpha));
+    --background-primary-alt: rgba(var(--zp-container), var(--zp-bar-alpha));
+    --background-secondary: rgba(var(--zp-bg), var(--zp-bar-alpha));
+    --background-secondary-alt: rgba(var(--zp-container), var(--zp-bar-alpha));
+    --background-modifier-hover: rgba(var(--zp-highest), 0.55);
+    --background-modifier-active-hover: {{ c.primary | rgba:0.18 }};
+    --background-modifier-border: {{ c.outlineVariant | hex }};
+    --background-modifier-border-hover: {{ c.outline | hex }};
+    --background-modifier-border-focus: {{ c.primary | hex }};
+    --background-modifier-form-field: rgba(var(--zp-container), var(--zp-pill-alpha));
+    --background-modifier-cover: {{ c.surfaceDim | rgba:0.7 }};
+    --background-modifier-error: {{ c.error | hex }};
+    --background-modifier-success: {{ c.success | hex }};
+    --background-modifier-message: rgba(var(--zp-high), var(--zp-pill-alpha));
+    --titlebar-background: rgba(var(--zp-bg), var(--zp-bar-alpha));
+    --titlebar-background-focused: rgba(var(--zp-bg), var(--zp-bar-alpha));
+    --titlebar-text-color: var(--zp-fg-variant);
+    --titlebar-text-color-focused: var(--zp-fg);
+
+    --text-normal: var(--zp-fg);
+    --text-muted: var(--zp-fg-variant);
+    --text-faint: {{ c.outline | hex }};
+    --text-on-accent: var(--zp-on-primary);
+    --text-error: var(--zp-error);
+    --text-success: var(--zp-success);
+    --text-warning: var(--zp-warning);
+    --text-accent: var(--zp-primary);
+    --text-accent-hover: {{ c.primaryLighter | hex }};
+    --text-selection: {{ c.primary | rgba:0.28 }};
+    --text-highlight-bg: {{ c.warning | rgba:0.3 }};
+
+    --interactive-normal: rgba(var(--zp-high), var(--zp-pill-alpha));
+    --interactive-hover: rgba(var(--zp-highest), var(--zp-pill-alpha));
+    --interactive-accent: {{ c.primary | hex }};
+    --interactive-accent-hover: {{ c.primaryLight | hex }};
+    --interactive-accent-hsl: {{ s.primaryHsl }};
+
+    --color-accent: {{ c.primary | hex }};
+    --color-accent-1: {{ c.primary | hex }};
+    --color-accent-2: {{ c.primaryLight | hex }};
+    --color-accent-hsl: {{ s.primaryHsl }};
+
+    --color-red: {{ c.red | hex }};
+    --color-orange: {{ c.orange | hex }};
+    --color-yellow: {{ c.yellow | hex }};
+    --color-green: {{ c.green | hex }};
+    --color-cyan: {{ c.cyan | hex }};
+    --color-blue: {{ c.blue | hex }};
+    --color-purple: {{ c.purple | hex }};
+    --color-pink: {{ c.pink | hex }};
+
+    --code-background: rgba(var(--zp-container), 0.9);
+    --code-normal: var(--zp-fg-variant);
+    --code-comment: {{ c.neutral45 | hex }};
+    --code-function: {{ c.blue | hex }};
+    --code-keyword: {{ c.purple | hex }};
+    --code-string: {{ c.green | hex }};
+    --code-value: {{ c.orange | hex }};
+    --code-property: {{ c.cyan | hex }};
+    --code-tag: {{ c.red | hex }};
+    --code-operator: {{ c.sky | hex }};
+    --code-punctuation: {{ c.neutral60 | hex }};
+    --code-important: {{ c.yellow | hex }};
+
+    --scrollbar-bg: transparent;
+    --scrollbar-thumb-bg: {{ c.outline | rgba:0.25 }};
+    --scrollbar-active-thumb-bg: {{ c.primary | rgba:0.5 }};
+
+    --shadow-s: 0 2px 8px rgba(0, 0, 0, 0.35);
+    --shadow-l: 0 12px 40px rgba(0, 0, 0, 0.55);
+}
+
+/* Только самый внешний слой красим — вложенные контейнеры прозрачны, иначе
+   полупрозрачные фоны складываются и окно ползёт к 100% непрозрачности. */
+.app-container,
+.horizontal-main-container,
+.workspace,
+.workspace-split,
+.mod-root {
+    background-color: transparent !important;
+}
+
+/* --- плавающие карточки вместо сплошной сетки --- */
+.workspace {
+    gap: 0;
+}
+
+.workspace-split.mod-vertical > .workspace-leaf,
+.workspace-tabs {
+    border-radius: var(--zp-radius);
+}
+
+.workspace-tab-header-container {
+    background: rgba(var(--zp-bg), var(--zp-bar-alpha));
+    border-bottom: 1px solid {{ c.outlineVariant | rgba:0.5 }};
+}
+
+/* --- вкладки: пилюли --- */
+.workspace-tab-header {
+    border-radius: var(--zp-radius-s);
+}
+
+.workspace-tab-header.is-active {
+    background: rgba(var(--zp-high), var(--zp-pill-alpha));
+    box-shadow: inset 0 -2px 0 var(--zp-primary);
+}
+
+.workspace-tab-header.is-active .workspace-tab-header-inner-title {
+    color: var(--zp-primary);
+}
+
+.workspace-tab-header:not(.is-active):hover {
+    background: rgba(var(--zp-highest), 0.5);
+}
+
+/* --- боковые панели --- */
+.nav-file-title,
+.nav-folder-title,
+.tree-item-self {
+    border-radius: {{ r.sm | px }};
+}
+
+.nav-file-title.is-active,
+.tree-item-self.is-active {
+    background: {{ c.primary | rgba:0.16 }};
+    color: var(--zp-primary);
+}
+
+.tree-item-self:hover,
+.nav-file-title:hover,
+.nav-folder-title:hover {
+    background: rgba(var(--zp-highest), 0.55);
+}
+
+.side-dock-ribbon {
+    background: rgba(var(--zp-bg), var(--zp-bar-alpha));
+}
+
+.status-bar {
+    background: rgba(var(--zp-bg), var(--zp-bar-alpha));
+    border-top: 1px solid {{ c.outlineVariant | rgba:0.5 }};
+    border-radius: 0;
+    color: var(--zp-fg-variant);
+}
+
+/* --- поля, кнопки, переключатели --- */
+input[type="text"],
+input[type="search"],
+input[type="number"],
+textarea,
+select,
+.dropdown {
+    border-radius: var(--zp-radius-s);
+    border: 1px solid var(--zp-outline-variant);
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--zp-primary) !important;
+    box-shadow: 0 0 0 2px {{ c.primary | rgba:0.25 }} !important;
+}
+
+button {
+    border-radius: var(--zp-radius-s);
+}
+
+button.mod-cta,
+.mod-cta {
+    background: var(--zp-primary);
+    color: var(--zp-on-primary);
+}
+
+.checkbox-container.is-enabled {
+    background: var(--zp-primary);
+}
+
+/* --- модальные окна, палитра команд, меню, подсказки: плотнее (контекст) --- */
+.modal,
+.prompt,
+.menu,
+.suggestion-container,
+.tooltip,
+.popover {
+    background: rgb(var(--zp-high));
+    border: 1px solid var(--zp-outline-variant);
+    border-radius: var(--zp-radius);
+    box-shadow: var(--shadow-l);
+}
+
+.menu-item,
+.suggestion-item {
+    border-radius: {{ r.sm | px }};
+}
+
+.menu-item.selected,
+.suggestion-item.is-selected {
+    background: {{ c.primary | rgba:0.18 }};
+    color: var(--zp-primary);
+}
+
+.notice {
+    background: rgb(var(--zp-high));
+    border: 1px solid var(--zp-outline-variant);
+    border-radius: var(--zp-radius);
+    color: var(--zp-fg);
+}
+
+/* --- редактор и чтение --- */
+.markdown-source-view.mod-cm6 .cm-content,
+.markdown-preview-view {
+    --h1-color: {{ c.purple | hex }};
+    --h2-color: {{ c.blue | hex }};
+    --h3-color: {{ c.cyan | hex }};
+    --h4-color: {{ c.green | hex }};
+    --h5-color: {{ c.yellow | hex }};
+    --h6-color: {{ c.red | hex }};
+    --link-color: {{ c.secondary | hex }};
+    --link-color-hover: {{ c.secondaryLight | hex }};
+    --link-external-color: {{ c.tertiary | hex }};
+    --link-unresolved-color: {{ c.error | hex }};
+    --link-unresolved-opacity: 0.8;
+    --bold-color: {{ c.onSurface | hex }};
+    --italic-color: {{ c.primaryLighter | hex }};
+    --tag-color: {{ c.primary | hex }};
+    --tag-background: {{ c.primary | rgba:0.14 }};
+    --tag-border-color: {{ c.primary | rgba:0.3 }};
+    --hr-color: {{ c.outlineVariant | hex }};
+    --blockquote-border-color: {{ c.primary | hex }};
+    --blockquote-color: var(--zp-fg-variant);
+    --list-marker-color: {{ c.outline | hex }};
+    --checkbox-color: {{ c.primary | hex }};
+    --checkbox-marker-color: {{ c.onPrimary | hex }};
+}
+
+.tag {
+    border-radius: 999px;
+    padding: 1px 9px;
+}
+
+blockquote {
+    background: rgba(var(--zp-container), 0.6);
+    border-radius: 0 var(--zp-radius-s) var(--zp-radius-s) 0;
+}
+
+code,
+pre,
+.HyperMD-codeblock {
+    border-radius: {{ r.sm | px }};
+}
+
+pre {
+    background: rgba(var(--zp-container), 0.9);
+    border: 1px solid {{ c.outlineVariant | rgba:0.6 }};
+    padding: 4px 6px;
+}
+
+table th,
+table td {
+    border-color: var(--zp-outline-variant);
+}
+
+th {
+    background: rgba(var(--zp-high), 0.8);
+    color: var(--zp-primary);
+}
+
+.callout {
+    border-radius: var(--zp-radius);
+    border: 1px solid {{ c.outlineVariant | rgba:0.6 }};
+    background-color: rgba(var(--zp-container), 0.7);
+}
+
+/* --- граф --- */
+.graph-view.color-fill { color: {{ c.outline | hex }}; }
+.graph-view.color-circle { color: {{ c.primary | hex }}; }
+.graph-view.color-line { color: {{ c.outlineVariant | hex }}; }
+.graph-view.color-text { color: {{ c.onSurface | hex }}; }
+.graph-view.color-fill-highlight { color: {{ c.primary | hex }}; }
+.graph-view.color-line-highlight { color: {{ c.tertiary | hex }}; }
+.graph-view.color-fill-tag { color: {{ c.tertiary | hex }}; }
+.graph-view.color-fill-attachment { color: {{ c.success | hex }}; }
+.graph-view.color-fill-unresolved { color: {{ c.error | hex }}; }
+
+/* --- тонкие скроллбары --- */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}

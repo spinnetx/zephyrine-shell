@@ -1,0 +1,949 @@
+{
+    "version": 1,
+    "description": "Схема настроек Zephyrine (DESIGN §5). keys - плоский словарь 'ключ с точками -> описание'. Эффективное значение = settings.json (только отличия) + default. Ключи со '*' - шаблонные (pattern). stub:true - заглушка будущего этапа, значения валидируются, но не применяются.",
+    "fields": "type (number|integer|boolean|string|color|enum|font|path|array|object), default, min/max/step, enum, nullable, pattern, presets, items, enumSource, fontFilter, relativeTo, unit, targets (id целей из targets.json для перегенерации при set), live (бар показывает превью через Prefs.preview), stage (v1|v1.1|2|3|4), stub, doc.",
+    "stages": [
+        "v1",
+        "v1.1",
+        "2",
+        "3",
+        "4"
+    ],
+    "keys": {
+        "appearance.accent": {
+            "type": "color",
+            "default": null,
+            "nullable": true,
+            "pattern": "^#[0-9a-fA-F]{6}$",
+            "presets": {
+                "purple": "#bb9af7",
+                "blue": "#7aa2f7",
+                "cyan": "#2ac3de",
+                "green": "#9ece6a",
+                "yellow": "#e0af68",
+                "orange": "#ff9e64",
+                "red": "#f7768e",
+                "pink": "#f5a3d4"
+            },
+            "targets": [
+                "quickshell",
+                "gtk3",
+                "gtk4",
+                "qt6ct",
+                "kitty",
+                "zathura",
+                "obsidian",
+                "tb-css",
+                "tb-theme",
+                "zen-chrome",
+                "zen-content",
+                "hypr",
+                "hyprlock",
+                "sddm"
+            ],
+            "live": false,
+            "stage": "v1",
+            "doc": "Акцент (primary). null = primary из scheme.json. Контраст к background >= 3:1, OKLCH L >= 0.55."
+        },
+        "appearance.mode": {
+            "type": "enum",
+            "enum": [
+                "dark",
+                "light"
+            ],
+            "default": "dark",
+            "targets": [
+                "quickshell",
+                "hypr",
+                "gtk3",
+                "gtk4",
+                "qt6ct",
+                "zed",
+                "kitty",
+                "zathura",
+                "obsidian",
+                "tb-css",
+                "tb-theme",
+                "zen-chrome",
+                "zen-content",
+                "gtk3-settings",
+                "gtk4-settings",
+                "qt6ct-conf",
+                "gsettings",
+                "hyprlock",
+                "sddm"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "doc": "Тема: тёмная или светлая. Светлая палитра - palette-roles.json schemes.light (tools/make_light_palette.py); акцент в светлой теме автоматически приводится к допустимой светлоте."
+        },
+        "appearance.glassAlpha": {
+            "type": "number",
+            "default": 0.88,
+            "min": 0.5,
+            "max": 1.0,
+            "step": 0.01,
+            "targets": [
+                "gtk3",
+                "gtk4",
+                "obsidian",
+                "tb-css",
+                "zen-chrome",
+                "zed"
+            ],
+            "live": true,
+            "stage": "v1",
+            "doc": "Альфа стекла (фон окон/бара)."
+        },
+        "appearance.surfaceAlpha": {
+            "type": "number",
+            "default": 0.94,
+            "min": 0.7,
+            "max": 1.0,
+            "step": 0.01,
+            "targets": [
+                "gtk3",
+                "gtk4",
+                "obsidian",
+                "tb-css"
+            ],
+            "live": true,
+            "stage": "v1",
+            "doc": "Плотность элементов (пилюли, контейнеры)."
+        },
+        "appearance.radius": {
+            "type": "integer",
+            "default": 12,
+            "min": 0,
+            "max": 20,
+            "step": 1,
+            "unit": "px",
+            "targets": [
+                "gtk3",
+                "gtk4",
+                "obsidian",
+                "tb-css",
+                "zen-chrome"
+            ],
+            "live": true,
+            "stage": "v1",
+            "doc": "Базовое скругление: lg=r+2, md=r, sm=max(0,r-2), xs=max(0,r-4); бар: pillRadius=r, barRadius/popoutRadius=r+2."
+        },
+        "appearance.windowRounding": {
+            "type": "integer",
+            "default": 10,
+            "min": 0,
+            "max": 20,
+            "step": 1,
+            "unit": "px",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "v1",
+            "doc": "Скругление окон Hyprland (decoration.rounding)."
+        },
+        "appearance.targets.*": {
+            "type": "boolean",
+            "default": true,
+            "pattern": "appearance.targets.<id>",
+            "targets": [],
+            "live": false,
+            "stage": "v1",
+            "doc": "Управлять целью (по id из targets.json). false = цель не перегенерируется. Шаблонный ключ: подставляется id цели."
+        },
+        "hypr.borders.style": {
+            "type": "enum",
+            "default": "legacy",
+            "enum": [
+                "legacy",
+                "accent",
+                "custom"
+            ],
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "v1",
+            "doc": "Рамки окон: legacy = текущий градиент 33ccffee->00ff99ee 45deg, неактивная 595959aa; accent = primary->secondary (ee), неактивная outlineVariant (aa); custom = hypr.borders.custom."
+        },
+        "hypr.borders.size": {
+            "type": "integer",
+            "default": 2,
+            "min": 0,
+            "max": 4,
+            "step": 1,
+            "unit": "px",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "v1",
+            "doc": "Толщина рамки (general.border_size)."
+        },
+        "hypr.borders.custom": {
+            "type": "object",
+            "default": {
+                "active": [
+                    "rgba(33ccffee)",
+                    "rgba(00ff99ee)"
+                ],
+                "angle": 45,
+                "inactive": "rgba(595959aa)"
+            },
+            "items": {
+                "active": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^rgba\\([0-9a-fA-F]{8}\\)$"
+                    },
+                    "minItems": 1
+                },
+                "angle": {
+                    "type": "integer",
+                    "min": 0,
+                    "max": 360
+                },
+                "inactive": {
+                    "type": "string",
+                    "pattern": "^rgba\\([0-9a-fA-F]{8}\\)$"
+                }
+            },
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "v1",
+            "doc": "Свои рамки (при style=custom): active - 1..n цветов rgba(rrggbbaa), angle 0..360, inactive - один цвет."
+        },
+        "hypr.glassOpacity": {
+            "type": "number",
+            "default": 0.7,
+            "min": 0.3,
+            "max": 1.0,
+            "step": 0.01,
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "doc": "Стекло hyprglass (plugin.hyprglass.glass_opacity)."
+        },
+        "appearance.fonts.shell.family": {
+            "type": "font",
+            "default": "JetBrainsMono Nerd Font",
+            "fontFilter": "nerd",
+            "targets": [
+                "quickshell"
+            ],
+            "live": true,
+            "stage": "v1.1",
+            "doc": "Шрифт шелла (только семейства с 'Nerd Font' - иначе пропадут иконки). Бар читает его сам (Prefs.shellFont -> Config.fontFamily)."
+        },
+        "appearance.fonts.shell.size": {
+            "type": "integer",
+            "default": 13,
+            "min": 10,
+            "max": 16,
+            "step": 1,
+            "unit": "pt",
+            "targets": [
+                "obsidian"
+            ],
+            "live": true,
+            "stage": "v1.1",
+            "doc": "Размер шрифта шелла (Config.fontSize; iconSize = size+3). Obsidian берёт его для --font-ui-medium."
+        },
+        "appearance.fonts.ui.family": {
+            "type": "font",
+            "default": "Inter",
+            "fontFilter": "any",
+            "targets": [
+                "gtk3-settings",
+                "gtk4-settings",
+                "qt6ct-conf",
+                "gsettings"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "doc": "Шрифт интерфейса (GTK settings.ini, gsettings font-name, qt6ct general)."
+        },
+        "appearance.fonts.ui.size": {
+            "type": "integer",
+            "default": 10,
+            "min": 8,
+            "max": 14,
+            "step": 1,
+            "unit": "pt",
+            "targets": [
+                "gtk3-settings",
+                "gtk4-settings",
+                "qt6ct-conf",
+                "gsettings"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "doc": "Размер шрифта интерфейса. Он же размер моно-шрифта в qt6ct (fixed) и gsettings (monospace-font-name): у тулкитов моно-шрифт получает размер интерфейса, как сейчас в системе (10)."
+        },
+        "appearance.fonts.mono.family": {
+            "type": "font",
+            "default": "JetBrainsMono Nerd Font",
+            "fontFilter": "mono",
+            "targets": [
+                "kitty-conf",
+                "zathura",
+                "qt6ct-conf",
+                "obsidian",
+                "gsettings"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "doc": "Моноширинный шрифт (kitty, zathura, qt6ct fixed, obsidian, gsettings monospace-font-name)."
+        },
+        "appearance.fonts.mono.size": {
+            "type": "integer",
+            "default": 11,
+            "min": 8,
+            "max": 16,
+            "step": 1,
+            "unit": "pt",
+            "targets": [
+                "kitty-conf",
+                "zathura",
+                "qt6ct-conf",
+                "gsettings"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "doc": "Размер моноширинного шрифта (kitty, zathura, qt6ct fixed, gsettings monospace-font-name)."
+        },
+        "appearance.kittyOpacity": {
+            "type": "number",
+            "default": 0.74,
+            "min": 0.5,
+            "max": 1.0,
+            "step": 0.01,
+            "targets": [
+                "kitty-conf"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "doc": "kitty background_opacity (patch kitty.conf)."
+        },
+        "appearance.wallpaper.desktop": {
+            "type": "path",
+            "default": "wallpapers/japanese-night-village.1920x1080.mp4",
+            "relativeTo": "repo",
+            "targets": [
+                "wallpaper"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "ext": [
+                ".mp4",
+                ".mkv",
+                ".webm",
+                ".mov",
+                ".avi",
+                ".m4v",
+                ".gif",
+                ".png",
+                ".jpg",
+                ".jpeg",
+                ".webp",
+                ".bmp"
+            ],
+            "doc": "Обои рабочего стола: существующий видео/картинка-файл (путь от корня репо или абсолютный). Цель wallpaper: симлинк в состоянии + перезапуск mpvpaper рабочего стола. SDDM обновляет только sudo sddm/install-theme.sh."
+        },
+        "appearance.wallpaper.lock": {
+            "type": "path",
+            "default": null,
+            "nullable": true,
+            "relativeTo": "repo",
+            "targets": [
+                "wallpaper"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "ext": [
+                ".mp4",
+                ".mkv",
+                ".webm",
+                ".mov",
+                ".avi",
+                ".m4v",
+                ".gif",
+                ".png",
+                ".jpg",
+                ".jpeg",
+                ".webp",
+                ".bmp"
+            ],
+            "doc": "Обои экрана блокировки (scripts/lock-with-video.sh читает симлинк wallpaper-lock); null = как рабочий стол."
+        },
+        "network.confirmDisruptive": {
+            "type": "boolean",
+            "default": true,
+            "targets": [],
+            "live": false,
+            "stage": "2",
+            "stub": true,
+            "doc": "Подтверждать разрушительные действия в сети/Bluetooth (UI)."
+        },
+        "audio.volumeMax": {
+            "type": "number",
+            "default": 1.0,
+            "min": 1.0,
+            "max": 1.5,
+            "step": 0.05,
+            "targets": [],
+            "live": false,
+            "stage": "3",
+            "doc": "Максимальная громкость (Config.volumeMax)."
+        },
+        "audio.volumeStep": {
+            "type": "number",
+            "default": 0.05,
+            "min": 0.01,
+            "max": 0.1,
+            "step": 0.01,
+            "targets": [],
+            "live": false,
+            "stage": "3",
+            "doc": "Шаг громкости (Config.volumeStep)."
+        },
+        "display.monitors": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "match": "string",
+                "enabled": {
+                    "type": "boolean",
+                    "nullable": true
+                },
+                "mode": {
+                    "type": "string",
+                    "nullable": true
+                },
+                "position": {
+                    "type": "string",
+                    "nullable": true
+                },
+                "scale": {
+                    "type": "number",
+                    "nullable": true
+                },
+                "transform": {
+                    "type": "integer",
+                    "nullable": true
+                },
+                "mirror": {
+                    "type": "string",
+                    "nullable": true
+                }
+            },
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "3",
+            "doc": "Правила мониторов {match, enabled, mode, position, scale, transform, mirror}; [] = правила hyprland.lua. match - desc:<описание> или имя выхода."
+        },
+        "display.confirmTimeoutSec": {
+            "type": "integer",
+            "default": 15,
+            "min": 5,
+            "max": 60,
+            "step": 1,
+            "unit": "s",
+            "targets": [],
+            "live": false,
+            "stage": "3",
+            "doc": "Таймаут подтверждения настроек экрана до отката."
+        },
+        "power.idle.dimSec": {
+            "type": "integer",
+            "default": 150,
+            "min": 10,
+            "nullable": true,
+            "unit": "s",
+            "targets": [
+                "hypridle"
+            ],
+            "live": false,
+            "stage": "3",
+            "doc": "Затемнение через N с; null = выключено."
+        },
+        "power.idle.dimLevel": {
+            "type": "string",
+            "default": "10%",
+            "targets": [
+                "hypridle"
+            ],
+            "live": false,
+            "stage": "3",
+            "doc": "Значение для brightnessctl при затемнении (по решению DESIGN §10)."
+        },
+        "power.idle.lockSec": {
+            "type": "integer",
+            "default": null,
+            "min": 10,
+            "nullable": true,
+            "unit": "s",
+            "targets": [
+                "hypridle"
+            ],
+            "live": false,
+            "stage": "3",
+            "doc": "Блокировка через N с; null = автолок выключен (осознанно)."
+        },
+        "power.idle.dpmsSec": {
+            "type": "integer",
+            "default": 330,
+            "min": 10,
+            "nullable": true,
+            "unit": "s",
+            "targets": [
+                "hypridle"
+            ],
+            "live": false,
+            "stage": "3",
+            "doc": "Погасить экран через N с; null = выключено."
+        },
+        "power.idle.suspendSec": {
+            "type": "integer",
+            "default": null,
+            "min": 10,
+            "nullable": true,
+            "unit": "s",
+            "targets": [
+                "hypridle"
+            ],
+            "live": false,
+            "stage": "3",
+            "doc": "Сон через N с; null = выключено."
+        },
+        "power.batteryCritical": {
+            "type": "number",
+            "default": 0.15,
+            "min": 0.05,
+            "max": 0.3,
+            "step": 0.01,
+            "targets": [],
+            "live": false,
+            "stage": "3",
+            "doc": "Порог критичного заряда (Config.batteryCritical)."
+        },
+        "input.layouts": {
+            "type": "array",
+            "default": [
+                {
+                    "layout": "pl",
+                    "variant": ""
+                },
+                {
+                    "layout": "ru",
+                    "variant": ""
+                }
+            ],
+            "items": {
+                "layout": "string",
+                "variant": "string"
+            },
+            "enumSource": "xkb:layout/variant",
+            "minItems": 1,
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4",
+            "doc": "Раскладки {layout, variant}; >= 1, значения - из xkb base.lst."
+        },
+        "input.switchOption": {
+            "type": "enum",
+            "default": "grp:alt_shift_toggle",
+            "enumSource": "xkb:grp",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4",
+            "doc": "Опция переключения раскладок (grp:*); обязательна при >= 2 раскладках, \"\" допустим при одной."
+        },
+        "input.extraOptions": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "string"
+            },
+            "enumSource": "xkb:option",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4",
+            "doc": "Дополнительные xkb-опции (строки из base.lst)."
+        },
+        "input.repeatRate": {
+            "type": "integer",
+            "default": 25,
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4",
+            "doc": "Частота повтора клавиш (input.repeat_rate)."
+        },
+        "input.repeatDelay": {
+            "type": "integer",
+            "default": 600,
+            "min": 100,
+            "max": 2000,
+            "step": 10,
+            "unit": "ms",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4",
+            "doc": "Задержка повтора, мс (input.repeat_delay)."
+        },
+        "input.sensitivity": {
+            "type": "number",
+            "default": 0.0,
+            "min": -1.0,
+            "max": 1.0,
+            "step": 0.05,
+            "doc": "Чувствительность указателя (input.sensitivity): -1.0..1.0, 0 - без изменений; относится ко всем указателям.",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4"
+        },
+        "input.touchpad.naturalScroll": {
+            "type": "boolean",
+            "default": true,
+            "doc": "Естественная прокрутка тачпада (input.touchpad.natural_scroll).",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4"
+        },
+        "input.touchpad.tapToClick": {
+            "type": "boolean",
+            "default": true,
+            "doc": "Касание = клик (input.touchpad.tap-to-click; по умолчанию Hyprland включено).",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4"
+        },
+        "input.touchpad.tapAndDrag": {
+            "type": "boolean",
+            "default": true,
+            "doc": "Касание и перетаскивание (input.touchpad.tap-and-drag).",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4"
+        },
+        "input.touchpad.disableWhileTyping": {
+            "type": "boolean",
+            "default": true,
+            "doc": "Отключать тачпад при наборе (input.touchpad.disable_while_typing).",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4"
+        },
+        "input.touchpad.clickfinger": {
+            "type": "boolean",
+            "default": true,
+            "doc": "Клик по числу пальцев (1/2/3 = левая/правая/средняя), вместо зон тачпада (input.touchpad.clickfinger_behavior).",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4"
+        },
+        "input.touchpad.middleButtonEmulation": {
+            "type": "boolean",
+            "default": false,
+            "doc": "Средняя кнопка одновременным нажатием левой и правой (input.touchpad.middle_button_emulation).",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4"
+        },
+        "input.touchpad.scrollFactor": {
+            "type": "number",
+            "default": 1.0,
+            "min": 0.1,
+            "max": 5.0,
+            "step": 0.1,
+            "doc": "Скорость прокрутки тачпада (input.touchpad.scroll_factor).",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4"
+        },
+        "binds.*": {
+            "type": "array",
+            "default": null,
+            "pattern": "binds.<action>",
+            "items": {
+                "type": "string"
+            },
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4",
+            "doc": "Комбинации действия Zephyrine (binds.<action>, каталог - zsettings/binds.py); нет ключа - как в hyprland.lua. Формат: \"SUPER + CTRL + 4\"."
+        },
+        "apps.terminal": {
+            "type": "string",
+            "default": "kitty",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4",
+            "doc": "Команда терминала (бинд SUPER+Q)."
+        },
+        "apps.fileManager": {
+            "type": "string",
+            "default": "thunar",
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4",
+            "doc": "Команда файлового менеджера (бинд SUPER+E)."
+        },
+        "autostart": {
+            "type": "array",
+            "default": [
+                {
+                    "id": "telegram",
+                    "name": "Telegram",
+                    "cmd": "Telegram",
+                    "enabled": true,
+                    "delaySec": 0
+                },
+                {
+                    "id": "zen",
+                    "name": "Zen Browser",
+                    "cmd": "zen-browser",
+                    "enabled": true,
+                    "delaySec": 0
+                },
+                {
+                    "id": "viber",
+                    "name": "Viber",
+                    "cmd": "QT_QPA_PLATFORM=wayland viber",
+                    "enabled": true,
+                    "delaySec": 5
+                }
+            ],
+            "items": {
+                "id": "string",
+                "name": "string",
+                "cmd": "string",
+                "enabled": "boolean",
+                "delaySec": "integer"
+            },
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "4",
+            "doc": "Управляемый автозапуск {id, name, cmd, enabled, delaySec}: эмитится в settings.lua как hl.on(\"hyprland.start\"); дефолт - Telegram, Zen, Viber (перенесены из hyprland.lua)."
+        },
+        "notifications.toastMs": {
+            "type": "integer",
+            "default": 5000,
+            "min": 1000,
+            "max": 30000,
+            "step": 500,
+            "unit": "ms",
+            "targets": [],
+            "live": false,
+            "stage": "4",
+            "doc": "Время показа тоста по умолчанию (Config.toastDefaultMs)."
+        },
+        "notifications.historyMax": {
+            "type": "integer",
+            "default": 50,
+            "min": 10,
+            "max": 500,
+            "step": 10,
+            "targets": [],
+            "live": false,
+            "stage": "4",
+            "doc": "Размер истории уведомлений (Config.notifMax)."
+        },
+        "notifications.dndAllowCritical": {
+            "type": "boolean",
+            "default": true,
+            "targets": [],
+            "live": false,
+            "stage": "4",
+            "doc": "Показывать critical-уведомления в режиме DND."
+        },
+        "bar.position": {
+            "type": "enum",
+            "enum": [
+                "top",
+                "bottom",
+                "left",
+                "right"
+            ],
+            "default": "top",
+            "doc": "Сторона экрана, у которой стоит панель (читает сам шелл из settings.json; перезапуск не нужен).",
+            "targets": [],
+            "live": false,
+            "stage": "4"
+        },
+        "bar.left": {
+            "type": "array",
+            "default": [
+                "workspaces",
+                "activeWindow"
+            ],
+            "items": {
+                "type": "string"
+            },
+            "doc": "Элементы панели в зоне (bar.left) по порядку; id из zsettings/barlayout.py, каждый - не более одной зоны. На вертикальной панели зоны идут сверху вниз: начало, середина, конец.",
+            "targets": [],
+            "live": false,
+            "stage": "4"
+        },
+        "bar.center": {
+            "type": "array",
+            "default": [
+                "media"
+            ],
+            "items": {
+                "type": "string"
+            },
+            "doc": "Элементы панели в зоне (bar.center) по порядку; id из zsettings/barlayout.py, каждый - не более одной зоны. На вертикальной панели зоны идут сверху вниз: начало, середина, конец.",
+            "targets": [],
+            "live": false,
+            "stage": "4"
+        },
+        "bar.right": {
+            "type": "array",
+            "default": [
+                "limits",
+                "disk",
+                "gpu",
+                "cpu",
+                "mem",
+                "net",
+                "tray",
+                "status",
+                "clock",
+                "power"
+            ],
+            "items": {
+                "type": "string"
+            },
+            "doc": "Элементы панели в зоне (bar.right) по порядку; id из zsettings/barlayout.py, каждый - не более одной зоны. На вертикальной панели зоны идут сверху вниз: начало, середина, конец.",
+            "targets": [],
+            "live": false,
+            "stage": "4"
+        },
+        "weather.city": {
+            "type": "string",
+            "default": "",
+            "targets": [],
+            "live": false,
+            "stage": "4",
+            "doc": "Город для виджета панели «Погода» (wttr.in); пусто - определить по IP."
+        },
+        "appearance.fonts.lock.family": {
+            "type": "font",
+            "default": "JetBrainsMono Nerd Font",
+            "fontFilter": "any",
+            "targets": [
+                "hyprlock"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "doc": "Шрифт экрана блокировки (hyprlock font_family; для жирных надписей добавляется « Bold»)."
+        },
+        "appearance.fonts.login.family": {
+            "type": "font",
+            "default": "JetBrainsMono Nerd Font",
+            "fontFilter": "any",
+            "targets": [
+                "sddm"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "doc": "Шрифт окна входа (тема SDDM zephyrine, fontFamily в theme.conf.user). Применяется после sudo sddm/install-theme.sh."
+        },
+        "appearance.icons.theme": {
+            "type": "string",
+            "default": null,
+            "nullable": true,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._+ -]{0,63}$",
+            "themeKind": "icons",
+            "targets": [
+                "gtk3-settings",
+                "gtk4-settings",
+                "qt6ct-conf",
+                "gsettings"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "doc": "Тема иконок (имя каталога из ~/.icons, ~/.local/share/icons, /usr/share/icons). null = по режиму темы: Papirus-Dark (dark) / Papirus (light). GTK 4 подхватит сразу (gsettings), GTK 3 и Qt - после перезапуска приложений."
+        },
+        "appearance.cursor.theme": {
+            "type": "string",
+            "default": "Qogir",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._+ -]{0,63}$",
+            "themeKind": "cursors",
+            "targets": [
+                "gtk3-settings",
+                "gtk4-settings",
+                "gsettings",
+                "hypr",
+                "cursor"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "doc": "Тема курсора мыши (каталог с подкаталогом cursors/). Hyprland и новые GTK-окна меняются сразу (hyprctl setcursor, gsettings); Qt, XWayland и уже открытые GTK 3 приложения - после перезапуска приложения, переменные окружения (XCURSOR_THEME) - со следующего входа."
+        },
+        "appearance.cursor.size": {
+            "type": "integer",
+            "default": 24,
+            "min": 16,
+            "max": 64,
+            "step": 4,
+            "unit": "px",
+            "targets": [
+                "gtk3-settings",
+                "gtk4-settings",
+                "gsettings",
+                "hypr",
+                "cursor"
+            ],
+            "live": false,
+            "stage": "v1.1",
+            "doc": "Размер курсора мыши (XCURSOR_SIZE / HYPRCURSOR_SIZE, gtk-cursor-theme-size, gsettings cursor-size)."
+        }
+    }
+}

@@ -1,0 +1,24 @@
+/* Внутренние страницы Zen (about:*, новая вкладка) — палитра ObsidianNeon.
+ * Сайты не трогаются. Полный перезапуск Zen обязателен. */
+
+@-moz-document url-prefix("about:") {
+    :root {
+        --in-content-page-background: {{ c.background | hex }} !important;
+        --in-content-page-color: {{ c.onSurface | hex }} !important;
+        --in-content-text-color: {{ c.onSurface | hex }} !important;
+        --in-content-box-background: {{ c.surfaceContainer | hex }} !important;
+        --in-content-box-background-hover: {{ c.surfaceContainerHigh | hex }} !important;
+        --in-content-box-border-color: {{ c.outlineVariant | hex }} !important;
+        --in-content-border-color: {{ c.outlineVariant | hex }} !important;
+        --in-content-primary-button-background: {{ c.primary | hex }} !important;
+        --in-content-primary-button-background-hover: {{ c.primaryLight | hex }} !important;
+        --in-content-primary-button-text-color: {{ c.onPrimary | hex }} !important;
+        --in-content-accent-color: {{ c.primary | hex }} !important;
+        --in-content-link-color: {{ c.secondary | hex }} !important;
+        --in-content-link-color-hover: {{ c.secondaryLight | hex }} !important;
+        --in-content-focus-outline-color: {{ c.primary | hex }} !important;
+        --newtab-background-color: {{ c.background | hex }} !important;
+        --newtab-text-primary-color: {{ c.onSurface | hex }} !important;
+        --newtab-primary-action-background: {{ c.primary | hex }} !important;
+    }
+}

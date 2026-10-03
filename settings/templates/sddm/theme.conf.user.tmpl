@@ -1,0 +1,21 @@
+; СГЕНЕРИРОВАНО zephyrine-settings из templates/sddm/theme.conf.user.tmpl — руками не править.
+; Перекрывает theme.conf темы zephyrine: палитра (акцент — appearance.accent) и шрифт окна входа (appearance.fonts.login.family).
+; В систему копируется командой sudo sddm/install-theme.sh (greeter читает /usr/share/sddm/themes/zephyrine/theme.conf.user).
+[General]
+fontFamily={{ f.login.family }}
+background={{ c.background | bare }}
+surfaceContainer={{ c.surfaceContainer | bare }}
+surfaceContainerHigh={{ c.surfaceContainerHigh | bare }}
+surfaceContainerHighest={{ c.surfaceContainerHighest | bare }}
+fg={{ c.onSurface | bare }}
+fgVariant={{ c.onSurfaceVariant | bare }}
+outline={{ c.outline | bare }}
+outlineVariant={{ c.outlineVariant | bare }}
+primary={{ c.primary | bare }}
+primaryText={{ c.onPrimary | bare }}
+primaryContainer={{ c.primaryContainer | bare }}
+secondary={{ c.secondary | bare }}
+tertiary={{ c.tertiary | bare }}
+error={{ c.error | bare }}
+errorText={{ c.onError | bare }}
+success={{ c.success | bare }}

@@ -1,0 +1,43 @@
+# Тема zathura под палитру ObsidianNeon (та же, что у theme/obsidian-neon-scheme.json)
+# — в отличие от evince/papers, zathura не наследует GTK-тему, цвета задаются вручную.
+
+set font "{{ f.mono.family }} {{ f.mono.size }}"
+
+set default-bg               "{{ c.surface | hex }}"
+set default-fg                "{{ c.onSurface | hex }}"
+
+set statusbar-bg              "{{ c.surfaceContainer | hex }}"
+set statusbar-fg              "{{ c.onSurface | hex }}"
+
+set inputbar-bg               "{{ c.surfaceContainer | hex }}"
+set inputbar-fg               "{{ c.onSurface | hex }}"
+
+set completion-bg             "{{ c.surfaceContainerHigh | hex }}"
+set completion-fg             "{{ c.onSurface | hex }}"
+set completion-group-bg       "{{ c.surface | hex }}"
+set completion-group-fg       "{{ c.secondary | hex }}"
+set completion-highlight-bg   "{{ c.primary | hex }}"
+set completion-highlight-fg   "{{ c.surface | hex }}"
+
+set notification-bg           "{{ c.surfaceContainerHigh | hex }}"
+set notification-fg           "{{ c.onSurface | hex }}"
+set notification-error-bg     "{{ c.error | hex }}"
+set notification-error-fg     "{{ c.onErrorStrong | hex }}"
+set notification-warning-bg   "{{ c.warning | hex }}"
+set notification-warning-fg   "{{ c.surface | hex }}"
+
+set highlight-color           "{{ c.primary | hex }}"
+set highlight-active-color    "{{ c.secondary | hex }}"
+set highlight-transparency    0.6
+
+set recolor                   true
+set recolor-lightcolor        "{{ c.surface | hex }}"
+set recolor-darkcolor         "{{ c.onSurface | hex }}"
+set recolor-keephue           false
+
+set window-title-basename     true
+set selection-clipboard       clipboard
+set adjust-open               "best-fit"
+set pages-per-row             1
+set scroll-step               60
+set guioptions                ""

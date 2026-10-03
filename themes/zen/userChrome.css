@@ -1,0 +1,104 @@
+/* Zen Browser в стиле оболочки Zephyrine: палитра ObsidianNeon (quickshell/scheme.json),
+ * стекло с альфой бара (0.88), акцент — сиреневый primary, скругления 12 px.
+ * Красится только chrome браузера; страницы сайтов не трогаются (они непрозрачны сами).
+ *
+ * Прозрачность окна даёт Zen: prefs из user.js (zen.widget.linux.transparency,
+ * browser.tabs.allow_transparent_browser) + переменная --zen-main-browser-background ниже.
+ * Мод Transparent Zen для этого больше не нужен (в профиле он выключен); если его
+ * включить, он перекроет фон своим цветом из mod.sameerasw.zen_transparency_color.
+ * Нужен toolkit.legacyUserProfileCustomizations.stylesheets (есть в user.js) и полный
+ * перезапуск Zen. Селекторы взяты из chrome.css мода; вживую не проверялось.
+ */
+
+:root {
+    color-scheme: dark !important;
+    --zp-glass: rgba(20, 20, 20, 0.88);
+    --zp-container: #1c1d2b;
+    --zp-high: #242538;
+    --zp-highest: #303249;
+    --zp-fg: #e8e8f0;
+    --zp-fg-variant: #c0c0cc;
+    --zp-outline: #41466a;
+    --zp-primary: #9ece6a;
+    --zp-on-primary: #1c331b;
+
+    --zen-colors-primary: #141414 !important;
+    --zen-colors-secondary: var(--zp-container) !important;
+    --zen-colors-tertiary: #0d0d10 !important;
+    --zen-colors-border: var(--zp-outline) !important;
+    --zen-primary-color: var(--zp-primary) !important;
+    --zen-border-radius: 12px !important;
+
+    --toolbar-bgcolor: transparent !important;
+    --toolbar-color: var(--zp-fg) !important;
+    --toolbarbutton-hover-background: rgba(48, 50, 73, 0.6) !important;
+    --toolbarbutton-active-background: rgba(158, 206, 106, 0.22) !important;
+    --toolbarbutton-icon-fill: var(--zp-fg-variant) !important;
+    --toolbarbutton-icon-fill-attention: var(--zp-primary) !important;
+    --tab-selected-bgcolor: var(--zp-high) !important;
+    --tab-selected-textcolor: var(--zp-primary) !important;
+    --tab-selected-color: var(--zp-primary) !important;
+    --lwt-text-color: var(--zp-fg) !important;
+    --urlbar-box-bgcolor: var(--zp-container) !important;
+    --urlbar-box-hover-bgcolor: var(--zp-highest) !important;
+    --urlbar-box-focus-bgcolor: var(--zp-high) !important;
+    --urlbar-box-text-color: var(--zp-fg) !important;
+    --focus-outline-color: var(--zp-primary) !important;
+    --color-accent-primary: var(--zp-primary) !important;
+    --button-primary-bgcolor: var(--zp-primary) !important;
+    --button-primary-color: var(--zp-on-primary) !important;
+    --button-primary-hover-bgcolor: #b5df96 !important;
+    --arrowpanel-background: var(--zp-high) !important;
+    --arrowpanel-color: var(--zp-fg) !important;
+    --arrowpanel-border-color: var(--zp-outline) !important;
+    --arrowpanel-border-radius: 12px !important;
+    --autocomplete-popup-background: var(--zp-high) !important;
+    --autocomplete-popup-color: var(--zp-fg) !important;
+    --autocomplete-popup-highlight-background: rgba(158, 206, 106, 0.24) !important;
+    --autocomplete-popup-highlight-color: var(--zp-fg) !important;
+}
+
+/* Основной фон окна — тот самый слой, который мод тоже подменял */
+.zen-browser-generic-background {
+    --zen-main-browser-background: var(--zp-glass) !important;
+}
+
+/* Вкладки, кнопки, адресная строка — пилюли */
+.tabbrowser-tab .tab-background,
+.zen-workspace-tab-background,
+.urlbar-background,
+toolbarbutton,
+.toolbarbutton-1 {
+    border-radius: 12px !important;
+}
+
+/* Подписи вкладок: цвет задаём явно. Встроенная тема браузера (user.js) тёмная и красит их светлым независимо от режима
+ * палитры — на светлой теме названия вкладок пропадали. */
+.tabbrowser-tab .tab-label,
+.tabbrowser-tab .tab-label-container,
+.zen-workspace-tab .tab-label {
+    color: var(--zp-fg) !important;
+}
+
+.tabbrowser-tab[selected] .tab-label {
+    color: var(--zp-primary) !important;
+}
+
+.tabbrowser-tab[selected] .tab-background {
+    background-color: var(--zp-high) !important;
+    box-shadow: inset 0 0 0 1px rgba(158, 206, 106, 0.35) !important;
+}
+
+#urlbar[focused] .urlbar-background,
+#urlbar[open] .urlbar-background {
+    border: 1px solid var(--zp-primary) !important;
+}
+
+/* Меню и панели плотные — читаемость над любым фоном */
+menupopup,
+panel {
+    --panel-background: var(--zp-high);
+    --panel-color: var(--zp-fg);
+    --panel-border-color: var(--zp-outline);
+    --panel-border-radius: 12px;
+}

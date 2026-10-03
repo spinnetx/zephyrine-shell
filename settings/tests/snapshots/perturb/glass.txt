@@ -1,0 +1,66 @@
+perturb appearance.glassAlpha = 0.5
+
+== gtk3 (.config/gtk-3.0/gtk.css): изменено строк: 6
+  -  11 | @define-color zp_bg rgba(20, 20, 20, 0.88);
+  +  11 | @define-color zp_bg rgba(20, 20, 20, 0.5);
+  -  21 | @define-color view_bg_color rgba(20, 20, 20, 0.72);
+  +  21 | @define-color view_bg_color rgba(20, 20, 20, 0.34);
+  -  23 | @define-color headerbar_bg_color rgba(20, 20, 20, 0.92);
+  +  23 | @define-color headerbar_bg_color rgba(20, 20, 20, 0.54);
+  -  25 | @define-color headerbar_backdrop_color rgba(20, 20, 20, 0.92);
+  +  25 | @define-color headerbar_backdrop_color rgba(20, 20, 20, 0.54);
+  -  28 | @define-color sidebar_bg_color rgba(20, 20, 20, 0.92);
+  +  28 | @define-color sidebar_bg_color rgba(20, 20, 20, 0.54);
+  -  30 | @define-color sidebar_backdrop_color rgba(20, 20, 20, 0.92);
+  +  30 | @define-color sidebar_backdrop_color rgba(20, 20, 20, 0.54);
+  старое значение осталось (допустимо только для намеренных констант: ANSI/синтаксис/нейтрали):
+      5 | Прозрачность (как в баре: barAlpha 0.88, pillAlpha 0.94) — только у «несущих» фонов:   [alpha 0.88]
+     84 | /* Фон окна задан цветами window_bg_color/headerbar_bg_color выше (alpha 0.88/0.92) —   [alpha 0.88]
+
+== gtk4 (.config/gtk-4.0/gtk.css): изменено строк: 6
+  -  11 | @define-color zp_bg rgba(20, 20, 20, 0.88);
+  +  11 | @define-color zp_bg rgba(20, 20, 20, 0.5);
+  -  21 | @define-color view_bg_color rgba(20, 20, 20, 0.72);
+  +  21 | @define-color view_bg_color rgba(20, 20, 20, 0.34);
+  -  23 | @define-color headerbar_bg_color rgba(20, 20, 20, 0.92);
+  +  23 | @define-color headerbar_bg_color rgba(20, 20, 20, 0.54);
+  -  25 | @define-color headerbar_backdrop_color rgba(20, 20, 20, 0.92);
+  +  25 | @define-color headerbar_backdrop_color rgba(20, 20, 20, 0.54);
+  -  28 | @define-color sidebar_bg_color rgba(20, 20, 20, 0.92);
+  +  28 | @define-color sidebar_bg_color rgba(20, 20, 20, 0.54);
+  -  30 | @define-color sidebar_backdrop_color rgba(20, 20, 20, 0.92);
+  +  30 | @define-color sidebar_backdrop_color rgba(20, 20, 20, 0.54);
+  старое значение осталось (допустимо только для намеренных констант: ANSI/синтаксис/нейтрали):
+      5 | Прозрачность (как в баре: barAlpha 0.88, pillAlpha 0.94) — только у «несущих» фонов:   [alpha 0.88]
+
+== qt6ct: без изменений
+== zed (.config/zed/themes/zephyrine.json): изменено строк: 4
+  -  18 |         "background": "#141414dd",
+  +  18 |         "background": "#1414147c",
+  -  40 |         "status_bar.background": "#141414dd",
+  +  40 |         "status_bar.background": "#1414147c",
+  -  41 |         "title_bar.background": "#141414dd",
+  +  41 |         "title_bar.background": "#1414147c",
+  -  42 |         "title_bar.inactive_background": "#242538dd",
+  +  42 |         "title_bar.inactive_background": "#2425387c",
+
+== kitty: без изменений
+== zathura: без изменений
+== obsidian (obsidian/Zephyrine/theme.css): изменено строк: 1
+  -  27 |     --zp-bar-alpha: 0.88;
+  +  27 |     --zp-bar-alpha: 0.5;
+
+== tb-css (thunderbird/userChrome.css): изменено строк: 1
+  -  16 |     --zp-glass: rgba(20, 20, 20, 0.88);
+  +  16 |     --zp-glass: rgba(20, 20, 20, 0.5);
+  старое значение осталось (допустимо только для намеренных констант: ANSI/синтаксис/нейтрали):
+      2 | * «стекло» с альфой бара (0.88), акцент — сиреневый primary, скругления 12 px.   [alpha 0.88]
+
+== tb-theme: без изменений
+== zen-chrome (zen/userChrome.css): изменено строк: 2
+  -   2 |  * стекло с альфой бара (0.88), акцент — сиреневый primary, скругления 12 px.
+  +   2 |  * стекло с альфой бара (0.5), акцент — сиреневый primary, скругления 12 px.
+  -  14 |     --zp-glass: rgba(20, 20, 20, 0.88);
+  +  14 |     --zp-glass: rgba(20, 20, 20, 0.5);
+
+== zen-content: без изменений

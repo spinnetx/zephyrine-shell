@@ -1,0 +1,52 @@
+{
+  "manifest_version": 2,
+  "name": "Zephyrine",
+  "version": "1.0",
+  "description": "Тёмная тема в палитре ObsidianNeon оболочки Zephyrine. Прозрачность задаёт userChrome.css.",
+  "browser_specific_settings": {
+    "gecko": { "id": "zephyrine-theme@zephyrine", "strict_min_version": "115.0" }
+  },
+  "theme": {
+    "colors": {
+      "frame": "#141414",
+      "frame_inactive": "#141414",
+      "tab_background_text": "#c0c0cc",
+      "tab_selected": "#242538",
+      "tab_text": "#bb9af7",
+      "tab_line": "#bb9af7",
+      "toolbar": "#141414",
+      "toolbar_text": "#e8e8f0",
+      "toolbar_field": "#1c1d2b",
+      "toolbar_field_text": "#e8e8f0",
+      "toolbar_field_border": "#41466a",
+      "toolbar_field_focus": "#242538",
+      "toolbar_field_border_focus": "#bb9af7",
+      "toolbar_field_highlight": "#4b3161",
+      "toolbar_field_highlight_text": "#e9d9fb",
+      "toolbar_top_separator": "#41466a",
+      "toolbar_bottom_separator": "#41466a",
+      "toolbar_vertical_separator": "#41466a",
+      "button_background_hover": "#303249",
+      "button_background_active": "#41466a",
+      "icons": "#c0c0cc",
+      "icons_attention": "#bb9af7",
+      "sidebar": "#141414",
+      "sidebar_text": "#e8e8f0",
+      "sidebar_border": "#41466a",
+      "sidebar_highlight": "#4b3161",
+      "sidebar_highlight_text": "#e9d9fb",
+      "popup": "#242538",
+      "popup_text": "#e8e8f0",
+      "popup_border": "#41466a",
+      "popup_highlight": "#4b3161",
+      "popup_highlight_text": "#e9d9fb",
+      "input_background": "#1c1d2b",
+      "input_color": "#e8e8f0",
+      "input_border": "#41466a",
+      "focus_outline": "#bb9af7"
+    },
+    "properties": {
+      "color_scheme": "dark"
+    }
+  }
+}

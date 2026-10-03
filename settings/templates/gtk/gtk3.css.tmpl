@@ -1,0 +1,85 @@
+/* Zephyrine: палитра ObsidianNeon (quickshell/scheme.json) поверх adw-gtk3 (GTK3) и
+   libadwaita (GTK4). Один и тот же набор именованных цветов libadwaita понимают обе
+   темы, поэтому блок одинаков в gtk-3.0/gtk.css и gtk-4.0/gtk.css.
+
+   Прозрачность (как в баре: barAlpha 0.88, pillAlpha 0.94) — только у «несущих» фонов:
+   окно, заголовок, сайдбар, вид (view). Всплывающие слои (popover, dialog) и карточки
+   остаются плотными — иначе меню и диалоги нечитаемы над ярким фоном. Размытие того,
+   что видно сквозь окно, даёт Hyprland (blur/hyprglass), не тулкит. Альфа в цвете
+   складывается только на один слой: вложенные виджеты фон не перекрашивают. */
+
+@define-color zp_bg {{ c.background | rgba:a.glass }};
+@define-color zp_bg_solid {{ c.background | hex }};
+@define-color zp_container {{ c.surfaceContainer | rgba:a.surface }};
+@define-color zp_high {{ c.surfaceContainerHigh | hex }};
+@define-color zp_highest {{ c.surfaceContainerHighest | hex }};
+@define-color zp_fg {{ c.onSurface | hex }};
+@define-color zp_primary {{ c.primary | hex }};
+
+@define-color window_bg_color @zp_bg;
+@define-color window_fg_color @zp_fg;
+@define-color view_bg_color rgba({{ c.background | rgb }}, {{ a.glass | anchor:0.72 }});
+@define-color view_fg_color @zp_fg;
+@define-color headerbar_bg_color rgba({{ c.background | rgb }}, {{ a.glass | anchor:0.92 }});
+@define-color headerbar_fg_color @zp_fg;
+@define-color headerbar_backdrop_color rgba({{ c.background | rgb }}, {{ a.glass | anchor:0.92 }});
+@define-color headerbar_border_color {{ c.outlineVariant | hex }};
+@define-color headerbar_shade_color rgba(0, 0, 0, 0.3);
+@define-color sidebar_bg_color rgba({{ c.background | rgb }}, {{ a.glass | anchor:0.92 }});
+@define-color sidebar_fg_color @zp_fg;
+@define-color sidebar_backdrop_color rgba({{ c.background | rgb }}, {{ a.glass | anchor:0.92 }});
+@define-color sidebar_border_color {{ c.outlineVariant | hex }};
+@define-color secondary_sidebar_bg_color rgba({{ c.surfaceContainer | rgb }}, {{ a.surface | anchor:0.92 }});
+@define-color secondary_sidebar_fg_color @zp_fg;
+@define-color card_bg_color @zp_container;
+@define-color card_fg_color @zp_fg;
+@define-color card_shade_color rgba(0, 0, 0, 0.3);
+@define-color dialog_bg_color @zp_high;
+@define-color dialog_fg_color @zp_fg;
+@define-color popover_bg_color @zp_high;
+@define-color popover_fg_color @zp_fg;
+@define-color popover_shade_color rgba(0, 0, 0, 0.3);
+@define-color thumbnail_bg_color @zp_highest;
+@define-color thumbnail_fg_color @zp_fg;
+
+@define-color accent_bg_color {{ c.primary | hex }};
+@define-color accent_fg_color {{ c.onPrimary | hex }};
+@define-color accent_color {{ c.primaryLight | hex }};
+@define-color destructive_bg_color {{ c.error | hex }};
+@define-color destructive_fg_color {{ c.onError | hex }};
+@define-color destructive_color {{ c.errorLight | hex }};
+@define-color success_bg_color {{ c.success | hex }};
+@define-color success_fg_color {{ c.onSuccess | hex }};
+@define-color success_color {{ c.successLight | hex }};
+@define-color warning_bg_color {{ c.warning | hex }};
+@define-color warning_fg_color {{ c.onWarning | hex }};
+@define-color warning_color {{ c.warningLight | hex }};
+@define-color error_bg_color {{ c.error | hex }};
+@define-color error_fg_color {{ c.onError | hex }};
+@define-color error_color {{ c.errorLight | hex }};
+
+/* adw-gtk3 берёт часть цветов из старых имён GTK3 */
+@define-color theme_bg_color {{ c.background | hex }};
+@define-color theme_fg_color {{ c.onBackground | hex }};
+@define-color theme_base_color {{ c.surface | hex }};
+@define-color theme_text_color {{ c.onSurface | hex }};
+@define-color theme_selected_bg_color {{ c.primary | hex }};
+@define-color theme_selected_fg_color {{ c.onPrimary | hex }};
+@define-color insensitive_fg_color {{ c.outline | hex }};
+@define-color borders {{ c.outlineVariant | hex }};
+
+/* Скругления как у пилюль оболочки (pillRadius 12, popoutRadius 14) */
+button, entry, .card, popover > contents, menu, .menu, tooltip {
+    border-radius: {{ r.md | px }};
+}
+
+popover > contents, menu {
+    border: 1px solid {{ c.outlineVariant | hex }};
+}
+
+selection, text selection {
+    background-color: {{ c.primary | rgba:0.28 }};
+}
+
+/* Фон окна задан цветами window_bg_color/headerbar_bg_color выше (alpha 0.88/0.92) —
+   дублировать его селекторами window/.background не нужно. */
