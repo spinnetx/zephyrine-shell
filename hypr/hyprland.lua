@@ -248,9 +248,9 @@ if hl.plugin and hl.plugin.hyprbars then
                 bar_text_size = 10,
                 bar_part_of_window = true,
                 bar_precedence_over_border = true,
-                bar_padding = 10,
-                bar_button_padding = 6,
-                on_double_click = "hyprctl dispatch fullscreen 1",
+                bar_padding = 8,
+                bar_button_padding = 8,
+                on_double_click = [[hyprctl dispatch 'hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" })']],
             },
         },
     })
@@ -258,17 +258,17 @@ if hl.plugin and hl.plugin.hyprbars then
     hl.plugin.hyprbars.add_button({
         bg_color = "rgba(f7768eff)",
         fg_color = "rgba(141414ff)",
-        size = 10,
+        size = 15,
         icon = "󰅖",
-        action = "hyprctl dispatch killactive",
+        action = [[hyprctl dispatch 'hl.dsp.window.close()']],
     })
 
     hl.plugin.hyprbars.add_button({
         bg_color = "rgba(9ece6aff)",
         fg_color = "rgba(141414ff)",
-        size = 10,
+        size = 15,
         icon = "󰘔",
-        action = "hyprctl dispatch togglefloating",
+        action = [[hyprctl dispatch 'hl.dsp.window.float({ action = "toggle" })']],
     })
 
     hl.window_rule({
