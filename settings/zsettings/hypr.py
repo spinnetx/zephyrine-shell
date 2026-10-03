@@ -207,8 +207,13 @@ def emit(values, ctx, paths=None):
     if window_mode not in ("tile", "float"):
         raise HyprError("hypr.windowMode: ожидается 'tile' или 'float', получено %r" % (window_mode,))
     if window_mode == "float":
-        lines.append("-- Режим окон по умолчанию: плавающие окна (hypr.windowMode)")
-        lines.append('hl.window_rule({ name = "default-floating-mode", match = { class = ".*" }, float = true })')
+        lines.append("-- Режим окон: плавающие окна (hypr.windowMode). Заголовки hyprbars всегда включены")
+        lines.append('hl.window_rule({ name = "default-floating-mode", match = { class = ".*" }, float = true, enabled = true })')
+        lines.append('hl.window_rule({ name = "hyprbars-floating-only", enabled = false })')
+    else:
+        lines.append("-- Режим окон: тайловый (hypr.windowMode). Заголовки hyprbars только у плавающих окон")
+        lines.append('hl.window_rule({ name = "default-floating-mode", enabled = false })')
+        lines.append('hl.window_rule({ name = "hyprbars-floating-only", match = { float = false }, ["hyprbars:no_bar"] = true, enabled = true })')
     monitors_list = values.get("display.monitors") or []
     if monitors_list:
         lines.append("-- Мониторы (display.monitors)")

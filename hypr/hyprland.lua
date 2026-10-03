@@ -271,6 +271,10 @@ if hl.plugin and hl.plugin.hyprbars then
         action = [[hyprctl dispatch 'hl.dsp.window.float({ action = "toggle" })']],
     })
 
+    -- Базовое поведение hyprbars: в тайловом режиме скрывать заголовок у неплавающих окон.
+    -- Динамически управляется центром управления (hypr.windowMode в settings.lua):
+    -- в режиме "float" (плавающие окна) заголовок показывается всегда (hyprbars-floating-only disabled),
+    -- в режиме "tile" (тайловый) заголовок показывается только у плавающих окон.
     hl.window_rule({
         name = "hyprbars-floating-only",
         match = { float = false },

@@ -34,6 +34,9 @@ DEFAULT_TEXT = (
     '    inactive_border = "rgba(595959aa)" } } })\n'
     "-- hyprglass: ключи плагина есть только после его загрузки\n"
     "if hl.plugin and hl.plugin.hyprglass then hl.plugin.hyprglass.config({ glass_opacity = 0.7 }) end\n"
+    "-- Режим окон: тайловый (hypr.windowMode). Заголовки hyprbars только у плавающих окон\n"
+    'hl.window_rule({ name = "default-floating-mode", enabled = false })\n'
+    'hl.window_rule({ name = "hyprbars-floating-only", match = { float = false }, ["hyprbars:no_bar"] = true, enabled = true })\n'
 )
 
 
@@ -135,14 +138,31 @@ class EmitText(unittest.TestCase):
     def test_window_mode_tile_and_float(self):
         t_tile = gen({"hypr.windowMode": "tile"})
         self.assertEqual(t_tile, DEFAULT_TEXT)
-        self.assertNotIn("default-floating-mode", t_tile)
+        self.assertIn('hl.window_rule({ name = "default-floating-mode", enabled = false })', t_tile)
+        self.assertIn('hl.window_rule({ name = "hyprbars-floating-only", match = { float = false }, ["hyprbars:no_bar"] = true, enabled = true })', t_tile)
 
         t_float = gen({"hypr.windowMode": "float"})
-        self.assertIn('-- Режим окон по умолчанию: плавающие окна (hypr.windowMode)\n', t_float)
-        self.assertIn('hl.window_rule({ name = "default-floating-mode", match = { class = ".*" }, float = true })', t_float)
+        self.assertIn('-- Режим окон: плавающие окна (hypr.windowMode). Заголовки hyprbars всегда включены\n', t_float)
+        self.assertIn('hl.window_rule({ name = "default-floating-mode", match = { class = ".*" }, float = true, enabled = true })', t_float)
+        self.assertIn('hl.window_rule({ name = "hyprbars-floating-only", enabled = false })', t_float)
 
         with self.assertRaises(hypr.HyprError):
             gen({"hypr.windowMode": "unknown"})
+
+    def test_window_mode_hyprbars_titlebar_visibility_regression(self):
+        """Регрессионный тест:
+        В режиме 'float' (плавающие окна) заголовок показывается всегда (hyprbars-floating-only отключен).
+        В режиме 'tile' (тайловый) заголовок показывается только у плавающих окон (hyprbars-floating-only активен).
+        """
+        code_float = gen({"hypr.windowMode": "float"})
+        self.assertIn('hl.window_rule({ name = "default-floating-mode", match = { class = ".*" }, float = true, enabled = true })', code_float)
+        self.assertIn('hl.window_rule({ name = "hyprbars-floating-only", enabled = false })', code_float)
+        # В режиме float правило no_bar не должно активироваться
+        self.assertNotIn('["hyprbars:no_bar"] = true, enabled = true', code_float)
+
+        code_tile = gen({"hypr.windowMode": "tile"})
+        self.assertIn('hl.window_rule({ name = "default-floating-mode", enabled = false })', code_tile)
+        self.assertIn('hl.window_rule({ name = "hyprbars-floating-only", match = { float = false }, ["hyprbars:no_bar"] = true, enabled = true })', code_tile)
 
     def test_lua_str_escaping(self):
         self.assertEqual(hypr.lua_str('a"b\\c\nd'), '"a\\"b\\\\c\\nd"')
@@ -198,7 +218,7 @@ class MockRun(unittest.TestCase):
         d = run_mock([self.lua(gen())])
         self.assertEqual(d["errors"], [])
         self.assertEqual([c["fn"] for c in d["calls"]],
-                         ["config", "config", "plugin.hyprglass.config"])
+                         ["config", "config", "plugin.hyprglass.config", "window_rule", "window_rule"])
         self.assertEqual(d["config"], {
             "decoration.rounding": 10,
             "general.border_size": 2,
