@@ -4,7 +4,7 @@ pkgver=1.0.0
 pkgrel=1
 pkgdesc="Modern, elegant Wayland desktop shell based on Hyprland and Quickshell"
 arch=('any')
-url="https://github.com/rzalevsky/zephyrine-shell"
+url="https://github.com/spinnetx/zephyrine-shell"
 license=('MIT')
 depends=(
     'hyprland'

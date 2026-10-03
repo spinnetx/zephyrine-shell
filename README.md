@@ -39,7 +39,7 @@
 ### Системные требования
 - **ОС**: Arch Linux, EndeavourOS или совместимый дистрибутив Linux.
 - **Wayland композитор**: Hyprland (версия 0.55+ с поддержкой Lua).
-- **Интерфейс**: Quickshell (`quickshell-git`).
+- **Интерфейс**: Quickshell (`quickshell` или `quickshell-git`).
 - **Зависимости**: `mpvpaper`, `socat`, `jq`, `python`, `qt6ct`, `papirus-icon-theme`.
 
 ---
@@ -47,7 +47,7 @@
 ### Способ 1: Установка пакетом Arch Linux / EndeavourOS (Рекомендуется)
 
 ```bash
-git clone https://github.com/rzalevsky/zephyrine-shell.git
+git clone https://github.com/spinnetx/zephyrine-shell.git
 cd zephyrine-shell
 makepkg -si
 ```
@@ -57,7 +57,7 @@ makepkg -si
 ### Способ 2: Установка через инсталлятор
 
 ```bash
-git clone https://github.com/rzalevsky/zephyrine-shell.git
+git clone https://github.com/spinnetx/zephyrine-shell.git
 cd zephyrine-shell
 ./install.sh --system --sddm
 ```
@@ -67,7 +67,7 @@ cd zephyrine-shell
 ### Способ 3: Сборка через Makefile
 
 ```bash
-git clone https://github.com/rzalevsky/zephyrine-shell.git
+git clone https://github.com/spinnetx/zephyrine-shell.git
 cd zephyrine-shell
 
 # Системная установка (в /usr):
