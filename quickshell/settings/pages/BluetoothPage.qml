@@ -638,4 +638,8 @@ Item {
             }
         }
     }
+
+    ScrollBar {
+        target: flick
+    }
 }

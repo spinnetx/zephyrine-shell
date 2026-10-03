@@ -22,7 +22,7 @@ ACTIONS = (
      ("exec", QS + "launcher toggle"), None),
     ("powermenu", "Меню питания", ["SUPER + Escape"], set(), ("exec", QS + "powermenu toggle"), None),
     ("notifs", "Уведомления и календарь", ["SUPER + N"], set(), ("exec", QS + "notifs toggle"), None),
-    ("settings", "Центр настроек", ["SUPER + I"], set(), ("exec", QS + "settings toggle"), None),
+    ("settings", "Центр управления", ["SUPER + I"], set(), ("exec", QS + "settings toggle"), None),
     ("terminal", "Терминал", ["SUPER + Q"], set(), ("exec", None), "apps.terminal"),
     ("files", "Файловый менеджер", ["SUPER + E"], set(), ("exec", None), "apps.fileManager"),
     ("lock", "Блокировка экрана", ["SUPER + L"], set(),

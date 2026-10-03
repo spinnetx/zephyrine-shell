@@ -704,8 +704,8 @@ Item {
                         anchors.fill: parent
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onEntered: root.footerHint = "Центр настроек"
-                        onExited: if (root.footerHint === "Центр настроек") root.footerHint = ""
+                        onEntered: root.footerHint = "Центр управления"
+                        onExited: if (root.footerHint === "Центр управления") root.footerHint = ""
                         onClicked: {
                             PopoutState.close();
                             Overlays.openSettings();

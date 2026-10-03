@@ -21,6 +21,7 @@ HEX_RE = re.compile(r"^[0-9a-fA-F]{6}$")
 # Запасные значения - ровно текущие в hyprland.lua; нужны, только если ключа нет в values.
 DEFAULTS = {
     "appearance.windowRounding": 10,
+    "hypr.windowMode": "tile",
     "hypr.borders.style": "legacy",
     "hypr.borders.size": 2,
     "hypr.glassOpacity": 0.7,
@@ -202,6 +203,12 @@ def emit(values, ctx, paths=None):
     lines.extend(_cursor_lines(values))
     lines.extend(binds.lua_lines(values, lua_str))
     lines.extend(autostart.lua_lines(values.get("autostart", DEFAULTS["autostart"]), lua_str))
+    window_mode = values.get("hypr.windowMode", DEFAULTS["hypr.windowMode"])
+    if window_mode not in ("tile", "float"):
+        raise HyprError("hypr.windowMode: ожидается 'tile' или 'float', получено %r" % (window_mode,))
+    if window_mode == "float":
+        lines.append("-- Режим окон по умолчанию: плавающие окна (hypr.windowMode)")
+        lines.append('hl.window_rule({ name = "default-floating-mode", match = { class = ".*" }, float = true })')
     monitors_list = values.get("display.monitors") or []
     if monitors_list:
         lines.append("-- Мониторы (display.monitors)")

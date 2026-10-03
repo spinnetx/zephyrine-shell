@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Zephyrine Settings
-Name[ru]=Центр настроек Zephyrine
+Name[ru]=Центр управления Zephyrine
 Comment=Configure Zephyrine Desktop Shell appearance, displays, audio, and shortcuts
 Comment[ru]=Настройка внешнего вида, экранов, звука и сочетаний клавиш Zephyrine
 Exec=zephyrine-settings

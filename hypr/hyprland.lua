@@ -343,9 +343,9 @@ hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(qsIpc .. "launcher toggle"), { descri
 hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd(qsIpc .. "powermenu toggle"), { description = "zp:powermenu · Меню питания" })
 -- Панель уведомлений/календарь (IPC-таргет notifs).
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(qsIpc .. "notifs toggle"), { description = "zp:notifs · Уведомления и календарь" })
--- Центр настроек Zephyrine (IPC-таргет settings). Бинд живёт здесь, а не в settings.lua:
+-- Центр управления Zephyrine (IPC-таргет settings). Бинд живёт здесь, а не в settings.lua:
 -- должен работать, даже если сгенерированный файл сломан.
-hl.bind(mainMod .. " + I", hl.dsp.exec_cmd(qsIpc .. "settings toggle"), { description = "zp:settings · Центр настроек" })
+hl.bind(mainMod .. " + I", hl.dsp.exec_cmd(qsIpc .. "settings toggle"), { description = "zp:settings · Центр управления" })
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("kitty --class torrents -e tremc"), { description = "zp:torrents · Торренты" }) -- Торрент-клиент (tremc + transmission-daemon)
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo(), { description = "Pseudo-тайлинг (dwindle)" }) -- dwindle
 -- hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle
@@ -480,11 +480,11 @@ hl.window_rule({
     opacity = "0.95 override 0.92 override",
 })
 
--- Окно центра настроек Zephyrine (FloatingWindow из Quickshell, DESIGN §2.8): плавающее,
--- по центру, стартовый размер 1040x700. Заголовок окна — "Zephyrine · Настройки".
+-- Окно центра управления Zephyrine (FloatingWindow из Quickshell, DESIGN §2.8): плавающее,
+-- по центру, стартовый размер 1040x700. Заголовок окна — "Zephyrine · Центр управления".
 hl.window_rule({
     name  = "zephyrine-settings",
-    match = { title = "^Zephyrine · Настройки$" },
+    match = { title = "^Zephyrine · (Центр управления|Настройки)$" },
 
     float  = true,
     size   = "1040 700",

@@ -27,6 +27,7 @@ Item {
     readonly property var defaults: ({
         "appearance.mode": "dark",
         "appearance.windowRounding": 10,
+        "hypr.windowMode": "tile",
         "hypr.glassOpacity": 0.7,
         "appearance.kittyOpacity": 0.7,
         "hypr.borders.size": 2,
@@ -570,6 +571,20 @@ Item {
                     onPreviewed: (k, v) => root.sliderPreview(k, v)
                     onCommitted: (k, v) => root.sliderCommit(k, v, 0)
                 }
+                SetRow {
+                    width: parent.width
+                    label: "Режим окон"
+                    hint: "Поведение окон по умолчанию для всей системы: тайловый режим упорядочивает окна по сетке, плавающие окна открываются свободно."
+                    error: root.errors["hypr.windowMode"] ?? ""
+                    SetSegmented {
+                        options: [
+                            { value: "tile", label: "Тайловый" },
+                            { value: "float", label: "Плавающие окна" }
+                        ]
+                        current: root.eff("hypr.windowMode")
+                        onSelected: v => root.send({ "hypr.windowMode": v })
+                    }
+                }
                 PrefSliderRow {
                     width: parent.width
                     prefKey: "hypr.glassOpacity"
@@ -785,6 +800,10 @@ Item {
                 }
             }
         }
+    }
+
+    ScrollBar {
+        target: flick
     }
 
     Snackbar {

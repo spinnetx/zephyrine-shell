@@ -204,4 +204,8 @@ Item {
             }
         }
     }
+
+    ScrollBar {
+        target: flick
+    }
 }

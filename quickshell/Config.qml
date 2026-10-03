@@ -16,7 +16,7 @@ Singleton {
     // Точка монтирования второго диска (если не смонтирован — показываем «—»).
     readonly property string dataMount: "/mnt/data"
 
-    // Центр настроек (settings/): корень репозитория и CLI — единственный писатель настроек.
+    // Центр управления (settings/): корень репозитория и CLI — единственный писатель настроек.
     readonly property string zephyrineRoot: Quickshell.env("ZEPHYRINE_ROOT") || "/usr/share/zephyrine"
     readonly property string settingsCli: Quickshell.env("ZEPHYRINE_CLI") || "zephyrine-settings"
 

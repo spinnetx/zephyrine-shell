@@ -107,4 +107,8 @@ Item {
             }
         }
     }
+
+    ScrollBar {
+        target: flick
+    }
 }

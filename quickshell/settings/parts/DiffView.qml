@@ -133,23 +133,32 @@ Rectangle {
                     color: Colors.fgVariant
                     wrapMode: Text.WordWrap
                 }
-                Flickable {
+                Item {
                     visible: !fileBox.modelData.binary && fileBox.modelData.diff.length > 0
                     width: parent.width
                     height: visible ? Math.min(diffText.implicitHeight, 300) : 0
-                    contentWidth: Math.max(width, diffText.implicitWidth)
-                    contentHeight: diffText.implicitHeight
-                    clip: true
-                    boundsBehavior: Flickable.StopAtBounds
-                    Text {
-                        id: diffText
-                        textFormat: Text.RichText
-                        text: root.html(fileBox.modelData.diff)
-                        color: Colors.fg
-                        font.family: "monospace"
-                        font.pixelSize: Config.fontSize - 2
-                        wrapMode: Text.NoWrap
-                        renderType: Text.NativeRendering
+
+                    Flickable {
+                        id: diffFlick
+                        anchors.fill: parent
+                        contentWidth: Math.max(width, diffText.implicitWidth)
+                        contentHeight: diffText.implicitHeight
+                        clip: true
+                        boundsBehavior: Flickable.StopAtBounds
+                        Text {
+                            id: diffText
+                            textFormat: Text.RichText
+                            text: root.html(fileBox.modelData.diff)
+                            color: Colors.fg
+                            font.family: "monospace"
+                            font.pixelSize: Config.fontSize - 2
+                            wrapMode: Text.NoWrap
+                            renderType: Text.NativeRendering
+                        }
+                    }
+
+                    ScrollBar {
+                        target: diffFlick
                     }
                 }
                 Txt {

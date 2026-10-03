@@ -90,6 +90,10 @@ Item {
         }
     }
 
+    ScrollBar {
+        target: flick
+    }
+
     // Диалог подтверждения мониторов (поверх всей страницы)
     MonitorConfirm {
         id: monitorConfirm

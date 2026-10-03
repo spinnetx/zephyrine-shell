@@ -125,11 +125,24 @@ class EmitText(unittest.TestCase):
             {"hypr.borders.style": "custom", "hypr.borders.custom": {"active": ['x"]})--'], "angle": 45, "inactive": "rgba(00000000)"}},
             {"hypr.borders.style": "custom", "hypr.borders.custom": {"active": ["rgba(00000000)"], "angle": 400, "inactive": "rgba(00000000)"}},
             {"hypr.borders.style": "custom", "hypr.borders.custom": {"active": ["rgba(00000000)"], "angle": 1, "inactive": "red"}},
+            {"hypr.windowMode": "tabs"}, {"hypr.windowMode": 123},
         ]
         for over in bad:
             with self.subTest(over=over):
                 with self.assertRaises(hypr.HyprError):
                     gen(over)
+
+    def test_window_mode_tile_and_float(self):
+        t_tile = gen({"hypr.windowMode": "tile"})
+        self.assertEqual(t_tile, DEFAULT_TEXT)
+        self.assertNotIn("default-floating-mode", t_tile)
+
+        t_float = gen({"hypr.windowMode": "float"})
+        self.assertIn('-- Режим окон по умолчанию: плавающие окна (hypr.windowMode)\n', t_float)
+        self.assertIn('hl.window_rule({ name = "default-floating-mode", match = { class = ".*" }, float = true })', t_float)
+
+        with self.assertRaises(hypr.HyprError):
+            gen({"hypr.windowMode": "unknown"})
 
     def test_lua_str_escaping(self):
         self.assertEqual(hypr.lua_str('a"b\\c\nd'), '"a\\"b\\\\c\\nd"')
@@ -252,8 +265,8 @@ def dofile_block():
 class PatchContent(unittest.TestCase):
     def test_added_text(self):
         added = "\n".join(patch_added_lines())
-        for needle in ('hl.bind(mainMod .. " + I", hl.dsp.exec_cmd(qsIpc .. "settings toggle"), { description = "zp:settings · Центр настроек" })',
-                       'name  = "zephyrine-settings"', 'match = { title = "^Zephyrine · Настройки$" }',
+        for needle in ('hl.bind(mainMod .. " + I", hl.dsp.exec_cmd(qsIpc .. "settings toggle"), { description = "zp:settings · Центр управления" })',
+                       'name  = "zephyrine-settings"', 'match = { title = "^Zephyrine · (Центр управления|Настройки)$" }',
                        'size   = "1040 700"', "center = true", "float  = true", "pcall(dofile, path)"):
             self.assertIn(needle, added)
 

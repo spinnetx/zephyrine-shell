@@ -205,7 +205,7 @@ echo "  1. Выберите сессию 'Zephyrine' на экране вход�
 echo "  2. Или запустите вручную из tty: zephyrine-session"
 echo
 echo "Управление оболочкой:"
-echo "  - Центр настроек: zephyrine-settings (или SUPER+I)"
+echo "  - Центр управления: zephyrine-settings (или SUPER+I)"
 echo "  - Лаунчер: SUPER (одиночный) или SUPER+Space"
 echo "  - Уведомления: SUPER+N"
 echo "  - Меню питания: SUPER+Escape"

@@ -152,6 +152,20 @@
             "stage": "v1",
             "doc": "Управлять целью (по id из targets.json). false = цель не перегенерируется. Шаблонный ключ: подставляется id цели."
         },
+        "hypr.windowMode": {
+            "type": "enum",
+            "default": "tile",
+            "enum": [
+                "tile",
+                "float"
+            ],
+            "targets": [
+                "hypr"
+            ],
+            "live": false,
+            "stage": "v1",
+            "doc": "Режим окон по умолчанию для всей системы: tile (тайловый) или float (плавающие окна)."
+        },
         "hypr.borders.style": {
             "type": "enum",
             "default": "legacy",

@@ -59,7 +59,7 @@ Rectangle {
                 font.pixelSize: Config.fontSize + 1
             }
             Txt {
-                text: "Настройки"
+                text: "Центр управления"
                 color: Colors.fgVariant
                 font.pixelSize: Config.fontSize - 2
             }

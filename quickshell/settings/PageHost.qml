@@ -118,6 +118,10 @@ Item {
                 sourceComponent: (root.section === "appearance" || root.section === "network" || root.section === "devices" || root.section === "system") ? null : soonPage
             }
         }
+
+        ScrollBar {
+            target: flick
+        }
     }
 
     // Заглушка разделов этапов 2–4.

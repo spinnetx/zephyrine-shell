@@ -7,7 +7,7 @@ import "../components"
 // Окно центра настроек (DESIGN §2.7, §2.8, §6.1): обычное плавающее окно, не слой.
 // Создаётся LazyLoader'ом в shell.qml по Overlays.settingsOpen: пока флаг false, окна нет вовсе;
 // закрытие компоситором (SUPER+C, ✕ и т.п.) приходит сигналом closed и сбрасывает флаг.
-// Заголовок ровно «Zephyrine · Настройки» — на него рассчитано правило окна в hyprland.lua
+// Заголовок «Zephyrine · Центр управления» — на него рассчитано правило окна в hyprland.lua
 // (settings/patches/hyprland-settings.patch).
 // Клавиатура: Ctrl+1…4 — раздел, Ctrl+Tab / Ctrl+Shift+Tab — следующий/предыдущий, Esc — закрыть
 // (открытый выпадающий список сам перехватывает Esc раньше окна).
@@ -27,7 +27,7 @@ FloatingWindow {
         return 0;
     }
 
-    title: "Zephyrine · Настройки"
+    title: "Zephyrine · Центр управления"
     visible: true
     implicitWidth: 1040
     implicitHeight: 700
