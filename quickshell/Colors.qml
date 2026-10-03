@@ -64,13 +64,30 @@ Singleton {
     }
 
     FileView {
-        path: Quickshell.shellPath("scheme.override.json")
+        id: stateOverrideView
+        path: (Quickshell.env("ZEPHYRINE_STATE") || ((Quickshell.env("HOME") || "") + "/.local/state/zephyrine")) + "/scheme.override.json"
         printErrors: false
         watchChanges: true
         onFileChanged: reload()
         onLoaded: root.applyOverride(text())
-        // Файла нет (по умолчанию) или он удалён — переопределений нет.
-        onLoadFailed: root.override = ({})
+        onLoadFailed: {
+            if (shellOverrideView.loaded)
+                root.applyOverride(shellOverrideView.text());
+            else
+                root.override = ({});
+        }
+    }
+
+    FileView {
+        id: shellOverrideView
+        path: Quickshell.shellPath("scheme.override.json")
+        printErrors: false
+        watchChanges: true
+        onFileChanged: reload()
+        onLoaded: {
+            if (!stateOverrideView.loaded)
+                root.applyOverride(text());
+        }
     }
 
     FileView {

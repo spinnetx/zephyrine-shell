@@ -359,7 +359,7 @@ local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
 -- Экран блокировки — hyprlock с прозрачным фоном + видео-обои на слое overlay (scripts/lock-with-video.sh);
 -- без misc.session_lock_xray (ниже) видео под lock-сюрфейсом не рисуется.
-hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("$HOME/my_zephyrine_conf/scripts/lock-with-video.sh"), { description = "zp:lock · Блокировка экрана" })
+hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("zephyrine-lock"), { description = "zp:lock · Блокировка экрана" })
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal), { description = "zp:terminal · Терминал" })

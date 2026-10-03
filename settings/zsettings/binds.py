@@ -26,7 +26,7 @@ ACTIONS = (
     ("terminal", "Терминал", ["SUPER + Q"], set(), ("exec", None), "apps.terminal"),
     ("files", "Файловый менеджер", ["SUPER + E"], set(), ("exec", None), "apps.fileManager"),
     ("lock", "Блокировка экрана", ["SUPER + L"], set(),
-     ("exec", "$HOME/my_zephyrine_conf/scripts/lock-with-video.sh"), None),
+     ("exec", "zephyrine-lock"), None),
     ("torrents", "Торренты", ["SUPER + T"], set(), ("exec", "kitty --class torrents -e tremc"), None),
     ("shot-area", "Скриншот области", ["SUPER + CTRL + 4"], set(),
      ("exec", 'grim -g "$(slurp)" -t ppm - | satty --filename - --fullscreen'), None),

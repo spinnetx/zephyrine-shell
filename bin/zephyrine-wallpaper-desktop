@@ -4,6 +4,8 @@
 
 if [ -f "/usr/lib/zephyrine/scripts/wallpaper-desktop.sh" ]; then
     exec "/usr/lib/zephyrine/scripts/wallpaper-desktop.sh" "$@"
+elif [ -f "${HOME}/.local/lib/zephyrine/scripts/wallpaper-desktop.sh" ]; then
+    exec "${HOME}/.local/lib/zephyrine/scripts/wallpaper-desktop.sh" "$@"
 else
     SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
     exec "${SELF_DIR}/scripts/wallpaper-desktop.sh" "$@"

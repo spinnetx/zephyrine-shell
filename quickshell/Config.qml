@@ -10,15 +10,15 @@ Singleton {
     // --- Команды ---
     // Кнопка питания открывает своё меню (powermenu/PowerMenu.qml, состояние — services/Overlays.qml).
     // Блокировка экрана (видео-заставка hyprlock).
-    readonly property var lockCommand: [Quickshell.env("HOME") + "/my_zephyrine_conf/scripts/lock-with-video.sh"]
+    readonly property var lockCommand: ["zephyrine-lock"]
     // Скрипт лимитов ИИ (аргумент: claude | agy), выдаёт JSON {text,tooltip,class}.
-    readonly property string aiScript: Quickshell.env("HOME") + "/my_zephyrine_conf/scripts/ai-usage-widget.sh"
+    readonly property string aiScript: Quickshell.env("ZEPHYRINE_AI_SCRIPT") || "ai-usage-widget.sh"
     // Точка монтирования второго диска (если не смонтирован — показываем «—»).
     readonly property string dataMount: "/mnt/data"
 
     // Центр настроек (settings/): корень репозитория и CLI — единственный писатель настроек.
-    readonly property string zephyrineRoot: Quickshell.env("HOME") + "/my_zephyrine_conf"
-    readonly property string settingsCli: zephyrineRoot + "/settings/bin/zephyrine-settings"
+    readonly property string zephyrineRoot: Quickshell.env("ZEPHYRINE_ROOT") || (Quickshell.env("HOME") + "/my_zephyrine_conf")
+    readonly property string settingsCli: Quickshell.env("ZEPHYRINE_CLI") || "zephyrine-settings"
 
     // Переключение воркспейса: синтаксис Lua-dispatch Hyprland 0.56 (подтверждён).
     function workspaceCommand(n) {

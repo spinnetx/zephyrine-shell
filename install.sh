@@ -37,25 +37,75 @@ echo "    Установка Zephyrine Shell"
 echo "=========================================="
 echo "Режим: $MODE"
 
-# 1. Проверка ключевых зависимостей
+# 1. Проверка утилиты сборки make
+if ! command -v make >/dev/null 2>&1; then
+    echo "  [ОШИБКА] Утилита make не найдена. Установите пакет base-devel или make." >&2
+    exit 1
+fi
+
+# 2. Проверка ключевых и рекомендуемых зависимостей
 echo "==> Проверка зависимостей..."
-MISSING_DEPS=()
-for cmd in Hyprland qs mpvpaper socat jq python3; do
+CORE_DEPS=(
+    "Hyprland:hyprland"
+    "qs:quickshell"
+    "mpvpaper:mpvpaper (AUR)"
+    "hyprlock:hyprlock"
+    "hypridle:hypridle"
+    "wpctl:wireplumber"
+    "brightnessctl:brightnessctl"
+    "playerctl:playerctl"
+    "socat:socat"
+    "jq:jq"
+    "python3:python"
+    "luac:lua"
+)
+
+MISSING_CORE=()
+for item in "${CORE_DEPS[@]}"; do
+    cmd="${item%%:*}"
+    pkg="${item##*:}"
     if ! command -v "$cmd" >/dev/null 2>&1; then
-        MISSING_DEPS+=("$cmd")
+        MISSING_CORE+=("$cmd ($pkg)")
     fi
 done
 
-if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
-    echo "  [ВНИМАНИЕ] Не найдены следующие программы:" >&2
-    for dep in "${MISSING_DEPS[@]}"; do
+if [ ${#MISSING_CORE[@]} -gt 0 ]; then
+    echo "  [ВНИМАНИЕ] Не найдены следующие обязательные компоненты:" >&2
+    for dep in "${MISSING_CORE[@]}"; do
         echo "    - $dep" >&2
     done
-    echo "  Для корректной работы оболочки установите их через ваш пакетный менеджер (pacman/yay/aur)."
+    echo "  Установите их для корректной работы оболочки (pacman/yay)." >&2
     echo
 fi
 
-# 2. Выполнение установки
+OPT_DEPS=(
+    "nmcli:networkmanager"
+    "bluetoothctl:bluez-utils"
+    "powerprofilesctl:power-profiles-daemon"
+    "grim:grim"
+    "slurp:slurp"
+    "satty:satty"
+    "ffmpeg:ffmpeg"
+    "wl-copy:wl-clipboard"
+)
+MISSING_OPT=()
+for item in "${OPT_DEPS[@]}"; do
+    cmd="${item%%:*}"
+    pkg="${item##*:}"
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        MISSING_OPT+=("$cmd ($pkg)")
+    fi
+done
+
+if [ ${#MISSING_OPT[@]} -gt 0 ]; then
+    echo "  [ИНФОРМАЦИЯ] Рекомендуемые пакеты (опционально):"
+    for dep in "${MISSING_OPT[@]}"; do
+        echo "    - $dep"
+    done
+    echo
+fi
+
+# 3. Выполнение установки
 if [ "$MODE" = "system" ]; then
     echo "==> Установка в /usr (требуются права администратора)..."
     sudo make install PREFIX=/usr
@@ -68,7 +118,7 @@ else
     echo "  sudo cp desktop/zephyrine.desktop /usr/share/wayland-sessions/"
 fi
 
-# 3. Установка темы SDDM
+# 4. Установка темы SDDM
 if [ "$INSTALL_SDDM" -eq 1 ]; then
     if [ -f "sddm/install-theme.sh" ]; then
         echo "==> Установка темы экрана входа SDDM..."

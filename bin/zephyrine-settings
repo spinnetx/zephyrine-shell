@@ -4,18 +4,22 @@
 
 set -euo pipefail
 
-# Определение каталога настроек
+# Определение каталога настроек и корня данных
 if [ -z "${ZEPHYRINE_SETTINGS_DIR:-}" ]; then
     if [ -d "/usr/share/zephyrine/settings" ]; then
         SETTINGS_DIR="/usr/share/zephyrine/settings"
+        export ZEPHYRINE_ROOT="${ZEPHYRINE_ROOT:-/usr/share/zephyrine}"
     elif [ -d "${HOME}/.local/share/zephyrine/settings" ]; then
         SETTINGS_DIR="${HOME}/.local/share/zephyrine/settings"
+        export ZEPHYRINE_ROOT="${ZEPHYRINE_ROOT:-${HOME}/.local/share/zephyrine}"
     else
         SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
         SETTINGS_DIR="${SELF_DIR}/settings"
+        export ZEPHYRINE_ROOT="${ZEPHYRINE_ROOT:-$SELF_DIR}"
     fi
 else
     SETTINGS_DIR="$ZEPHYRINE_SETTINGS_DIR"
+    export ZEPHYRINE_ROOT="${ZEPHYRINE_ROOT:-$(dirname "$SETTINGS_DIR")}"
 fi
 
 export PYTHONPATH="${SETTINGS_DIR}${PYTHONPATH:+:$PYTHONPATH}"

@@ -436,7 +436,19 @@ class Engine:
             return p.na("later", "kind-not-implemented", str(e))
         except (RenderError, palette.PaletteError, OSError, ValueError, KeyError) as e:
             return p.na("error", "render-error", "%s: %s" % (type(e).__name__, e))
-        p.dests.append(Dest(os.path.join(self.paths.root, t["output"]), "repo", data))
+        is_writable_root = os.access(self.paths.root, os.W_OK) and not self.paths.root.startswith("/usr")
+        if is_writable_root:
+            p.dests.append(Dest(os.path.join(self.paths.root, t["output"]), "repo", data))
+        else:
+            deploy = t.get("deploy", "none")
+            if deploy == "none":
+                out = t.get("output", "")
+                if out.startswith(".config/"):
+                    self._add(p, Dest(os.path.join(self.paths.home, out), "copy", data))
+                elif t.get("id") == "quickshell":
+                    self._add(p, Dest(os.path.join(self.paths.state, "scheme.override.json"), "copy", data))
+                elif t.get("id") == "sddm":
+                    self._add(p, Dest(os.path.join(self.paths.state, "sddm-theme.conf.user"), "copy", data))
         try:
             self._deploy(t, p, data)
             self._evaluate(p)

@@ -61,7 +61,7 @@ label {
 }
 label {
     monitor =
-    text = cmd[update:60000] /usr/lib/zephyrine/scripts/lock-info.sh date
+    text = cmd[update:60000] lock-info.sh date
     font_size = 12
     font_family = {{ f.lock.family }}
     color = {{ c.onSurfaceVariant | rgba:1.0 }}
@@ -85,7 +85,7 @@ shape {
 }
 label {
     monitor =
-    text = cmd[update:30000] /usr/lib/zephyrine/scripts/lock-info.sh battery
+    text = cmd[update:30000] lock-info.sh battery
     font_size = 11
     font_family = {{ f.lock.family }}
     color = {{ c.onSurface | rgba:1.0 }}
@@ -165,7 +165,7 @@ image {
 # Имя пользователя
 label {
     monitor =
-    text = cmd[update:3600000] /usr/lib/zephyrine/scripts/lock-info.sh name
+    text = cmd[update:3600000] lock-info.sh name
     font_size = 15
     font_family = {{ f.lock.family }} Bold
     color = {{ c.onSurface | rgba:1.0 }}

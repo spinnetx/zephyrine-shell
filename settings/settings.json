@@ -7,6 +7,13 @@
     },
     "kittyOpacity": 0.85
   },
+  "bar": {
+    "left": [
+      "workspaces",
+      "activeWindow",
+      "apps"
+    ]
+  },
   "hypr": {
     "borders": {
       "custom": {

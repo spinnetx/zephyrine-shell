@@ -159,7 +159,12 @@ class FontCase(Fixture):
                     ".config/kitty/kitty.conf"):
             dst = os.path.join(self.root, rel)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
-            shutil.copy(os.path.join(REAL_ROOT, rel), dst)
+            src = os.path.join(REAL_ROOT, rel)
+            if not os.path.isfile(src) and rel.startswith(".config/"):
+                alt = os.path.join(REAL_ROOT, "themes", rel[8:])
+                if os.path.isfile(alt):
+                    src = alt
+            shutil.copy(src, dst)
 
     def _make_bin(self):
         super()._make_bin()
@@ -182,7 +187,7 @@ class FontCase(Fixture):
             shutil.copy(self.repo(".config/" + rel), self.cfg(rel))
             os.chmod(self.cfg(rel), 0o600)
         live_qt = self.read(self.repo(".config/qt6ct/qt6ct.conf")).decode().replace(
-            "/home/testuser", str(self.home.home))
+            "/home/testuser", str(self.home.home)).replace("~", str(self.home.home))
         self.write_file(self.cfg("qt6ct/qt6ct.conf"), live_qt.encode())
         shutil.rmtree(self.cfg("kitty"))
         os.symlink(self.repo(".config/kitty"), self.cfg("kitty"))
@@ -242,8 +247,9 @@ class SetFontsTests(FontCase):
         for txt in (repo_qt, live_qt):
             self.assertIn('general="Cantarell,12,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"\n', txt)
             self.assertIn('fixed="JetBrainsMono Nerd Font,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"\n', txt)
-        # путь палитры: в репо прежний /home/testuser, в живой копии - HOME (как делает deploy.sh)
-        self.assertIn("color_scheme_path=/home/testuser/.config/qt6ct/colors/zephyrine.conf\n", repo_qt)
+        # путь палитры: в репо прежний (~ или /home/testuser), в живой копии - HOME (как делает deploy.sh)
+        self.assertTrue("color_scheme_path=/home/testuser/.config/qt6ct/colors/zephyrine.conf\n" in repo_qt or
+                        "color_scheme_path=~/.config/qt6ct/colors/zephyrine.conf\n" in repo_qt)
         self.assertIn("color_scheme_path=%s/.config/qt6ct/colors/zephyrine.conf\n" % self.home.home, live_qt)
         self.assertEqual(self.gs_sets(), [
             "gsettings set org.gnome.desktop.interface font-name Cantarell  12"])

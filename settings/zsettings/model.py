@@ -334,6 +334,13 @@ class Store:
             with open(self.paths.settings_file, "rb") as f:
                 return f.read()
         except FileNotFoundError:
+            default_path = os.path.join(self.paths.settings_dir, "settings.json")
+            if default_path != self.paths.settings_file and os.path.isfile(default_path):
+                try:
+                    with open(default_path, "rb") as f:
+                        return f.read()
+                except OSError:
+                    pass
             return None
 
     def parse(self, data):

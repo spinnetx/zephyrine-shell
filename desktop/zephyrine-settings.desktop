@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Zephyrine Settings
+Name[ru]=Центр настроек Zephyrine
+Comment=Configure Zephyrine Desktop Shell appearance, displays, audio, and shortcuts
+Comment[ru]=Настройка внешнего вида, экранов, звука и сочетаний клавиш Zephyrine
+Exec=zephyrine-settings
+Icon=preferences-desktop
+Terminal=false
+Type=Application
+Categories=Settings;DesktopSettings;GTK;Qt;
+Keywords=settings;theme;appearance;wallpaper;hyprland;zephyrine;

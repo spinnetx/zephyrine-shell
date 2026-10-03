@@ -16,7 +16,9 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    readonly property string path: Quickshell.env("HOME") + "/my_zephyrine_conf/settings/settings.json"
+    readonly property string userPath: (Quickshell.env("XDG_CONFIG_HOME") || (Quickshell.env("HOME") + "/.config")) + "/zephyrine/settings.json"
+    readonly property string devPath: Quickshell.env("HOME") + "/my_zephyrine_conf/settings/settings.json"
+    readonly property string path: userPath
 
     // Разобранный settings.json (вложенные объекты). Заменяется целиком — так срабатывают привязки.
     property var file: ({})
@@ -151,15 +153,31 @@ Singleton {
     readonly property var barRight: barZone("right")
 
     FileView {
-        path: root.path
+        id: userView
+        path: root.userPath
         printErrors: false
         watchChanges: true
         onFileChanged: reload()
         onLoaded: root.apply(text())
-        // Файла нет — всё по умолчанию.
         onLoadFailed: {
-            root.file = ({});
-            root.ready = true;
+            if (devView.loaded)
+                root.apply(devView.text());
+            else {
+                root.file = ({});
+                root.ready = true;
+            }
+        }
+    }
+
+    FileView {
+        id: devView
+        path: root.devPath
+        printErrors: false
+        watchChanges: true
+        onFileChanged: reload()
+        onLoaded: {
+            if (!userView.loaded)
+                root.apply(text());
         }
     }
 }

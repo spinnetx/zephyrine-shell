@@ -4,6 +4,8 @@
 
 if [ -f "/usr/lib/zephyrine/scripts/lock-with-video.sh" ]; then
     exec "/usr/lib/zephyrine/scripts/lock-with-video.sh" "$@"
+elif [ -f "${HOME}/.local/lib/zephyrine/scripts/lock-with-video.sh" ]; then
+    exec "${HOME}/.local/lib/zephyrine/scripts/lock-with-video.sh" "$@"
 else
     SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
     exec "${SELF_DIR}/scripts/lock-with-video.sh" "$@"

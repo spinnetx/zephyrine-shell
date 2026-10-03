@@ -214,22 +214,41 @@ def plan(engine, t, p):
     try:
         paths, eff = engine.paths, engine.eff
         specs = t.get("patches") or []
-        repo_path = os.path.join(paths.root, t["output"])
-        try:
-            raw, text = _read_text(repo_path)
-        except FileNotFoundError:
-            return p.na("missing", "file-missing", repo_path)
-        new_text, notes = patch_text(text, specs, eff, paths.home)
-        repo = Dest(repo_path, "repo", new_text.encode("utf-8"))
-        repo.current = raw
-        p.dests.append(repo)
-        for n in notes:
-            p.skipped.append({"reason": "patch-note", "path": repo_path, "message": n})
         deploy = t.get("deploy", "none")
         dpatches = t.get("deployPatches") or []
+        is_writable_root = os.access(paths.root, os.W_OK) and not paths.root.startswith("/usr")
+
+        repo_path = os.path.join(paths.root, t["output"])
+        live_path = expand(paths, deploy[5:]) if deploy.startswith("copy:") else None
+
+        alt_repo = None
+        if not os.path.isfile(repo_path) and t["output"].startswith(".config/"):
+            cand = os.path.join(paths.root, "themes", t["output"][8:])
+            if os.path.isfile(cand):
+                alt_repo = cand
+
+        src_path = repo_path if os.path.isfile(repo_path) else alt_repo
+        if src_path is None and live_path and os.path.isfile(live_path):
+            src_path = live_path
+
+        if src_path is None:
+            return p.na("missing", "file-missing", repo_path)
+
+        raw, text = _read_text(src_path)
+        new_text, notes = patch_text(text, specs, eff, paths.home)
+
+        if is_writable_root:
+            repo = Dest(repo_path, "repo", new_text.encode("utf-8"))
+            repo.current = raw if src_path == repo_path else None
+            p.dests.append(repo)
+            for n in notes:
+                p.skipped.append({"reason": "patch-note", "path": repo_path, "message": n})
+
         if deploy.startswith("copy:"):
-            live = expand(paths, deploy[5:])
-            if os.path.realpath(live) != repo.real:  # симлинк на файл репо - уже тот же файл
+            live = live_path
+            if is_writable_root and os.path.realpath(live) == os.path.realpath(repo_path):
+                pass
+            else:
                 try:
                     lraw, ltext = _read_text(live)
                 except FileNotFoundError:
@@ -243,8 +262,19 @@ def plan(engine, t, p):
                 p.dests.append(d)
                 for n in lnotes:
                     p.skipped.append({"reason": "patch-note", "path": live, "message": n})
+        elif not is_writable_root and deploy == "none":
+            if t["output"].startswith(".config/"):
+                live = os.path.join(paths.home, t["output"])
+                try:
+                    lraw, ltext = _read_text(live)
+                except FileNotFoundError:
+                    lraw, ltext = None, new_text
+                d = Dest(live, "copy", new_text.encode("utf-8"))
+                d.current = lraw
+                p.dests.append(d)
         elif deploy != "none":
             raise PatchError("unknown deploy %r" % deploy)
+
         for d in p.dests:
             d.action = "create" if d.current is None else ("same" if d.current == d.cmp else "update")
         return p

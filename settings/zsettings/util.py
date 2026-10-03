@@ -38,16 +38,42 @@ class Paths:
     def from_env(cls, env=None):
         env = os.environ if env is None else env
         home = env.get("HOME") or os.path.expanduser("~")
-        root = env.get("ZEPHYRINE_ROOT") or os.path.join(home, "my_zephyrine_conf")
+        root = env.get("ZEPHYRINE_ROOT") or env.get("ZEPHYRINE_DIR")
+        if not root:
+            if os.path.isdir(os.path.join(home, "my_zephyrine_conf")):
+                root = os.path.join(home, "my_zephyrine_conf")
+            elif os.path.isdir("/usr/share/zephyrine"):
+                root = "/usr/share/zephyrine"
+            elif os.path.isdir(os.path.join(home, ".local", "share", "zephyrine")):
+                root = os.path.join(home, ".local", "share", "zephyrine")
+            else:
+                root = os.path.join(home, "my_zephyrine_conf")
+
         state = env.get("ZEPHYRINE_STATE") or os.path.join(home, ".local", "state", "zephyrine")
         sdir = os.path.join(root, "settings")
+
+        cfg_home = env.get("XDG_CONFIG_HOME") or os.path.join(home, ".config")
+        user_cfg = os.path.join(cfg_home, "zephyrine", "settings.json")
+        repo_cfg = os.path.join(sdir, "settings.json")
+
+        explicit_file = env.get("ZEPHYRINE_SETTINGS_FILE")
+        is_system_root = root.startswith(("/usr", "/opt")) or not os.access(sdir if os.path.isdir(sdir) else root, os.W_OK)
+        if explicit_file:
+            sfile = explicit_file
+        elif is_system_root:
+            sfile = user_cfg
+        elif os.path.exists(user_cfg) and not os.path.exists(repo_cfg):
+            sfile = user_cfg
+        else:
+            sfile = repo_cfg
+
         try:
             timeout = float(env.get("ZEPHYRINE_LOCK_TIMEOUT", "5"))
         except ValueError:
             timeout = 5.0
         return cls(
             home=home, root=root, settings_dir=sdir,
-            settings_file=os.path.join(sdir, "settings.json"),
+            settings_file=sfile,
             schema_file=os.path.join(sdir, "schema.json"),
             targets_file=os.path.join(sdir, "targets.json"),
             state=state,
