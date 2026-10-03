@@ -5,9 +5,15 @@
 
 set -euo pipefail
 
+# Логирование сессии в ~/.local/state/zephyrine/session.log
+LOG_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/zephyrine"
+mkdir -p "$LOG_DIR"
+exec >> "$LOG_DIR/session.log" 2>&1
+echo "=== Zephyrine Session started at $(date) ==="
+
 # Базовые переменные окружения сессии
-export XDG_CURRENT_DESKTOP="Hyprland:Zephyrine"
-export XDG_SESSION_DESKTOP="Zephyrine"
+export XDG_CURRENT_DESKTOP="Hyprland"
+export XDG_SESSION_DESKTOP="Hyprland"
 export XDG_SESSION_TYPE="wayland"
 
 # Определение системных каталогов Zephyrine
@@ -26,28 +32,63 @@ fi
 # Каталог Quickshell оболочки
 export ZEPHYRINE_QS_DIR="${ZEPHYRINE_QS_DIR:-${ZEPHYRINE_DIR}/quickshell}"
 
+# Симлинк quickshell конфигурации для пользователя, если его нет
+USER_QS_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/zephyrine"
+if [ ! -e "$USER_QS_DIR" ] && [ -d "$ZEPHYRINE_QS_DIR" ]; then
+    mkdir -p "$(dirname "$USER_QS_DIR")"
+    ln -s "$ZEPHYRINE_QS_DIR" "$USER_QS_DIR" 2>/dev/null || true
+fi
+if [ -e "$USER_QS_DIR" ]; then
+    export ZEPHYRINE_QS_DIR="$USER_QS_DIR"
+fi
+
 # Обои по умолчанию
 export ZEPHYRINE_DEFAULT_WALLPAPER="${ZEPHYRINE_DEFAULT_WALLPAPER:-${ZEPHYRINE_DIR}/assets/wallpapers/japanese-night-village.1920x1080.mp4}"
 
 # Добавление путей бинарников и скриптов в PATH
-if [ -d "/usr/lib/zephyrine/bin" ]; then
-    export PATH="/usr/lib/zephyrine/bin:/usr/lib/zephyrine/scripts:$PATH"
-elif [ -d "${ZEPHYRINE_DIR}/scripts" ]; then
-    export PATH="${ZEPHYRINE_DIR}/bin:${ZEPHYRINE_DIR}/scripts:$PATH"
+export PATH="/usr/lib/zephyrine/scripts:${HOME}/.local/bin:${ZEPHYRINE_DIR}/bin:${ZEPHYRINE_DIR}/scripts:$PATH"
+
+# Подготовка пользовательской конфигурации Hyprland при первом запуске
+USER_HYPR_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/hypr"
+USER_HYPR_CONF="${USER_HYPR_DIR}/hyprland.lua"
+SYS_HYPR_DIR="${ZEPHYRINE_DIR}/hypr"
+
+mkdir -p "$USER_HYPR_DIR"
+
+if [ ! -f "$USER_HYPR_CONF" ] && [ -f "${SYS_HYPR_DIR}/hyprland.lua" ]; then
+    echo "==> Инициализация hyprland.lua в $USER_HYPR_DIR..."
+    cp "${SYS_HYPR_DIR}/hyprland.lua" "$USER_HYPR_CONF"
+fi
+if [ ! -f "${USER_HYPR_DIR}/hypridle.conf" ] && [ -f "${SYS_HYPR_DIR}/hypridle.conf" ]; then
+    echo "==> Инициализация hypridle.conf в $USER_HYPR_DIR..."
+    cp "${SYS_HYPR_DIR}/hypridle.conf" "${USER_HYPR_DIR}/hypridle.conf"
+fi
+if [ ! -f "${USER_HYPR_DIR}/hyprlock.conf" ] && [ -f "${SYS_HYPR_DIR}/hyprlock.conf" ]; then
+    echo "==> Инициализация hyprlock.conf в $USER_HYPR_DIR..."
+    cp "${SYS_HYPR_DIR}/hyprlock.conf" "${USER_HYPR_DIR}/hyprlock.conf"
 fi
 
-# Проверка и подготовка пользовательской конфигурации
-USER_HYPR_CONF="${XDG_CONFIG_HOME:-$HOME/.config}/hypr/hyprland.lua"
-SYS_HYPR_CONF="${ZEPHYRINE_DIR}/hypr/hyprland.lua"
-
-# Если у пользователя нет своего hyprland.lua, предлагаем системный
+# Если конфигурация существует, запускаем с ней
 CONF_ARG=()
-if [ ! -f "$USER_HYPR_CONF" ] && [ -f "$SYS_HYPR_CONF" ]; then
-    CONF_ARG=("--config" "$SYS_HYPR_CONF")
+if [ -f "$USER_HYPR_CONF" ]; then
+    CONF_ARG=("--config" "$USER_HYPR_CONF")
+elif [ -f "${SYS_HYPR_DIR}/hyprland.lua" ]; then
+    CONF_ARG=("--config" "${SYS_HYPR_DIR}/hyprland.lua")
 fi
 
-echo "==> Запуск сессии Zephyrine..."
+echo "==> Запуск композитора Hyprland..."
 echo "    ZEPHYRINE_DIR: $ZEPHYRINE_DIR"
 echo "    ZEPHYRINE_QS_DIR: $ZEPHYRINE_QS_DIR"
+echo "    CONFIG: ${CONF_ARG[*]:-default}"
 
-exec Hyprland "${CONF_ARG[@]}"
+# Выбор официальной точки входа (start-hyprland с watchdog или напрямую Hyprland)
+if command -v start-hyprland >/dev/null 2>&1; then
+    exec start-hyprland -- "${CONF_ARG[@]}"
+elif command -v Hyprland >/dev/null 2>&1; then
+    exec Hyprland "${CONF_ARG[@]}"
+elif command -v hyprland >/dev/null 2>&1; then
+    exec hyprland "${CONF_ARG[@]}"
+else
+    echo "CRITICAL: Ни один бинарник Hyprland (start-hyprland, Hyprland, hyprland) не найден в PATH!" >&2
+    exit 1
+fi

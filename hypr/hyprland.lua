@@ -7,32 +7,33 @@
 ------------------
 
 -- monitor=name,resolution,position,scale
+-- Автоопределение любого подключенного монитора (универсальный fallback)
+hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
+
+-- Частные настройки для известных мониторов (если подключены)
 hl.monitor({ output = "eDP-1", mode = "1920x1080", position = "0x0", scale = 1 })
 -- hl.monitor({ output = "DP-6", mode = "1920x1200", position = "0x-2400", scale = 0.5 })
 hl.monitor({ output = "DP-6", mode = "1920x1200", position = "0x-1200", scale = 1 })
 
--- Любой внешний монитор при подключении получает рабочий стол 10.
--- Статическим workspace-rule это не сделать: правило требует конкретного имени
--- выхода (DP-6 / HDMI-A-1 / ...), а wildcard'а «любой монитор» в правилах нет.
--- Поэтому вешаемся на событие monitor.added (Lua-API 0.56, см.
--- /usr/share/hypr/stubs/hl.meta.lua — там полный список событий и полей).
+-- Дополнительный внешний монитор при подключении получает рабочий стол 10
 local EXTERNAL_WS = 10
 local INTERNAL    = "eDP-1"   -- встроенная панель ноутбука
 
 hl.on("monitor.added", function(m)
     if not m or m.name == INTERNAL then return end
+    -- Если в системе только один монитор (например внешний экран ПК/ВМ), не выкидываем его на 10 стол
+    local monitors = hl.get_monitors and hl.get_monitors() or {}
+    if #monitors <= 1 then return end
+
     local name = m.name
     -- Небольшая задержка: к моменту события монитор ещё может быть не полностью готов.
     hl.timer(function()
         if not hl.get_monitor(name) then return end
         local prev = hl.get_active_monitor()
-        -- m:set_workspace(N) из API молча не работает (вызов проходит, воркспейс
-        -- не меняется) — поэтому связка move + focus, проверено на headless-выходе.
         hl.dispatch(hl.dsp.workspace.move({ workspace = EXTERNAL_WS, monitor = name }))
         hl.dispatch(hl.dsp.focus({ monitor = name }))
         hl.dispatch(hl.dsp.focus({ workspace = EXTERNAL_WS }))
-        -- Фокус возвращаем на прежний монитор. Убрать эти три строки, если хочется,
-        -- чтобы фокус сразу уезжал на внешний экран.
+        -- Фокус возвращаем на прежний монитор.
         if prev and prev.name ~= name then
             hl.dispatch(hl.dsp.focus({ monitor = prev.name }))
         end
@@ -63,8 +64,7 @@ hl.on("hyprland.start", function()
     -- собран под Hyprland 0.56.2 вручную — после обновления hyprland пересобрать:
     -- git checkout <пин из hyprpm.toml> && make). Настройки — блок ниже; ключи плагина
     -- появляются только после загрузки, поэтому через пару секунд перечитываем конфиг.
-    hl.exec_cmd("hyprctl plugin load $HOME/.local/share/hyprland/plugins/libhyprglass.so")
-    hl.exec_cmd("sh -c 'sleep 3 && hyprctl reload'")
+    hl.exec_cmd("sh -c 'test -f $HOME/.local/share/hyprland/plugins/libhyprglass.so && hyprctl plugin load $HOME/.local/share/hyprland/plugins/libhyprglass.so && sleep 2 && hyprctl reload'")
 
     -- hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
     hl.exec_cmd("systemctl --user enable --now hyprpolkitagent.service")

@@ -2,7 +2,8 @@
 Name=Zephyrine
 Comment=Modern, elegant Wayland desktop shell based on Hyprland and Quickshell
 Comment[ru]=Современная графическая оболочка Wayland на базе Hyprland и Quickshell
-Exec=zephyrine-session
+Exec=/usr/bin/zephyrine-session
+TryExec=/usr/bin/zephyrine-session
 Type=Application
-DesktopNames=Hyprland;Zephyrine;
+DesktopNames=Hyprland
 Keywords=Wayland;hyprland;quickshell;desktop;shell;
