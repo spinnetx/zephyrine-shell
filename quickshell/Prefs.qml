@@ -17,7 +17,7 @@ Singleton {
     id: root
 
     readonly property string userPath: (Quickshell.env("XDG_CONFIG_HOME") || (Quickshell.env("HOME") + "/.config")) + "/zephyrine/settings.json"
-    readonly property string devPath: Quickshell.env("HOME") + "/my_zephyrine_conf/settings/settings.json"
+    readonly property string devPath: Quickshell.env("ZEPHYRINE_DEV_SETTINGS") || userPath
     readonly property string path: userPath
 
     // Разобранный settings.json (вложенные объекты). Заменяется целиком — так срабатывают привязки.

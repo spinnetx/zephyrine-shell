@@ -66,10 +66,58 @@ set_theme() {
     fi
 }
 
+# Сохраняем имя текущей активной темы для отката
+if [ ! -f /var/backups/sddm-zephyrine-prev-theme.conf ]; then
+    mkdir -p /var/backups
+    current_active=""
+    for f in /etc/sddm.conf /etc/sddm.conf.d/*.conf; do
+        if [ -f "$f" ]; then
+            val=$(grep -E '^[[:space:]]*Current=' "$f" | head -n1 | cut -d= -f2 | tr -d '[:space:]')
+            if [ -n "$val" ] && [ "$val" != "$NEW_THEME" ]; then
+                current_active="$val"
+                break
+            fi
+        fi
+    done
+    if [ -n "$current_active" ]; then
+        echo "$current_active" > /var/backups/sddm-zephyrine-prev-theme.conf
+    fi
+fi
+
 if [ "${1:-}" = "--revert" ]; then
-    echo "==> Откат: Current=$FALLBACK_THEME"
-    set_theme "$FALLBACK_THEME"
-    echo "Готово. Применится при следующем выходе из сессии / входе (sddm не перезапускался)."
+    echo "==> Откат темы SDDM..."
+    target_theme=""
+    if [ -f /var/backups/sddm-zephyrine-prev-theme.conf ]; then
+        target_theme="$(cat /var/backups/sddm-zephyrine-prev-theme.conf | tr -d '[:space:]')"
+        rm -f /var/backups/sddm-zephyrine-prev-theme.conf
+    fi
+    if [ -f /etc/sddm.conf.d/10-zephyrine-theme.conf ]; then
+        rm -f /etc/sddm.conf.d/10-zephyrine-theme.conf
+        echo "  удалён /etc/sddm.conf.d/10-zephyrine-theme.conf"
+    fi
+
+    if [ -n "$target_theme" ] && [ -d "/usr/share/sddm/themes/$target_theme" ]; then
+        echo "  восстановление предыдущей темы: $target_theme"
+        set_theme "$target_theme"
+    elif [ -d "/usr/share/sddm/themes/$FALLBACK_THEME" ]; then
+        set_theme "$FALLBACK_THEME"
+    else
+        found_any=""
+        for t in breeze sugar-candy maldives elarun maya; do
+            if [ -d "/usr/share/sddm/themes/$t" ]; then
+                set_theme "$t"
+                found_any="$t"
+                break
+            fi
+        done
+        if [ -z "$found_any" ]; then
+            for f in /etc/sddm.conf /etc/sddm.conf.d/*.conf; do
+                [ -f "$f" ] && sed -i '/^[[:space:]]*Current=zephyrine/d' "$f"
+            done
+        fi
+    fi
+    rm -rf "$DEST"
+    echo "Готово. SDDM не перезапускался — изменения применятся при следующем выходе / входе."
     exit 0
 fi
 

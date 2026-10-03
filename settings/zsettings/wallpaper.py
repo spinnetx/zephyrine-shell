@@ -40,12 +40,19 @@ NEW_GRACE = 1.0              # сколько ждём, что новый mpvpap
 KILL_WAIT = 2.0              # сколько ждём выхода старого после SIGTERM
 THUMB_W = 320
 THUMB_TIMEOUT = 20
-SDDM_HINT = "sudo ~/my_zephyrine_conf/sddm/install-theme.sh"
-SDDM_THEMES = ("zephyrine", "mybar")   # где может лежать установленная копия видео (системный каталог)
-SDDM_ROOT = "/usr/share/sddm/themes"   # подменяется в тестах
-
 _which = shutil.which
 _sleep = time.sleep
+
+def _get_sddm_hint():
+    if _which("zephyrine-sddm-theme"):
+        return "sudo zephyrine-sddm-theme"
+    if os.path.isfile("/usr/lib/zephyrine/sddm/install-theme.sh"):
+        return "sudo /usr/lib/zephyrine/sddm/install-theme.sh"
+    return "sudo install-theme.sh"
+
+SDDM_HINT = _get_sddm_hint()
+SDDM_THEMES = ("zephyrine", "mybar")   # где может лежать установленная копия видео (системный каталог)
+SDDM_ROOT = "/usr/share/sddm/themes"   # подменяется в тестах
 
 
 # --------------------------------------------------------------------------- пути и проверка

@@ -13,7 +13,7 @@ QtObject {
     id: root
 
     // Команда запуска; подменяется только в проверках без реального BlueZ.
-    property var command: ["zs-btagent"]
+    property var command: [Quickshell.env("ZEPHYRINE_BTAGENT_CMD") || "zs-btagent"]
 
     property bool running: false      // процесс запущен (в т.ч. ещё не зарегистрировался)
     property bool ready: false        // агент зарегистрирован в BlueZ

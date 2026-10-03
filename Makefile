@@ -9,7 +9,7 @@ SESSIONSDIR ?= $(PREFIX)/share/wayland-sessions
 APPLICATIONSDIR ?= $(PREFIX)/share/applications
 SDDMTHEMESDIR ?= $(PREFIX)/share/sddm/themes
 
-.PHONY: all install uninstall user-install test clean
+.PHONY: all install uninstall user-install user-uninstall test clean
 
 all:
 	@echo "Zephyrine Shell готов к установке."
@@ -88,6 +88,14 @@ uninstall:
 
 user-install:
 	$(MAKE) PREFIX=$(HOME)/.local install
+
+user-uninstall:
+	@echo "==> Удаление Zephyrine Shell из $(HOME)/.local..."
+	$(MAKE) PREFIX=$(HOME)/.local uninstall
+	@if [ -L $(HOME)/.config/quickshell/zephyrine ]; then \
+		rm -f $(HOME)/.config/quickshell/zephyrine; \
+		echo "  Удалён симлинк ~/.config/quickshell/zephyrine"; \
+	fi
 
 test:
 	@echo "==> Запуск тестов модуля zsettings..."

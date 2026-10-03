@@ -7,37 +7,107 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-MODE="system"
+ACTION="install"
+MODE=""
 INSTALL_SDDM=0
+PURGE=0
 
 usage() {
     cat <<EOF
 Использование: $0 [ПАРАМЕТРЫ]
 
-Параметры:
+Параметры установки:
   --system       Установка в систему (/usr) — требует sudo (по умолчанию)
   --user         Установка в домашний каталог (~/.local) без sudo
   --sddm         Установить и активировать тему SDDM Zephyrine (требует sudo)
+
+Параметры удаления:
+  --uninstall    Удалить Zephyrine Shell (из системы или ~/.local)
+  --purge        Вместе с --uninstall удалить пользовательские настройки (~/.config/zephyrine) и кэш
+  --sddm         Вместе с --uninstall откатить тему SDDM (требует sudo)
+
+Общие параметры:
   -h, --help     Показать эту справку
 EOF
 }
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --system) MODE="system"; shift ;;
-        --user)   MODE="user"; shift ;;
-        --sddm)   INSTALL_SDDM=1; shift ;;
-        -h|--help) usage; exit 0 ;;
+        --uninstall) ACTION="uninstall"; shift ;;
+        --purge)     PURGE=1; shift ;;
+        --system)    MODE="system"; shift ;;
+        --user)      MODE="user"; shift ;;
+        --sddm)      INSTALL_SDDM=1; shift ;;
+        -h|--help)   usage; exit 0 ;;
         *) echo "Неизвестный параметр: $1" >&2; usage >&2; exit 1 ;;
     esac
 done
+
+# 1. Режим деинсталляции
+if [ "$ACTION" = "uninstall" ]; then
+    echo "=========================================="
+    echo "    Удаление Zephyrine Shell"
+    echo "=========================================="
+    
+    if [ -z "$MODE" ]; then
+        if [ -f "/usr/bin/zephyrine-session" ]; then
+            MODE="system"
+        elif [ -f "$HOME/.local/bin/zephyrine-session" ]; then
+            MODE="user"
+        else
+            MODE="system"
+        fi
+    fi
+    echo "Режим удаления: $MODE"
+
+    if [ "$MODE" = "system" ]; then
+        echo "==> Удаление из /usr (требуются права администратора)..."
+        sudo make uninstall PREFIX=/usr
+    else
+        echo "==> Удаление из $HOME/.local..."
+        make user-uninstall
+    fi
+
+    if [ "$INSTALL_SDDM" -eq 1 ] || [ -d "/usr/share/sddm/themes/zephyrine" ]; then
+        if [ -f "sddm/install-theme.sh" ]; then
+            echo "==> Откат темы экрана входа SDDM..."
+            sudo ./sddm/install-theme.sh --revert || true
+        fi
+    fi
+
+    if [ "$PURGE" -eq 1 ]; then
+        echo "==> Очистка пользовательских настроек и кэша (--purge)..."
+        rm -rf "$HOME/.config/zephyrine"
+        rm -rf "$HOME/.local/state/zephyrine"
+        rm -rf "$HOME/.cache/zephyrine"
+        if [ -L "$HOME/.config/quickshell/zephyrine" ]; then
+            rm -f "$HOME/.config/quickshell/zephyrine"
+        fi
+        echo "  Удалены конфигурационные файлы: ~/.config/zephyrine, ~/.local/state/zephyrine"
+    else
+        echo
+        echo "Примечание: Пользовательские настройки сохранены в ~/.config/zephyrine."
+        echo "Для полной очистки запустите: $0 --uninstall --purge"
+    fi
+
+    echo
+    echo "=========================================="
+    echo "  Zephyrine Shell успешно удалён!"
+    echo "=========================================="
+    exit 0
+fi
+
+# 2. Режим установки
+if [ -z "$MODE" ]; then
+    MODE="system"
+fi
 
 echo "=========================================="
 echo "    Установка Zephyrine Shell"
 echo "=========================================="
 echo "Режим: $MODE"
 
-# 1. Проверка утилиты сборки make
+# Проверка утилиты сборки make
 if ! command -v make >/dev/null 2>&1; then
     echo "  [ОШИБКА] Утилита make не найдена. Установите пакет base-devel или make." >&2
     exit 1

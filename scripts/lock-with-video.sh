@@ -13,7 +13,18 @@ pidof hyprlock >/dev/null && exit 0
 
 # Файл — симлинк центра настроек (zephyrine-settings, цель wallpaper); нет/битый — прежнее видео.
 VIDEO="$(readlink -f -- "${ZEPHYRINE_STATE:-$HOME/.local/state/zephyrine}/wallpaper-lock" 2>/dev/null)"
-[ -f "$VIDEO" ] || VIDEO="${ZEPHYRINE_DEFAULT_WALLPAPER:-/usr/share/zephyrine/assets/wallpapers/japanese-night-village.1920x1080.mp4}"
+if [ ! -f "$VIDEO" ]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+    if [ -n "${ZEPHYRINE_DEFAULT_WALLPAPER:-}" ] && [ -f "$ZEPHYRINE_DEFAULT_WALLPAPER" ]; then
+        VIDEO="$ZEPHYRINE_DEFAULT_WALLPAPER"
+    elif [ -f "$SCRIPT_DIR/wallpapers/japanese-night-village.1920x1080.mp4" ]; then
+        VIDEO="$SCRIPT_DIR/wallpapers/japanese-night-village.1920x1080.mp4"
+    elif [ -f "$SCRIPT_DIR/assets/wallpapers/japanese-night-village.1920x1080.mp4" ]; then
+        VIDEO="$SCRIPT_DIR/assets/wallpapers/japanese-night-village.1920x1080.mp4"
+    elif [ -f "/usr/share/zephyrine/assets/wallpapers/japanese-night-village.1920x1080.mp4" ]; then
+        VIDEO="/usr/share/zephyrine/assets/wallpapers/japanese-night-village.1920x1080.mp4"
+    fi
+fi
 SOCK="${XDG_RUNTIME_DIR:-/tmp}/lock-video.sock"
 MAX_WAIT=30          # × 0.1 с = 3 с
 LOG="${XDG_RUNTIME_DIR:-/tmp}/lock-video.log"

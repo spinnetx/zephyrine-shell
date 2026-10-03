@@ -1,7 +1,7 @@
 """Общие утилиты: пути, атомарная запись, flock, JSON-вывод (только stdlib).
 
 Все пути берутся из окружения, чтобы тесты работали в изолированном каталоге:
-  ZEPHYRINE_ROOT   корень репо (по умолчанию $HOME/my_zephyrine_conf)
+  ZEPHYRINE_ROOT   корень репо/установки (по умолчанию автоопределение)
   ZEPHYRINE_STATE  каталог состояния (по умолчанию $HOME/.local/state/zephyrine)
   HOME             домашний каталог
   ZEPHYRINE_LOCK_TIMEOUT  секунд ожидания flock (по умолчанию 5)
@@ -40,14 +40,18 @@ class Paths:
         home = env.get("HOME") or os.path.expanduser("~")
         root = env.get("ZEPHYRINE_ROOT") or env.get("ZEPHYRINE_DIR")
         if not root:
-            if os.path.isdir(os.path.join(home, "my_zephyrine_conf")):
-                root = os.path.join(home, "my_zephyrine_conf")
+            here = os.path.abspath(__file__)
+            cand = os.path.dirname(os.path.dirname(os.path.dirname(here)))
+            if os.path.isdir(os.path.join(cand, "settings")) and os.path.isfile(os.path.join(cand, "settings", "schema.json")):
+                root = cand
             elif os.path.isdir("/usr/share/zephyrine"):
                 root = "/usr/share/zephyrine"
             elif os.path.isdir(os.path.join(home, ".local", "share", "zephyrine")):
                 root = os.path.join(home, ".local", "share", "zephyrine")
-            else:
+            elif os.path.isdir(os.path.join(home, "my_zephyrine_conf")):
                 root = os.path.join(home, "my_zephyrine_conf")
+            else:
+                root = cand
 
         state = env.get("ZEPHYRINE_STATE") or os.path.join(home, ".local", "state", "zephyrine")
         sdir = os.path.join(root, "settings")

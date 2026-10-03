@@ -128,6 +128,33 @@ zephyrine-shell/
 
 ---
 
+## Удаление
+
+### Через install.sh:
+
+```bash
+# Стандартное удаление:
+./install.sh --uninstall
+
+# Полное удаление с очисткой настроек (~/.config/zephyrine) и кэша:
+./install.sh --uninstall --purge
+
+# Если была установлена тема SDDM — откат темы:
+./install.sh --uninstall --sddm
+```
+
+### Через Makefile:
+
+```bash
+# Удаление системной установки:
+sudo make uninstall
+
+# Удаление пользовательской установки:
+make user-uninstall
+```
+
+---
+
 ## Лицензия
 
 Проект распространяется под лицензией [MIT](LICENSE).

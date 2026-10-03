@@ -26,7 +26,7 @@ SetCard {
     property bool again: false
 
     readonly property string tstate: status ? (status.state ?? "") : ""
-    readonly property string sddmHint: sddm.hint ?? "sudo ~/my_zephyrine_conf/sddm/install-theme.sh"
+    readonly property string sddmHint: sddm.hint ?? "sudo zephyrine-sddm-theme"
 
     title: "Обои"
     icon: Config.icons.monitor

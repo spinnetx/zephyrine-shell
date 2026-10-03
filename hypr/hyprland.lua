@@ -43,8 +43,7 @@ hl.on("hyprland.start", function()
     -- hypridle с автоматическим поиском конфигурации
     hl.exec_cmd("sh -c 'if [ -f $HOME/.config/hypr/hypridle.conf ]; then hypridle; elif [ -f /usr/share/zephyrine/hypr/hypridle.conf ]; then hypridle -c /usr/share/zephyrine/hypr/hypridle.conf; fi'")
 
-    -- Панель — собственный бар на Quickshell (my_zephyrine_conf/quickshell, симлинк
-    -- ~/.config/quickshell/zephyrine). Лаунчер/меню питания — свои (IPC, см. binds).
+    -- Панель — собственный бар на Quickshell (quickshell/zephyrine). Лаунчер/меню питания — свои (IPC, см. binds).
     -- Обои — видео через mpvpaper (ниже).
     hl.exec_cmd("qs -p ${ZEPHYRINE_QS_DIR:-/usr/share/zephyrine/quickshell}")
 
@@ -56,7 +55,7 @@ hl.on("hyprland.start", function()
     -- Обои рабочего стола: скрипт берёт файл из симлинка центра настроек (~/.local/state/zephyrine/wallpaper-desktop),
     -- нет симлинка — прежнее japanese-night-village; mpvpaper внутри скрипта (exec), на всех мониторах.
     hl.exec_cmd("zephyrine-wallpaper-desktop")
-    -- hl.exec_cmd("mpvpaper -l overlay -o \"no-audio --loop-playlist --hwdec=auto\" '*' $HOME/my_zephyrine_conf/wallpapers/japanese-night-village.1920x1080.mp4 &")
+    -- hl.exec_cmd("mpvpaper -l overlay -o \"no-audio --loop-playlist --hwdec=auto\" '*' \"$WALLPAPER\" &")
 
 
     -- adw-gtk3-dark + Papirus вместо Orchis: adw-gtk3 — порт GTK4/libadwaita

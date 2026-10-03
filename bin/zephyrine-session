@@ -115,14 +115,39 @@ echo "    ZEPHYRINE_DIR: $ZEPHYRINE_DIR"
 echo "    ZEPHYRINE_QS_DIR: $ZEPHYRINE_QS_DIR"
 echo "    CONFIG: ${TARGET_CONF:-default}"
 
+cleanup_session() {
+    echo "==> Завершение сессии Zephyrine: очистка переменных окружения systemd..."
+    systemctl --user unset-environment \
+        WAYLAND_DISPLAY \
+        XDG_CURRENT_DESKTOP \
+        XDG_SESSION_DESKTOP \
+        XDG_SESSION_TYPE \
+        HYPRLAND_CMD \
+        HYPRLAND_INSTANCE_SIGNATURE \
+        AQ_DRM_DEVICES \
+        LIBVA_DRIVER_NAME \
+        __GLX_VENDOR_LIBRARY_NAME \
+        NVD_BACKEND \
+        QT_QPA_PLATFORMTHEME \
+        ZEPHYRINE_DIR \
+        ZEPHYRINE_QS_DIR \
+        ZEPHYRINE_DEFAULT_WALLPAPER \
+        2>/dev/null || true
+    echo "==> Сессия завершена."
+}
+trap cleanup_session EXIT
+
 # 7. Запуск официальной точки входа (start-hyprland с watchdog или напрямую Hyprland)
+EXIT_CODE=0
 if command -v start-hyprland >/dev/null 2>&1; then
-    exec start-hyprland -- "${CONF_ARG[@]}"
+    start-hyprland -- "${CONF_ARG[@]}" || EXIT_CODE=$?
 elif command -v Hyprland >/dev/null 2>&1; then
-    exec Hyprland "${CONF_ARG[@]}"
+    Hyprland "${CONF_ARG[@]}" || EXIT_CODE=$?
 elif command -v hyprland >/dev/null 2>&1; then
-    exec hyprland "${CONF_ARG[@]}"
+    hyprland "${CONF_ARG[@]}" || EXIT_CODE=$?
 else
     echo "CRITICAL: Ни один бинарник Hyprland не найден в PATH!" >&2
     exit 1
 fi
+
+exit "$EXIT_CODE"

@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "description": "Манифест целей генератора (DESIGN §3.2). Пути output - относительно корня репо ($ZEPHYRINE_ROOT, по умолчанию ~/my_zephyrine_conf); ~ - домашний каталог. stage != v1 - заглушка будущего этапа.",
+    "description": "Манифест целей генератора (DESIGN §3.2). Пути output - относительно корня репо/установки ($ZEPHYRINE_ROOT); ~ - домашний каталог. stage != v1 - заглушка будущего этапа.",
     "fields": {
         "kind": "template|patch|data|emit|command",
         "deploy": "none | copy:<путь> | obsidian-vaults | zen-profile | tb-profile | tb-xpi",
