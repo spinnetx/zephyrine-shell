@@ -10,7 +10,7 @@ if [ -f "$HERE/../assets/wallpapers/japanese-night-village.1920x1080.mp4" ]; the
 elif [ -f "/usr/share/zephyrine/assets/wallpapers/japanese-night-village.1920x1080.mp4" ]; then
     VIDEO="/usr/share/zephyrine/assets/wallpapers/japanese-night-village.1920x1080.mp4"
 else
-    VIDEO="$HERE/../wallpapers/japanese-night-village.1920x1080.mp4"
+    VIDEO="$HERE/../assets/wallpapers/japanese-night-village.1920x1080.mp4"
 fi
 
 # В тестовом режиме видео берётся из каталога темы — кладём dev-симлинк

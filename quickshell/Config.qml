@@ -17,7 +17,7 @@ Singleton {
     readonly property string dataMount: "/mnt/data"
 
     // Центр настроек (settings/): корень репозитория и CLI — единственный писатель настроек.
-    readonly property string zephyrineRoot: Quickshell.env("ZEPHYRINE_ROOT") || (Quickshell.env("HOME") + "/my_zephyrine_conf")
+    readonly property string zephyrineRoot: Quickshell.env("ZEPHYRINE_ROOT") || "/usr/share/zephyrine"
     readonly property string settingsCli: Quickshell.env("ZEPHYRINE_CLI") || "zephyrine-settings"
 
     // Переключение воркспейса: синтаксис Lua-dispatch Hyprland 0.56 (подтверждён).

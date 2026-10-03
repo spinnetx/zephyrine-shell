@@ -11,7 +11,7 @@ if [ -f "$HERE/../assets/wallpapers/japanese-night-village.1920x1080.mp4" ]; the
 elif [ -f "/usr/share/zephyrine/assets/wallpapers/japanese-night-village.1920x1080.mp4" ]; then
     VIDEO_SRC="/usr/share/zephyrine/assets/wallpapers/japanese-night-village.1920x1080.mp4"
 else
-    VIDEO_SRC="$HERE/../wallpapers/japanese-night-village.1920x1080.mp4"
+    VIDEO_SRC="$HERE/../assets/wallpapers/japanese-night-village.1920x1080.mp4"
 fi
 # Видео — то, что выбрано в центре настроек (симлинк wallpaper-desktop пользователя, вызвавшего sudo).
 # Нет симлинка / битый / выбрана картинка (SDDM-теме нужно видео) — прежнее видео выше.

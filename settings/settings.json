@@ -9,9 +9,9 @@
   },
   "bar": {
     "left": [
+      "apps",
       "workspaces",
-      "activeWindow",
-      "apps"
+      "activeWindow"
     ]
   },
   "hypr": {
