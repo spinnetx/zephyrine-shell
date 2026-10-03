@@ -29,11 +29,7 @@ DEFAULTS = {
     "input.extraOptions": [],
     "input.repeatRate": 25,
     "input.repeatDelay": 600,
-    "autostart": [
-        {"id": "telegram", "name": "Telegram", "cmd": "Telegram", "enabled": True, "delaySec": 0},
-        {"id": "zen", "name": "Zen Browser", "cmd": "zen-browser", "enabled": True, "delaySec": 0},
-        {"id": "viber", "name": "Viber", "cmd": "QT_QPA_PLATFORM=wayland viber", "enabled": True, "delaySec": 5},
-    ],
+    "autostart": [],
     "appearance.cursor.theme": "Qogir",
     "appearance.cursor.size": 24,
     "apps.terminal": "kitty",

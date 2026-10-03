@@ -734,29 +734,7 @@
         },
         "autostart": {
             "type": "array",
-            "default": [
-                {
-                    "id": "telegram",
-                    "name": "Telegram",
-                    "cmd": "Telegram",
-                    "enabled": true,
-                    "delaySec": 0
-                },
-                {
-                    "id": "zen",
-                    "name": "Zen Browser",
-                    "cmd": "zen-browser",
-                    "enabled": true,
-                    "delaySec": 0
-                },
-                {
-                    "id": "viber",
-                    "name": "Viber",
-                    "cmd": "QT_QPA_PLATFORM=wayland viber",
-                    "enabled": true,
-                    "delaySec": 5
-                }
-            ],
+            "default": [],
             "items": {
                 "id": "string",
                 "name": "string",
@@ -768,8 +746,7 @@
                 "hypr"
             ],
             "live": false,
-            "stage": "4",
-            "doc": "Управляемый автозапуск {id, name, cmd, enabled, delaySec}: эмитится в settings.lua как hl.on(\"hyprland.start\"); дефолт - Telegram, Zen, Viber (перенесены из hyprland.lua)."
+            "doc": "Управляемый автозапуск {id, name, cmd, enabled, delaySec}: эмитится в settings.lua как hl.on(\"hyprland.start\")."
         },
         "notifications.toastMs": {
             "type": "integer",

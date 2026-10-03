@@ -69,12 +69,6 @@ hl.on("hyprland.start", function()
     -- hl.exec_cmd("gsettings set org.gnome.desktop.interface font-name 'JetBrainsMono Nerd Font 11'")
     -- hl.exec_cmd("gsettings set org.gnome.desktop.interface font-name 'Inter 11'")
 
-    -- Telegram, Zen и Viber теперь в управляемом списке автозапуска (центр настроек → Система → Автозапуск):
-    -- их запускает settings.lua (hl.on("hyprland.start", …)). Viber — AUR-пакет (/usr/bin/viber), не AppImage.
-
-    -- hl.exec_cmd("rclone mount gdrive-spinnetx: ~/gdrive-spinnetx --vfs-cache-mode full --daemon")
-    -- hl.exec_cmd("rclone mount gdrive-animacja.aud11.s1: ~/gdrive-animacja.aud11.s1 --vfs-cache-mode full --daemon")
-    -- hl.exec_cmd("rclone mount onedrive-spinnetx: ~/onedrive-spinnetx --vfs-cache-mode full --daemon")
 end)
 
 

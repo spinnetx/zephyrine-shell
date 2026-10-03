@@ -714,8 +714,7 @@ if hl.plugin and hl.plugin.hyprglass then hl.plugin.hyprglass.config({ glass_opa
 | `input.extraOptions` | array string | `[]` | hypr | 4 |
 | `input.repeatRate` / `.repeatDelay` | integer | 25 / 600 | hypr | 4 |
 | `binds.<action>` | array of string (комбинации) | как в hyprland.lua (лаунчер: `SUPER + Super_L` (release), `SUPER + space`, `SUPER + R`) | hypr | 4 |
-| `apps.terminal` / `apps.fileManager` | string (команда) | `kitty` / `thunar` | hypr (бинды) | 4 |
-| `autostart` | array `{id, name, cmd, enabled, delaySec}` | перенос пользовательских строк (Telegram, zen-browser, viber) — после решения §10 | hypr | 4 |
+| `autostart` | array `{id, name, cmd, enabled, delaySec}` | список пользовательских команд автозапуска | hypr | 4 |
 | `notifications.toastMs` / `.historyMax` / `.dndAllowCritical` | integer / integer / boolean | 5000 / 50 / true | Config | 4 |
 
 Не хранится в settings.json (источник правды — сама система): состояние Wi-Fi/Bluetooth/сетей (NetworkManager,
@@ -919,9 +918,7 @@ opacity 0→1 и сдвиг y 8→0; подсветка пункта сайдб�
   │ Текст [Zed ▾]     PDF [Zathura ▾]   Изображения [Loupe ▾]   Видео [mpv ▾]│
   ╰────────────────────────────────────────────────────────────────────────╯
   ╭ Автозапуск ────────────────────────────────────────────────────────────╮
-  │ [■] Telegram        Telegram                     задержка 0 с  [✕]     │
-  │ [■] Zen Browser     zen-browser                  задержка 0 с  [✕]     │
-  │ [■] Viber           QT_QPA_PLATFORM=wayland viber  5 с         [✕]     │
+  │ [■] My App          my-app-command               задержка 0 с  [✕]     │
   │ Системное (только просмотр): hyprglass, polkit, keyring, порталы, …     │
   ╰────────────────────────────────────────────────────────────────────────╯
   ╭ Уведомления ───────────────────────────────────────────────────────────╮
@@ -1120,7 +1117,7 @@ Telegram/Zen/Viber убраны из `hyprland.start` (теперь в `autostar
 
 **Решены 2026-10-02:** (1) hypridle — ЧИНИТЬ (dpms на Lua-синтаксис, затемнение до 10 %), правка конфига сделана до D3,
 шаблон hypridle.conf (D3) берёт исправленный файл как golden; (2) автозапуск — модель A (свой список в settings.json →
-`hyprland.start` в settings.lua; Telegram/Zen/Viber переезжают из hyprland.lua; мёртвые `~/.config/autostart/{org.telegram.desktop,ssh-add}.desktop` убрать).
+`hyprland.start` в settings.lua; дефолт — пустой список `[]`).
 
 Решения по умолчанию, которые можно переиграть без остановки работ: settings.json в репо (§2.3, вариант A);
 окно — FloatingWindow (§2.8); бинд `SUPER+I`; рамки окон по умолчанию — «как сейчас» (циан→зелёный, не

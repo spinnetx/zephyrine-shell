@@ -34,12 +34,6 @@ DEFAULT_TEXT = (
     '    inactive_border = "rgba(595959aa)" } } })\n'
     "-- hyprglass: ключи плагина есть только после его загрузки\n"
     "if hl.plugin and hl.plugin.hyprglass then hl.plugin.hyprglass.config({ glass_opacity = 0.7 }) end\n"
-    "-- Автозапуск (autostart): управляемый список центра настроек\n"
-    'hl.on("hyprland.start", function()\n'
-    '    hl.exec_cmd("Telegram")\n'
-    '    hl.exec_cmd("zen-browser")\n'
-    '    hl.exec_cmd("sleep 5 && QT_QPA_PLATFORM=wayland viber")\n'
-    "end)\n"
 )
 
 
@@ -80,6 +74,18 @@ class EmitText(unittest.TestCase):
 
     def test_values_without_optional_keys_use_defaults(self):
         self.assertEqual(hypr.emit({}, ctx_for(DEFAULTS), PATHS), gen())
+
+    def test_autostart_lines(self):
+        t = gen({"autostart": [
+            {"id": "test", "name": "Test", "cmd": "test-cmd", "enabled": True, "delaySec": 0},
+            {"id": "delayed", "name": "Delayed", "cmd": "delayed-cmd", "enabled": True, "delaySec": 5},
+            {"id": "disabled", "name": "Disabled", "cmd": "off", "enabled": False, "delaySec": 0},
+        ]})
+        self.assertIn('-- Автозапуск (autostart): управляемый список центра настроек\n', t)
+        self.assertIn('hl.on("hyprland.start", function()\n', t)
+        self.assertIn('    hl.exec_cmd("test-cmd")\n', t)
+        self.assertIn('    hl.exec_cmd("sleep 5 && delayed-cmd")\n', t)
+        self.assertNotIn('hl.exec_cmd("off")', t)
 
     def test_rounding_size_glass(self):
         t = gen({"appearance.windowRounding": 0, "hypr.borders.size": 4, "hypr.glassOpacity": 0.55})
@@ -179,7 +185,7 @@ class MockRun(unittest.TestCase):
         d = run_mock([self.lua(gen())])
         self.assertEqual(d["errors"], [])
         self.assertEqual([c["fn"] for c in d["calls"]],
-                         ["config", "config", "plugin.hyprglass.config", "on"])
+                         ["config", "config", "plugin.hyprglass.config"])
         self.assertEqual(d["config"], {
             "decoration.rounding": 10,
             "general.border_size": 2,
@@ -187,6 +193,8 @@ class MockRun(unittest.TestCase):
             "general.col.inactive_border": "rgba(595959aa)",
             "plugin.hyprglass.glass_opacity": 0.7,
         })
+        d_auto = run_mock([self.lua(gen({"autostart": [{"id": "x", "name": "X", "cmd": "true", "enabled": True, "delaySec": 0}]}))])
+        self.assertIn("on", [c["fn"] for c in d_auto["calls"]])
 
     def test_without_plugin_no_glass_call(self):
         d = run_mock([self.lua(gen())], plugin=False)

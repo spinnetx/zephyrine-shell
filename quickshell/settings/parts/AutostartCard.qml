@@ -19,11 +19,7 @@ SetCard {
     property string error: ""
     property bool sent: false
 
-    readonly property var defaults: [
-        { id: "telegram", name: "Telegram", cmd: "Telegram", enabled: true, delaySec: 0 },
-        { id: "zen", name: "Zen Browser", cmd: "zen-browser", enabled: true, delaySec: 0 },
-        { id: "viber", name: "Viber", cmd: "QT_QPA_PLATFORM=wayland viber", enabled: true, delaySec: 5 }
-    ]
+    readonly property var defaults: []
     readonly property var entries: {
         const v = Prefs.lookup(Prefs.file, "autostart");
         return Array.isArray(v) ? v : defaults;
@@ -103,6 +99,13 @@ SetCard {
         color: Colors.fgVariant
         font.pixelSize: Config.fontSize - 1
         wrapMode: Text.WordWrap
+    }
+
+    Txt {
+        visible: root.entries.length === 0
+        text: "Список пуст. Вы можете добавить команды ниже."
+        color: Colors.fgVariant
+        font.pixelSize: Config.fontSize - 1
     }
 
     Repeater {

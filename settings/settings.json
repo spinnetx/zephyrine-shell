@@ -8,10 +8,18 @@
     "kittyOpacity": 0.85
   },
   "bar": {
-    "left": [
-      "apps",
-      "workspaces",
-      "activeWindow"
+    "right": [
+      "limits",
+      "disk",
+      "gpu",
+      "cpu",
+      "mem",
+      "net",
+      "tray",
+      "status",
+      "clock",
+      "power",
+      "weather"
     ]
   },
   "hypr": {
