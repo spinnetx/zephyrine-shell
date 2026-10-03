@@ -139,6 +139,25 @@ hl.env("HYPRCURSOR_SIZE", "24")
 -- hl.env does NOT expand $VARNAME like the old env= directive did; os.getenv() is required instead.
 -- SSH-агент один на всю систему — gpg-agent (его ssh-сокет; тот же выбор в fish/config.fish).
 hl.env("SSH_AUTH_SOCK", os.getenv("XDG_RUNTIME_DIR") .. "/gnupg/S.gpg-agent.ssh")
+-- Настройки аппаратного ускорения для карт NVIDIA
+if os.getenv("LIBVA_DRIVER_NAME") then
+    hl.env("LIBVA_DRIVER_NAME", os.getenv("LIBVA_DRIVER_NAME"))
+elseif os.execute("test -e /dev/nvidiactl") == 0 then
+    hl.env("LIBVA_DRIVER_NAME", "nvidia")
+end
+
+if os.getenv("__GLX_VENDOR_LIBRARY_NAME") then
+    hl.env("__GLX_VENDOR_LIBRARY_NAME", os.getenv("__GLX_VENDOR_LIBRARY_NAME"))
+elseif os.execute("test -e /dev/nvidiactl") == 0 then
+    hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
+end
+
+if os.getenv("NVD_BACKEND") then
+    hl.env("NVD_BACKEND", os.getenv("NVD_BACKEND"))
+elseif os.execute("test -e /dev/nvidiactl") == 0 then
+    hl.env("NVD_BACKEND", "direct")
+end
+
 -- Multi-GPU (Aquamarine): если задана переменная AQ_DRM_DEVICES, передаем в композитор
 if os.getenv("AQ_DRM_DEVICES") then
     hl.env("AQ_DRM_DEVICES", os.getenv("AQ_DRM_DEVICES"))

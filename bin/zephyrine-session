@@ -68,9 +68,18 @@ if [ ! -f "${USER_HYPR_DIR}/hyprlock.conf" ] && [ -f "${SYS_HYPR_DIR}/hyprlock.c
     cp "${SYS_HYPR_DIR}/hyprlock.conf" "${USER_HYPR_DIR}/hyprlock.conf"
 fi
 
-# Автоопределение порядка GPU для Aquamarine (Hyprland 0.56+) при multi-GPU (Optimus/hybrid)
+# Настройки аппаратного ускорения для систем с дискретными видеокартами NVIDIA
+if [ -e "/dev/nvidiactl" ] || [ -d "/proc/driver/nvidia" ]; then
+    export LIBVA_DRIVER_NAME="${LIBVA_DRIVER_NAME:-nvidia}"
+    export __GLX_VENDOR_LIBRARY_NAME="${__GLX_VENDOR_LIBRARY_NAME:-nvidia}"
+    export NVD_BACKEND="${NVD_BACKEND:-direct}"
+    echo "==> Обнаружен драйвер NVIDIA: активированы переменные аппаратного ускорения"
+fi
+
+# Автоопределение порядка GPU для Aquamarine (Hyprland 0.56+) при multi-GPU (Optimus/hybrid/MUX)
 if [ -z "${AQ_DRM_DEVICES:-}" ]; then
-    primary_card=""
+    cards_with_display=()
+    boot_vga_cards=()
     other_cards=()
 
     to_by_path() {
@@ -89,6 +98,12 @@ if [ -z "${AQ_DRM_DEVICES:-}" ]; then
         c_dev="/dev/dri/$(basename "$c")"
         [ -e "$c_dev" ] || continue
 
+        # Пропуск виртуального EFI-фреймбуфера и устройств без аппаратного ускорения
+        drv="$(basename "$(readlink -f "$c/device/driver" 2>/dev/null || echo "none")")"
+        if [ "$drv" = "simple-framebuffer" ] || [ "$drv" = "simpledrm" ] || [ "$drv" = "none" ]; then
+            continue
+        fi
+
         has_connected=0
         for conn in "$c"/card*-*; do
             if [ -f "$conn/status" ] && [ "$(cat "$conn/status" 2>/dev/null)" = "connected" ]; then
@@ -103,17 +118,29 @@ if [ -z "${AQ_DRM_DEVICES:-}" ]; then
         fi
 
         bp_dev=$(to_by_path "$c_dev")
-        if [ "$has_connected" -eq 1 ] || [ "$is_boot_vga" -eq 1 ]; then
-            if [ -z "$primary_card" ]; then
-                primary_card="$bp_dev"
-                continue
-            fi
+        if [ "$has_connected" -eq 1 ]; then
+            cards_with_display+=("$bp_dev")
+        elif [ "$is_boot_vga" -eq 1 ]; then
+            boot_vga_cards+=("$bp_dev")
+        else
+            other_cards+=("$bp_dev")
         fi
-        other_cards+=("$bp_dev")
     done
 
-    if [ -n "$primary_card" ] && [ ${#other_cards[@]} -gt 0 ]; then
-        export AQ_DRM_DEVICES="${primary_card}:$(IFS=:; echo "${other_cards[*]}")"
+    # Формируем упорядоченный список всех ускорителей:
+    # 1. Карты с подключенными мониторами (наивысший приоритет)
+    # 2. Карты с флагом boot_vga
+    # 3. Все прочие видеокарты
+    ordered_cards=()
+    for dev in "${cards_with_display[@]}" "${boot_vga_cards[@]}" "${other_cards[@]}"; do
+        for seen in "${ordered_cards[@]}"; do
+            [ "$seen" = "$dev" ] && continue 2
+        done
+        ordered_cards+=("$dev")
+    done
+
+    if [ ${#ordered_cards[@]} -gt 1 ]; then
+        export AQ_DRM_DEVICES="$(IFS=:; echo "${ordered_cards[*]}")"
         echo "==> Multi-GPU: установлен порядок AQ_DRM_DEVICES: $AQ_DRM_DEVICES"
     fi
 fi

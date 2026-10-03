@@ -1,7 +1,7 @@
 # Maintainer: Zephyrine Shell Authors
 pkgname=zephyrine-shell-git
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Modern, elegant Wayland desktop shell based on Hyprland and Quickshell"
 arch=('any')
 url="https://github.com/spinnetx/zephyrine-shell"
@@ -50,6 +50,11 @@ provides=('zephyrine-shell')
 conflicts=('zephyrine-shell')
 source=("git+file://${PWD}")
 sha256sums=('SKIP')
+
+pkgver() {
+    cd "${startdir}"
+    printf "1.0.0.r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
 
 package() {
     cd "${srcdir}/${pkgname}" 2>/dev/null || cd "${srcdir}/.."
