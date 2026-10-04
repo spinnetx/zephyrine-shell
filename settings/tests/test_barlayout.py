@@ -79,6 +79,38 @@ class LayoutTests(unittest.TestCase):
                 with self.assertRaises(model.ValidationError):
                     self.s.validate(key, "not-a-number")
 
+    def test_workspaces_scroll_and_command_regression(self):
+        """Проверка, что Workspaces.qml и VWorkspaces.qml обрабатывают скролл колеса мыши
+        и Config.workspaceCommand генерирует корректный синтаксис Lua-команд."""
+        # 1. Проверка синтаксиса функции workspaceCommand в Config.qml
+        config_path = os.path.join(REAL_ROOT, "quickshell", "Config.qml")
+        with open(config_path, encoding="utf-8") as f:
+            config_code = f.read()
+        self.assertIn("function workspaceCommand(n)", config_code)
+        # Проверяем, что строковые аргументы оборачиваются в кавычки для предотвращения ошибки Lua (e+1 как nil)
+        self.assertTrue(
+            ('typeof n === "number"' in config_code or "typeof n === 'number'" in config_code),
+            "Config.workspaceCommand должен оборачивать строковые параметры в кавычки для Lua"
+        )
+
+        # 2. Проверка Workspaces.qml
+        ws_path = os.path.join(REAL_ROOT, "quickshell", "components", "Workspaces.qml")
+        with open(ws_path, encoding="utf-8") as f:
+            ws_code = f.read()
+        self.assertIn("onScrolled:", ws_code, "Workspaces.qml должен содержать обработчик onScrolled")
+        self.assertIn("onWheel:", ws_code, "Dot MouseArea в Workspaces.qml должен перехватывать и передавать onWheel")
+        self.assertIn('workspaceCommand("m-1")', ws_code)
+        self.assertIn('workspaceCommand("m+1")', ws_code)
+
+        # 3. Проверка VWorkspaces.qml
+        vws_path = os.path.join(REAL_ROOT, "quickshell", "components", "VWorkspaces.qml")
+        with open(vws_path, encoding="utf-8") as f:
+            vws_code = f.read()
+        self.assertIn("onScrolled:", vws_code, "VWorkspaces.qml должен содержать обработчик onScrolled")
+        self.assertIn("onWheel:", vws_code, "Dot MouseArea в VWorkspaces.qml должен перехватывать и передавать onWheel")
+        self.assertIn('workspaceCommand("m-1")', vws_code)
+        self.assertIn('workspaceCommand("m+1")', vws_code)
+
 
 if __name__ == "__main__":
     unittest.main()

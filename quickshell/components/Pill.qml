@@ -48,7 +48,10 @@ Rectangle {
         anchors.fill: parent
         acceptedButtons: root.clickable ? Qt.LeftButton | Qt.RightButton | Qt.MiddleButton : Qt.NoButton
         onClicked: mouse => root.clicked(mouse)
-        onWheel: wheel => root.scrolled(wheel.angleDelta.y)
+        onWheel: wheel => {
+            const d = wheel.angleDelta.y !== 0 ? wheel.angleDelta.y : -wheel.angleDelta.x;
+            root.scrolled(d);
+        }
     }
 
     Row {

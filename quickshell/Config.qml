@@ -22,7 +22,8 @@ Singleton {
 
     // Переключение воркспейса: синтаксис Lua-dispatch Hyprland 0.56 (подтверждён).
     function workspaceCommand(n) {
-        return ["hyprctl", "dispatch", "hl.dsp.focus({workspace=" + n + "})"];
+        const arg = typeof n === "number" ? n : ('"' + n + '"');
+        return ["hyprctl", "dispatch", "hl.dsp.focus({workspace=" + arg + "})"];
     }
 
     // --- Размеры ---

@@ -17,6 +17,13 @@ Pill {
     implicitWidth: Config.pillHeight + 8
     implicitHeight: dots.implicitHeight + 16
 
+    onScrolled: delta => {
+        if (delta > 0)
+            Quickshell.execDetached(Config.workspaceCommand("m-1"));
+        else if (delta < 0)
+            Quickshell.execDetached(Config.workspaceCommand("m+1"));
+    }
+
     Column {
         id: dots
         y: (root.height - height) / 2
@@ -57,6 +64,10 @@ Pill {
                     anchors.margins: -3
                     cursorShape: Qt.PointingHandCursor
                     onClicked: Quickshell.execDetached(Config.workspaceCommand(dot.wsId))
+                    onWheel: wheel => {
+                        const d = wheel.angleDelta.y !== 0 ? wheel.angleDelta.y : -wheel.angleDelta.x;
+                        root.scrolled(d);
+                    }
                 }
             }
         }
