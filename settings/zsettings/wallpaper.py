@@ -496,3 +496,64 @@ def status_info(engine, t, info):
     else:
         info["state"] = "live"
     return info
+
+
+def pick_file(paths):
+    """Вызов системного диалога выбора файла (zenity / yad / kdialog). -> (code, envelope)."""
+    filter_pattern = "*.mp4 *.mkv *.webm *.mov *.avi *.m4v *.gif *.png *.jpg *.jpeg *.webp *.bmp"
+    filter_label = "Обои (видео, изображения)"
+    title = "Выберите обои (видео или изображение)"
+
+    if _which("zenity"):
+        cmd = [
+            _which("zenity"), "--file-selection",
+            "--title=" + title,
+            f"--file-filter={filter_label} | {filter_pattern}",
+            "--file-filter=Все файлы | *"
+        ]
+    elif _which("yad"):
+        cmd = [
+            _which("yad"), "--file-selection",
+            "--title=" + title,
+            f"--file-filter={filter_label} | {filter_pattern}",
+            "--file-filter=Все файлы | *"
+        ]
+    elif _which("kdialog"):
+        cmd = [
+            _which("kdialog"), "--getopenfilename", paths.home,
+            f"{filter_pattern}|{filter_label}\n*|Все файлы",
+            "--title", title
+        ]
+    else:
+        return 1, {"ok": False, "error": "file chooser dialog not found (install zenity, yad, or kdialog)"}
+
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True)
+    except OSError as e:
+        return 1, {"ok": False, "error": "failed to run file chooser: %s" % e}
+
+    if proc.returncode != 0:
+        return 0, {"ok": False, "cancelled": True}
+
+    chosen = proc.stdout.strip()
+    if not chosen:
+        return 0, {"ok": False, "cancelled": True}
+
+    if "|" in chosen:
+        chosen = chosen.split("|")[0].strip()
+
+    err = check_file(chosen)
+    if err:
+        return 2, {"ok": False, "error": err}
+
+    val = to_value(paths, chosen)
+    thumb = make_thumb(paths, chosen)
+    return 0, {
+        "ok": True,
+        "path": chosen,
+        "value": val,
+        "name": os.path.splitext(os.path.basename(chosen))[0],
+        "kind": media_kind(chosen),
+        "thumb": thumb
+    }
+

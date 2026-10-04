@@ -1,6 +1,7 @@
 import QtQuick
 import "../../"
 import "../../components"
+import "../logic.js" as Logic
 
 // Список приложений, к которым применяется оформление (DESIGN §3.8, §6.3, §6.5): на каждое — чип статуса
 // из `zephyrine-settings status` (вживую / нужен перезапуск / не установлено / изменён вручную / ошибка),
@@ -42,9 +43,14 @@ Column {
     readonly property int pendingCount: countSev(2)
     readonly property var restartLabels: labelsSev(4)
 
-    function present(t) {
-        return t !== undefined && t !== null && t.state !== "later" && t.state !== "no-template";
+    function isInstalled(t) {
+        return Logic.isTargetInstalled(t);
     }
+
+    function present(t) {
+        return Logic.isTargetPresent(t);
+    }
+
 
     // Статус одной цели -> {sev, kind, text, tip}; sev — «тяжесть» для свёртки (больше — хуже).
     function classify(t, err) {

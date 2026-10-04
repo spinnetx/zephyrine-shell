@@ -1,9 +1,9 @@
 {
   "version": 1,
   "appearance": {
-    "accent": "#7aa2f7",
+    "accent": "#9ece6a",
     "cursor": {
-      "theme": "Qogir-Dark"
+      "theme": "Qogir-Light"
     },
     "icons": {
       "theme": "Qogir-Dark"
@@ -14,17 +14,12 @@
     }
   },
   "bar": {
-    "center": [
-      "media",
-      "power"
-    ],
     "left": [
       "apps",
       "workspaces",
       "activeWindow"
     ],
     "right": [
-      "weather",
       "limits",
       "disk",
       "gpu",
@@ -32,8 +27,26 @@
       "mem",
       "net",
       "tray",
-      "status",
-      "clock"
+      "kbd",
+      "volume",
+      "wifi",
+      "bluetooth",
+      "battery",
+      "clock",
+      "power"
+    ]
+  },
+  "display": {
+    "monitors": [
+      {
+        "match": "desc:Najing CEC Panda FPD Technology CO. ltd 0x0050",
+        "enabled": true,
+        "mode": "1920x1080@60",
+        "position": "0x0",
+        "scale": 1,
+        "transform": 0,
+        "mirror": null
+      }
     ]
   },
   "hypr": {

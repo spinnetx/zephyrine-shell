@@ -42,4 +42,23 @@ assert.strictEqual(ctx.formatBatteryTime(0), "");
 assert.strictEqual(ctx.formatBatteryTime(180), "3 мин");
 assert.strictEqual(ctx.formatBatteryTime(3700), "1 ч 2 мин");
 
+// Test isTargetInstalled
+assert.strictEqual(ctx.isTargetInstalled(null), false);
+assert.strictEqual(ctx.isTargetInstalled(undefined), false);
+assert.strictEqual(ctx.isTargetInstalled({ installed: false, state: "missing", reason: "not-installed" }), false);
+assert.strictEqual(ctx.isTargetInstalled({ installed: false, state: "missing", reason: "profile-not-found" }), false);
+assert.strictEqual(ctx.isTargetInstalled({ state: "missing", reason: "not-installed" }), false);
+assert.strictEqual(ctx.isTargetInstalled({ installed: true, state: "live" }), true);
+assert.strictEqual(ctx.isTargetInstalled({ installed: true, state: "missing", reason: "not-deployed" }), true);
+
+// Test isTargetPresent
+assert.strictEqual(ctx.isTargetPresent(null), false);
+assert.strictEqual(ctx.isTargetPresent({ state: "later", installed: true }), false);
+assert.strictEqual(ctx.isTargetPresent({ state: "no-template", installed: true }), false);
+assert.strictEqual(ctx.isTargetPresent({ installed: false, state: "missing", reason: "not-installed" }), false);
+assert.strictEqual(ctx.isTargetPresent({ installed: true, state: "live" }), true);
+assert.strictEqual(ctx.isTargetPresent({ installed: true, state: "missing", reason: "not-deployed" }), true);
+assert.strictEqual(ctx.isTargetPresent({ installed: true, state: "outdated" }), true);
+
 console.log("logic-test.js: all tests passed!");
+

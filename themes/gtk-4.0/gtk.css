@@ -14,7 +14,7 @@
 @define-color zp_high #242538;
 @define-color zp_highest #303249;
 @define-color zp_fg #e8e8f0;
-@define-color zp_primary #7aa2f7;
+@define-color zp_primary #9ece6a;
 
 @define-color window_bg_color @zp_bg;
 @define-color window_fg_color @zp_fg;
@@ -42,9 +42,9 @@
 @define-color thumbnail_bg_color @zp_highest;
 @define-color thumbnail_fg_color @zp_fg;
 
-@define-color accent_bg_color #7aa2f7;
-@define-color accent_fg_color #151731;
-@define-color accent_color #99b6f8;
+@define-color accent_bg_color #9ece6a;
+@define-color accent_fg_color #1c331b;
+@define-color accent_color #b5df96;
 @define-color destructive_bg_color #f7768e;
 @define-color destructive_fg_color #4a0d17;
 @define-color destructive_color #ff9aab;
@@ -63,8 +63,8 @@
 @define-color theme_fg_color #e8e8f0;
 @define-color theme_base_color #141414;
 @define-color theme_text_color #e8e8f0;
-@define-color theme_selected_bg_color #7aa2f7;
-@define-color theme_selected_fg_color #151731;
+@define-color theme_selected_bg_color #9ece6a;
+@define-color theme_selected_fg_color #1c331b;
 @define-color insensitive_fg_color #7f88b5;
 @define-color borders #41466a;
 
@@ -78,5 +78,5 @@ popover > contents, menu {
 }
 
 selection, text selection {
-    background-color: rgba(122, 162, 247, 0.28);
+    background-color: rgba(158, 206, 106, 0.28);
 }

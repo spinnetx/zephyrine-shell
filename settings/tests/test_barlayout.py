@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 import unittest
 
 from zsettings import barlayout, model
@@ -49,7 +50,8 @@ class LayoutTests(unittest.TestCase):
             self.s.validate("bar.position", "middle")
 
     def test_catalog_matches_bar_qml(self):
-        qml = open(os.path.join(REAL_ROOT, "quickshell", "Bar.qml"), encoding="utf-8").read()
+        with open(os.path.join(REAL_ROOT, "quickshell", "Bar.qml"), encoding="utf-8") as f:
+            qml = f.read()
         if "registry" not in qml:
             self.skipTest("реестр в Bar.qml ещё не добавлен")
         for i in barlayout.IDS:
@@ -111,6 +113,29 @@ class LayoutTests(unittest.TestCase):
         self.assertIn('workspaceCommand("m-1")', vws_code)
         self.assertIn('workspaceCommand("m+1")', vws_code)
 
+    def test_targets_list_hides_uninstalled_apps_regression(self):
+        """Проверка, что TargetsList.qml и logic.js скрывают неустановленные приложения."""
+        targets_path = os.path.join(REAL_ROOT, "quickshell", "settings", "parts", "TargetsList.qml")
+        with open(targets_path, encoding="utf-8") as f:
+            targets_code = f.read()
+
+        # TargetsList.qml должен проверять статус установки цели (installed !== false и reason !== 'not-installed')
+        self.assertTrue(
+            "isInstalled" in targets_code or "isTargetInstalled" in targets_code,
+            "TargetsList.qml должен содержать проверку установки приложения (isInstalled)"
+        )
+        self.assertTrue(
+            "installed !== false" in targets_code or "isTargetPresent" in targets_code,
+            "TargetsList.qml должен исключать цели с installed: false"
+        )
+
+        # Проверяем исполнение логики фильтрации через node logic-test.js
+        test_js = os.path.join(REAL_ROOT, "quickshell", "settings", "logic-test.js")
+        proc = subprocess.run(["node", test_js], capture_output=True, text=True)
+        self.assertEqual(proc.returncode, 0, f"logic-test.js failed: {proc.stderr}")
+        self.assertIn("logic-test.js: all tests passed!", proc.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()
+

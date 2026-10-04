@@ -33,6 +33,20 @@ SetCard {
     chipKind: tstate === "live" ? "live" : tstate === "error" ? "error" : tstate === "missing" ? "missing" : "neutral"
     chipText: tstate === "outdated" ? "не применено" : tstate === "missing" ? "mpvpaper не найден" : ""
 
+    headerRight: [
+        SetButton {
+            text: "Выбрать файл..."
+            icon: Config.icons.folder
+            tooltip: "Открыть системный диалог выбора видео или картинки"
+            enabled: !picker.running
+            onClicked: {
+                pickerOut.text = "";
+                picker.command = [Config.settingsCli, "wallpaper", "pick"];
+                picker.running = true;
+            }
+        }
+    ]
+
     function reload() {
         if (list.running) {
             again = true;
@@ -97,6 +111,28 @@ SetCard {
 
     Process {
         id: copy
+    }
+
+    Process {
+        id: picker
+        stdout: StdioCollector {
+            id: pickerOut
+        }
+        onExited: code => {
+            if (code === 0) {
+                const res = root.parse(pickerOut.text);
+                if (res && res.ok && res.value) {
+                    root.pending = res.value;
+                    root.pick(res.value);
+                } else if (res && res.error) {
+                    root.listError = res.error;
+                }
+            } else if (code !== 0) {
+                const res = root.parse(pickerOut.text);
+                if (res && res.error)
+                    root.listError = res.error;
+            }
+        }
     }
 
     WallpaperGrid {

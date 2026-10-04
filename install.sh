@@ -10,6 +10,7 @@ cd "$SCRIPT_DIR"
 ACTION="install"
 MODE=""
 INSTALL_SDDM=0
+INSTALL_DEPS=0
 PURGE=0
 
 usage() {
@@ -20,6 +21,7 @@ usage() {
   --system       Установка в систему (/usr) — требует sudo (по умолчанию)
   --user         Установка в домашний каталог (~/.local) без sudo
   --sddm         Установить и активировать тему SDDM Zephyrine (требует sudo)
+  --install-deps Автоматически установить недостающие зависимости через yay/paru/pacman
 
 Параметры удаления:
   --uninstall    Удалить Zephyrine Shell (из системы или ~/.local)
@@ -33,15 +35,17 @@ EOF
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --uninstall) ACTION="uninstall"; shift ;;
-        --purge)     PURGE=1; shift ;;
-        --system)    MODE="system"; shift ;;
-        --user)      MODE="user"; shift ;;
-        --sddm)      INSTALL_SDDM=1; shift ;;
-        -h|--help)   usage; exit 0 ;;
+        --uninstall)    ACTION="uninstall"; shift ;;
+        --purge)        PURGE=1; shift ;;
+        --system)       MODE="system"; shift ;;
+        --user)         MODE="user"; shift ;;
+        --sddm)         INSTALL_SDDM=1; shift ;;
+        --install-deps) INSTALL_DEPS=1; shift ;;
+        -h|--help)      usage; exit 0 ;;
         *) echo "Неизвестный параметр: $1" >&2; usage >&2; exit 1 ;;
     esac
 done
+
 
 # 1. Режим деинсталляции
 if [ "$ACTION" = "uninstall" ]; then
@@ -118,7 +122,7 @@ echo "==> Проверка зависимостей..."
 CORE_DEPS=(
     "Hyprland:hyprland"
     "qs:quickshell"
-    "mpvpaper:mpvpaper (AUR)"
+    "mpvpaper:mpvpaper"
     "hyprlock:hyprlock"
     "hypridle:hypridle"
     "wpctl:wireplumber"
@@ -131,11 +135,13 @@ CORE_DEPS=(
 )
 
 MISSING_CORE=()
+MISSING_PKGS=()
 for item in "${CORE_DEPS[@]}"; do
     cmd="${item%%:*}"
     pkg="${item##*:}"
     if ! command -v "$cmd" >/dev/null 2>&1; then
         MISSING_CORE+=("$cmd ($pkg)")
+        MISSING_PKGS+=("$pkg")
     fi
 done
 
@@ -144,8 +150,35 @@ if [ ${#MISSING_CORE[@]} -gt 0 ]; then
     for dep in "${MISSING_CORE[@]}"; do
         echo "    - $dep" >&2
     done
-    echo "  Установите их для корректной работы оболочки (pacman/yay)." >&2
     echo
+
+    DO_INSTALL=0
+    if [ "$INSTALL_DEPS" -eq 1 ]; then
+        DO_INSTALL=1
+    elif [ -t 0 ]; then
+        read -r -p "Установить недостающие зависимости сейчас? [Y/n] " answer || true
+        case "$answer" in
+            [yY][eE][sS]|[yY]|"") DO_INSTALL=1 ;;
+            *) DO_INSTALL=0 ;;
+        esac
+    fi
+
+    if [ "$DO_INSTALL" -eq 1 ]; then
+        echo "==> Установка зависимостей: ${MISSING_PKGS[*]}"
+        if command -v yay >/dev/null 2>&1; then
+            yay -S --needed "${MISSING_PKGS[@]}"
+        elif command -v paru >/dev/null 2>&1; then
+            paru -S --needed "${MISSING_PKGS[@]}"
+        elif command -v pacman >/dev/null 2>&1; then
+            sudo pacman -S --needed "${MISSING_PKGS[@]}"
+        else
+            echo "  [ОШИБКА] Пакетный менеджер yay/paru/pacman не найден. Установите зависимости вручную." >&2
+        fi
+        echo
+    else
+        echo "  Установите их для корректной работы оболочки (pacman/yay)." >&2
+        echo
+    fi
 fi
 
 OPT_DEPS=(
@@ -157,6 +190,7 @@ OPT_DEPS=(
     "satty:satty"
     "ffmpeg:ffmpeg"
     "wl-copy:wl-clipboard"
+    "zenity:zenity"
 )
 MISSING_OPT=()
 for item in "${OPT_DEPS[@]}"; do

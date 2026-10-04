@@ -317,6 +317,9 @@ def cmd_wallpaper(args, paths):
     eff, _ = model.effective(schema, model.Store(paths, schema).read_flat())
     if args.action == "list":
         return 0, wallpaper.list_wallpapers(paths, eff, thumbs=not args.no_thumbs)
+    if args.action == "pick":
+        code, out = wallpaper.pick_file(paths)
+        return code, envelope(**out)
     want_d, _ = wallpaper.desired(paths, eff)
     err = wallpaper.check_file(want_d)
     if err:
@@ -493,7 +496,7 @@ def build_parser():
     s.set_defaults(fn=cmd_diff)
 
     s = sub.add_parser("wallpaper")
-    s.add_argument("action", choices=["list", "restart"])
+    s.add_argument("action", choices=["list", "restart", "pick"])
     s.add_argument("--no-thumbs", action="store_true")
     s.add_argument("--no-exec", action="store_true")
     s.set_defaults(fn=cmd_wallpaper)

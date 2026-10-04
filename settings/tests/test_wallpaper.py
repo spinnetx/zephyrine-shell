@@ -290,6 +290,39 @@ class CliTests(WallpaperCase):
         paths = [i["path"] for i in items]
         self.assertIn(os.path.join(user_wp, "custom.png"), paths)
 
+    def test_wallpaper_pick_command(self):
+        # 1. Когда нет утилиты диалога
+        code, r = self.run_cli("wallpaper", "pick")
+        self.assertEqual(code, 1)
+        self.assertIn("dialog not found", r["error"])
+
+        # 2. Успешный выбор файла через zenity
+        sample = os.path.join(self.tmp, "my_custom_wall.mp4")
+        self.write_file(sample, b"x" * 20)
+        self._script("zenity", f'#!/bin/sh\necho "{sample}"\nexit 0\n')
+        code, r = self.run_cli("wallpaper", "pick")
+        self.assertEqual(code, 0)
+        self.assertEqual(r["ok"], True)
+        self.assertEqual(r["path"], sample)
+        self.assertEqual(r["value"], sample)
+        self.assertEqual(r["kind"], "video")
+
+        # 3. Пользователь отменил выбор
+        self._script("zenity", '#!/bin/sh\nexit 1\n')
+        code, r = self.run_cli("wallpaper", "pick")
+        self.assertEqual(code, 0)
+        self.assertEqual(r["ok"], False)
+        self.assertEqual(r.get("cancelled"), True)
+
+        # 4. Выбор неподдерживаемого файла (текстовый файл)
+        bad = os.path.join(self.tmp, "notes.txt")
+        self.write_file(bad, b"text")
+        self._script("zenity", f'#!/bin/sh\necho "{bad}"\nexit 0\n')
+        code, r = self.run_cli("wallpaper", "pick")
+        self.assertEqual(code, 2)
+        self.assertIn("unsupported file type", r["error"])
+
 
 if __name__ == "__main__":
     unittest.main()
+

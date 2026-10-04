@@ -130,8 +130,9 @@ Singleton {
         headphones: g(0xF02CB), speaker: g(0xF04C3), mic: g(0xF036C), micOff: g(0xF036D), chevronRight: g(0xF0142),
         search: g(0xF0349), logout: g(0xF0343), sleep: g(0xF0904), restart: g(0xF0709),
         info: g(0xF02FD), alert: g(0xF0026), alertCircle: g(0xF0028), checkCircle: g(0xF05E0), brightness: g(0xF00DF),
-        palette: g(0xF03D8), monitor: g(0xF0379),
+        palette: g(0xF03D8), monitor: g(0xF0379), folder: g(0xF024B),
         apps: g(0xF003B), timer: g(0xF051B), play: g(0xF040A), pause: g(0xF03E4), stop: g(0xF04DB), weather: g(0xF0595),
         battery: g(0xF0079), batteryLow: g(0xF007A), batteryCharging: g(0xF0084), batteryOutline: g(0xF008E)
     })
 }
+

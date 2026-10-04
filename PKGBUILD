@@ -45,6 +45,7 @@ optdepends=(
     'zed: editor with matching Zephyrine theme'
     'zathura: document viewer'
     'zathura-pdf-mupdf: PDF support for zathura'
+    'zenity: graphical file chooser dialog for wallpaper selection'
 )
 provides=('zephyrine-shell')
 conflicts=('zephyrine-shell')

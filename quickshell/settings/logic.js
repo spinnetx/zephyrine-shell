@@ -93,3 +93,17 @@ function formatBatteryTime(sec) {
         return h + " ч " + m + " мин";
     return m + " мин";
 }
+
+function isTargetInstalled(t) {
+    if (!t)
+        return false;
+    if (t.installed === false)
+        return false;
+    if (t.reason === "not-installed")
+        return false;
+    return true;
+}
+
+function isTargetPresent(t) {
+    return t !== undefined && t !== null && t.state !== "later" && t.state !== "no-template" && isTargetInstalled(t);
+}
