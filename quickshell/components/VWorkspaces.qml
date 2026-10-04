@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import "workspaces-logic.js" as WsLogic
 import "../"
 
 // Воркспейсы для вертикальной панели: колонка точек, активная — вытянутая вниз. Логика та же, что у Workspaces.
@@ -17,11 +18,22 @@ Pill {
     implicitWidth: Config.pillHeight + 8
     implicitHeight: dots.implicitHeight + 16
 
+    function getOccupiedWorkspaces() {
+        const occ = [];
+        for (let i = 1; i <= Config.workspaceCount; i++) {
+            const ws = Hyprland.workspaces.values.find(w => w.id === i);
+            const onThisMon = !root.monitor || !ws?.monitor || ws.monitor.name === root.monitor.name || ws.monitor.id === root.monitor.id;
+            const isOccupied = ws !== undefined && onThisMon && (ws.toplevels.values.length > 0 || (ws.lastIpcObject?.windows ?? 0) > 0);
+            if (isOccupied)
+                occ.push(i);
+        }
+        return occ;
+    }
+
     onScrolled: delta => {
-        if (delta > 0)
-            Quickshell.execDetached(Config.workspaceCommand("m-1"));
-        else if (delta < 0)
-            Quickshell.execDetached(Config.workspaceCommand("m+1"));
+        const target = WsLogic.calculateNextWorkspace(root.activeId, delta, root.getOccupiedWorkspaces(), Config.workspaceCount);
+        if (target && target !== root.activeId)
+            Quickshell.execDetached(Config.workspaceCommand(target));
     }
 
     Column {

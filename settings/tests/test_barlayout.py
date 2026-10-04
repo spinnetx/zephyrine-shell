@@ -82,14 +82,14 @@ class LayoutTests(unittest.TestCase):
                     self.s.validate(key, "not-a-number")
 
     def test_workspaces_scroll_and_command_regression(self):
-        """Проверка, что Workspaces.qml и VWorkspaces.qml обрабатывают скролл колеса мыши
-        и Config.workspaceCommand генерирует корректный синтаксис Lua-команд."""
+        """Проверка, что Workspaces.qml и VWorkspaces.qml обрабатывают скролл колеса мыши,
+        умеют переключаться на следующий пустой рабочий стол и Config.workspaceCommand генерирует
+        корректный синтаксис Lua-команд."""
         # 1. Проверка синтаксиса функции workspaceCommand в Config.qml
         config_path = os.path.join(REAL_ROOT, "quickshell", "Config.qml")
         with open(config_path, encoding="utf-8") as f:
             config_code = f.read()
         self.assertIn("function workspaceCommand(n)", config_code)
-        # Проверяем, что строковые аргументы оборачиваются в кавычки для предотвращения ошибки Lua (e+1 как nil)
         self.assertTrue(
             ('typeof n === "number"' in config_code or "typeof n === 'number'" in config_code),
             "Config.workspaceCommand должен оборачивать строковые параметры в кавычки для Lua"
@@ -101,8 +101,8 @@ class LayoutTests(unittest.TestCase):
             ws_code = f.read()
         self.assertIn("onScrolled:", ws_code, "Workspaces.qml должен содержать обработчик onScrolled")
         self.assertIn("onWheel:", ws_code, "Dot MouseArea в Workspaces.qml должен перехватывать и передавать onWheel")
-        self.assertIn('workspaceCommand("m-1")', ws_code)
-        self.assertIn('workspaceCommand("m+1")', ws_code)
+        self.assertIn("calculateNextWorkspace", ws_code, "Workspaces.qml должен использовать WsLogic.calculateNextWorkspace")
+        self.assertIn("getOccupiedWorkspaces", ws_code, "Workspaces.qml должен определять занятые воркспейсы")
 
         # 3. Проверка VWorkspaces.qml
         vws_path = os.path.join(REAL_ROOT, "quickshell", "components", "VWorkspaces.qml")
@@ -110,8 +110,27 @@ class LayoutTests(unittest.TestCase):
             vws_code = f.read()
         self.assertIn("onScrolled:", vws_code, "VWorkspaces.qml должен содержать обработчик onScrolled")
         self.assertIn("onWheel:", vws_code, "Dot MouseArea в VWorkspaces.qml должен перехватывать и передавать onWheel")
-        self.assertIn('workspaceCommand("m-1")', vws_code)
-        self.assertIn('workspaceCommand("m+1")', vws_code)
+        self.assertIn("calculateNextWorkspace", vws_code, "VWorkspaces.qml должен использовать WsLogic.calculateNextWorkspace")
+        self.assertIn("getOccupiedWorkspaces", vws_code, "VWorkspaces.qml должен определять занятые воркспейсы")
+
+        # 4. Проверка запуска юнит-тестов логики воркспейсов (workspaces-test.js)
+        test_js = os.path.join(REAL_ROOT, "quickshell", "components", "workspaces-test.js")
+        proc = subprocess.run(["node", test_js], capture_output=True, text=True)
+        self.assertEqual(proc.returncode, 0, f"workspaces-test.js failed: {proc.stderr}")
+        self.assertIn("workspaces-test.js: all tests passed!", proc.stdout)
+
+    def test_wallpaper_card_file_picker_regression(self):
+        """Проверка, что в WallpaperCard.qml кнопка выбора файла не делает недопустимых присваиваний
+        к свойству text у StdioCollector и корректно запускает wallpaper pick."""
+        wp_card_path = os.path.join(REAL_ROOT, "quickshell", "settings", "parts", "WallpaperCard.qml")
+        with open(wp_card_path, encoding="utf-8") as f:
+            wp_code = f.read()
+
+        # Защита от TypeError: Cannot assign to read-only property "text"
+        self.assertNotIn("pickerOut.text =", wp_code, "Нельзя присваивать значение свойству pickerOut.text (read-only)")
+        self.assertIn("wallpaper", wp_code)
+        self.assertIn("pick", wp_code)
+        self.assertIn("picker.command = [Config.settingsCli, \"wallpaper\", \"pick\"]", wp_code)
 
     def test_targets_list_hides_uninstalled_apps_regression(self):
         """Проверка, что TargetsList.qml и logic.js скрывают неустановленные приложения."""

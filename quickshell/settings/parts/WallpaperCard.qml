@@ -40,7 +40,6 @@ SetCard {
             tooltip: "Открыть системный диалог выбора видео или картинки"
             enabled: !picker.running
             onClicked: {
-                pickerOut.text = "";
                 picker.command = [Config.settingsCli, "wallpaper", "pick"];
                 picker.running = true;
             }
@@ -124,6 +123,7 @@ SetCard {
                 if (res && res.ok && res.value) {
                     root.pending = res.value;
                     root.pick(res.value);
+                    root.reload();
                 } else if (res && res.error) {
                     root.listError = res.error;
                 }
